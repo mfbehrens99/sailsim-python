@@ -1,6 +1,3 @@
-from world import Boat
-from world import Wind
-
 class World:
     """Holds all objects that descripe the circumstances of the simulation"""
 
