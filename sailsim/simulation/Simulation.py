@@ -4,10 +4,10 @@ class Simulation:
     interval = 1
     
 
-    def __init__(self, world, interval, start, end):
-        self.word = world
-
+    def __init__(self, interval, world, start=None, end=None):
         self.interval = interval
+
+        self.word = world
         
         self.start = start
         self.end = end
