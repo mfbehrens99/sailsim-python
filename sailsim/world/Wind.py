@@ -1,4 +1,4 @@
-import Windfield
+from world import Windfield
 
 class Wind:
     """Generates and calculates speed and direction of wind"""

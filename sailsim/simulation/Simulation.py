@@ -1,5 +1,3 @@
-from World import World
-
 class Simulation:
     """Main simulation class in this project"""
 
