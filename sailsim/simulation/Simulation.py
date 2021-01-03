@@ -12,9 +12,9 @@ class Simulation:
         self.start = start
         self.end = end
 
-    def run():
+    def run(self):
         pass
 
-    def runStep():
+    def runStep(self):
         pass
 

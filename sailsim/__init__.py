@@ -1,4 +1,4 @@
-from simulation import Simulation
+from simulation.Simulation import Simulation
 
 from world.World import World
 from world.Boat import Boat
@@ -7,12 +7,12 @@ from world.Windfield import Windfield
 
 from algorithmus import Algorithmus
 
-def mainTest():
-    boat = world.Boat()
-    wf = world.Windfield(1, 0.5)
-    wind = Wind.Wind(wf)
+if __name__ == '__main__':
+    boat = Boat()
+    wf = Windfield(1, 0.5)
+    wind = Wind(20, 20, [wf])
 
-    w = world.World(boat,wind)
+    w = World(boat,wind,(52, 42))
 
     sim = Simulation(.1, w)
 
