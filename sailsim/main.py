@@ -1,11 +1,11 @@
-from sailsim.simulation.simulation import Simulation
+from simulation.simulation import Simulation
 
-from sailsim.world.world import World
-from sailsim.world.boat import Boat
-from sailsim.world.wind import Wind
-from sailsim.world.windfield import Windfield
+from world.world import World
+from world.boat import Boat
+from world.wind import Wind
+from world.windfield import Windfield
 
-from sailsim.algorithmus import Algorithmus
+#from algorithmus import Algorithmus
 
 if __name__ == '__main__':
     boat = Boat()
