@@ -1,6 +1,6 @@
 import math
 
-from world import Windfield
+from sailsim.world import Windfield
 
 class Wind:
     """Generates and calculates speed and direction of wind"""
