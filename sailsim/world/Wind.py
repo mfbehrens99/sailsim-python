@@ -22,6 +22,6 @@ class Wind:
             sum_y += wind_y
 
         # Convert to polar
-        speed = math.sqrt(x**2 + y**2)
-        direction = math.degrees(math.atan(y/x))
+        speed = math.sqrt(sum_x**2 + sum_y**2)
+        direction = (math.degrees(math.atan(sum_y/sum_x)) if sum_x != 0 else (90 if sum_y >= 0 else 270))
         return (speed, direction)

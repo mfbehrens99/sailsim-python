@@ -17,3 +17,4 @@ class Windfield:
         x_cart = speed * math.cos(math.radians(direction))
         y_cart = speed * math.sin(math.radians(direction))
         return (x_cart,y_cart)
+        #TODO slight errors due to rounding
