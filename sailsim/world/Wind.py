@@ -1,14 +1,14 @@
 import math
 
-from sailsim.world import Windfield
+from sailsim.world.windfield import Windfield
 
 class Wind:
     """Generates and calculates speed and direction of wind"""
 
-    def __init__(self, sizeX, sizeY, winds):
+    def __init__(self, size_x, size_y, winds):
         # TODO Size unnecessary?
-        self.sizeX = sizeX
-        self.sizeY = sizeY
+        self.size_x = size_x
+        self.sizeY = size_y
 
         self.winds = winds
 
