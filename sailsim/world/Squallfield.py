@@ -1,6 +1,6 @@
 from random import getrandbits
 
-from opensimplex import OpenSimplex #noise function
+from opensimplex import OpenSimplex # Noise function
 
 from sailsim.world.windfield import Windfield
 from sailsim.world.squall import Squall
@@ -8,7 +8,7 @@ from sailsim.world.squall import Squall
 class Squallfield(Windfield):
     """Simulates a field of squalls"""
     def __init__(self, x, y, gridDistance, displacementFactor = 1, noiseSeed = None):
-        super().__init__(x, y) # Call normal windfield constructor
+        super().__init__(x, y)
 
         self.squall = Squall(x, y)
 
@@ -16,7 +16,9 @@ class Squallfield(Windfield):
         self.gridDistance = gridDistance
         self.displacementFactor = displacementFactor
 
-        if noiseSeed is None: # Apply random seed
+        # Noise object creation
+        # Apply random seed if no seed is provided
+        if noiseSeed is None:
             noiseSeed = getrandbits(32) # Just a random time efficent algorithm
         self.noiseX = OpenSimplex(noiseSeed)
         self.noiseY = OpenSimplex(noiseSeed + 1)
@@ -28,7 +30,8 @@ class Squallfield(Windfield):
         (x, y) = self.transformPositionTime(x, y, t)
 
         (closestX, closestY) = self.closestPointIndex(x, y)
-        # Iterate relevant squalls
+
+        # Iterate all relevant squalls
         #TODO Check if algorithm is not doing too much work
         sumX, sumY = 0, 0
         for itX in range(closestX - self.squall.maxsize, closestX + self.squall.maxsize + 1):
@@ -47,7 +50,7 @@ class Squallfield(Windfield):
         return(indexX, indexY)
 
     def displacePoint(self, x, y):
-        """Pseudo randomly displaces point of a squall"""
+        """Pseudo randomly displaces point of a squall in x and y direction"""
         # Bitshift for scaling the noise so it is 'more' random
         positionX = x * self.gridDistance + self.noiseX.noise2d(x<<4, y<<4) * self.displacementFactor
         positionY = y * self.gridDistance + self.noiseY.noise2d(x<<4, y<<4) * self.displacementFactor

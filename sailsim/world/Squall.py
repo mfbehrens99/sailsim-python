@@ -17,8 +17,9 @@ class Squall(Windfield):
 
     def calcWindWeight(self, x, y):
         """Return a factor for the strength of the wind depending on the form of the squall"""
+        #TODO discuss if that is really worth the work
         (x, y) = self.rotatePosition(x, y)
-        if -1 < x and x < 2 and abs(y) <.5:
+        if -1 < x < 2 and abs(y) <.5:
             windWeight = self.windSquallFunction(x, y)
             if windWeight > 0:
                 return windWeight
@@ -26,7 +27,7 @@ class Squall(Windfield):
 
     @staticmethod
     def windSquallFunction(x, y):
-        """Function that representates weight of the squall"""
+        """Static function that representates weight of the squall"""
         return .25*y**3-.75*y**2 - 2*x**2 + 1
 
     def rotatePosition(self,x,y):
