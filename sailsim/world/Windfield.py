@@ -14,7 +14,7 @@ class Windfield:
     def getWindCart(self, x, y):
         """Returns cartesian components of the windfield at the position (x,y) as a tuple"""
         (speed, direction) = self.getWind(x, y)
-        x_cart = speed * math.cos(math.radians(direction))
-        y_cart = speed * math.sin(math.radians(direction))
-        return (x_cart,y_cart)
+        xCart = speed * math.cos(math.radians(direction))
+        yCart = speed * math.sin(math.radians(direction))
+        return (xCart,yCart)
         #TODO slight errors due to rounding
