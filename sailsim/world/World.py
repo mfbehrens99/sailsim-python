@@ -1,6 +1,3 @@
-from sailsim.world.boat import Boat
-from sailsim.world.wind import Wind
-
 class World:
     """Holds all objects that descripe the circumstances of the simulation"""
 
