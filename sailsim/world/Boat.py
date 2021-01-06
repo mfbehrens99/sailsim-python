@@ -1,15 +1,15 @@
 class Boat:
-    """Holds all information about the boat"""
+    """Holds all information about the boat and calculates forces and torques"""
 
     def __init__(self, position, mass, area, hull):
         self.position = position
 
-        #static properties
+        # Static properties
         self.mass = mass
-        self.sailarea = area
-        self.hullarea = hull
+        self.sailArea = area
+        self.hullArea = hull
 
-        #dynamic properties
+        # Dynamic properties
         self.speed = 0
         self.accel = 0
         self.boatDirection = 0
@@ -22,32 +22,42 @@ class Boat:
         return trueWindDirection - self.sailDirection
 
     def apparentWindAngle(self, trueWindAngle): # Scheinbarer Wind
-        return trueWindAngle #TODO apparantWindDirection
+        return trueWindAngle #TODO apparentWindDirection
 
-    def apparentWindDirection(self, trueWindAngle): #Scheinbare Windrichtung in Bezug auf Norden
-        return self.apparentWindAngle(trueWindAngle) + self.sailDirection # not needed very frequently
+    def apparentWindDirection(self, trueWindAngle):
+        """Apparent wind as it can be measured on the boat with reference to north"""
+        return self.apparentWindAngle(trueWindAngle) + self.sailDirection # actually not needed
 
 
     # Force calculations
     def resultingForce(self,trueWindDirection):
-        apparent_wind_angle = self.apparentWindAngle(self.trueWindAngle(trueWindDirection))
+        """Adds up all reacting forces and returns them as a tuple"""
+        apparentWindAngle = self.apparentWindAngle(self.trueWindAngle(trueWindDirection))
 
-        force = (0,0)
-        force += self.sailResistance(apparent_wind_angle)
-        force += self.sailLift(apparent_wind_angle)
+        #TODO check if this can be implemented nicer
+        sumX, sumY = 0, 0
+        (forceX, forceY) = self.sailResistance(apparentWindAngle)
+        sumX += forceX; sumY += forceY
+        (forceX, forceY) = self.sailLift(apparentWindAngle)
+        sumX += forceX; sumY += forceY
 
-        force += self.waterResistance()
-        force += self.waterLift()
+        (forceX, forceY) = self.waterResistance()
+        sumX += forceX; sumY += forceY
+        (forceX, forceY) = self.waterLift()
+        sumX += forceX; sumY += forceY
 
-        return force #TODO check if this is not produceing an error
+        return (sumX, sumY)
 
     def sailResistance(self, apparentWindAngle):
+        """Calculates the force that is created when wind blows against the boat"""
         return (0,0) #TODO sailResistance
 
     def sailLift(self, apparentWindAngle):
+        """Calculates the lift force that is created when the wind changes its direction in the sail"""
         return (0,0) #TODO sailLift
 
     def waterResistance(self):
+        """Calculates the restance force of the water that is decelerating the boat"""
         return (0,0) #TODO waterResistance
 
     def waterLift(self):
