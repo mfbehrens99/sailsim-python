@@ -9,4 +9,5 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     url='github.com/mfbehrens99/sailsim',
     long_description=open('README.md').read(),
+    install_requires=['opensimplex']
 )
