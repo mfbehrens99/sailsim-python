@@ -1,4 +1,4 @@
-from sailsim.utils.coordConversion import cartToPolar
+from sailsim.utils.coordconversion import cartToPolar
 
 class Wind:
     """Generates and calculates speed and direction of wind"""

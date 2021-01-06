@@ -1,6 +1,6 @@
 from math import sin, cos
 
-from sailsim.utils.coordConversion import cartToArg
+from sailsim.utils.coordconversion import cartToArg
 from sailsim.world.windfield import Windfield
 
 class Squall(Windfield):

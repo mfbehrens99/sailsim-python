@@ -1,4 +1,4 @@
-from sailsim.utils.coordConversion import cartToPolar
+from sailsim.utils.coordconversion import cartToPolar
 
 class Windfield:
     """Describes a partion of the wind"""
