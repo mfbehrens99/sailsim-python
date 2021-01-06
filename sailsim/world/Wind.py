@@ -1,27 +1,22 @@
-import math
-
-from sailsim.world.windfield import Windfield
+from sailsim.utils.coordConversion import cartToPolar
 
 class Wind:
     """Generates and calculates speed and direction of wind"""
 
-    def __init__(self, sizeX, sizeY, winds):
-        # TODO Size unnecessary?
-        self.sizeX = sizeX
-        self.sizeY = sizeY
-
+    def __init__(self, winds):
         self.winds = winds
 
-    def getWind(self, x, y):
+    def getWindCart(self, x, y, t):
         """Summs and returns the speed and direction of all windfields"""
         sumX = 0
         sumX = 0
         for wind in self.winds:
-            (windX, windY) = wind.getWindCart(x, y)
+            (windX, windY) = wind.getWindCart(x, y, t)
             sumX += windX
             sumY += windY
+        return (sumX, sumY)
 
-        # Convert to polar
-        speed = math.sqrt(sumX**2 + sumX**2)
-        direction = (math.degrees(math.atan(sumY/sumX)) if sumX != 0 else (90 if sumY >= 0 else 270)) #TODO check
-        return (speed, direction)
+    def getWind(self, x, y, t):
+        """Returns direction and speed of the windfield at the position (x,y) as a tuple"""
+        (cartX, cartY) = self.getWindCart(x, y, t)
+        return cartToPolar(cartX, cartY)
