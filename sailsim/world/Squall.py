@@ -1,7 +1,7 @@
 from math import sin, cos
 
 from sailsim.utils.coordconversion import cartToArg
-from sailsim.world.windfield import Windfield
+from sailsim.world.Windfield import Windfield
 
 class Squall(Windfield):
     """Holds all informationabout squalls"""
