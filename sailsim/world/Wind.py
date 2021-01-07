@@ -9,7 +9,7 @@ class Wind:
     def getWindCart(self, x, y, t):
         """Summs and returns the speed and direction of all windfields"""
         sumX = 0
-        sumX = 0
+        sumY = 0
         for wind in self.winds:
             (windX, windY) = wind.getWindCart(x, y, t)
             sumX += windX
