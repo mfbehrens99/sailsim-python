@@ -6,7 +6,7 @@ from sailsim.utils.coordconversion import cartToRadius, cartToArg, polarToCart
 ALMOST_CART_TO_ARG = 8
 ALMOST_POLAR_TO_CART = 8
 
-class TestUtils(unittest.TestCase):
+class TestCoordConversion(unittest.TestCase):
     def testCartToRadius(self):
         self.assertEqual(cartToRadius( 0,  0), 0)
         self.assertEqual(cartToRadius( 1,  0), 1)
