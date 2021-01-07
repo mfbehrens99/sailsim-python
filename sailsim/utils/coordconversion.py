@@ -26,6 +26,6 @@ def cartToPolar(cartX, cartY):
 
 def polarToCart(radius, argument):
     """Convert polar coordinates into Cartesian coordinates"""
-    cartX = radius * cos(argument)
-    cartY = radius * sin(argument)
+    cartX = radius * sin(argument)
+    cartY = radius * cos(argument)
     return (cartX, cartY)
