@@ -7,7 +7,7 @@ class Squall(Windfield):
     """Holds all informationabout squalls"""
     def __init__(self, x, y):
         super().__init__(x, y)
-        self.maxsize = 2
+        self.maxsize = 1
         #TODO calc for maxsize
 
     def getWindCart(self, x, y):
@@ -34,7 +34,9 @@ class Squall(Windfield):
         """Rotates position around center of squall as if squall was rotated"""
         direction = cartToArg(self.x, self.y)
         # A visualation of this calculation can be found in the docs foulder
-        #TODO add visualation .ggb file to docs folder
-        rotX = x * cos(direction) - y * sin(direction)
-        rotY = x * sin(direction) + y * cos(direction)
+        # less calculations, saves time
+        sinDirection = sin(direction)
+        cosDirection = cos(direction)
+        rotX = x * cosDirection - y * sinDirection
+        rotY = x * sinDirection + y * cosDirection
         return (rotX, rotY)
