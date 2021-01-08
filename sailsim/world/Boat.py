@@ -1,17 +1,17 @@
 class Boat:
     """Holds all information about the boat and calculates forces and torques"""
 
-    def __init__(self, position, mass, area, hull):
-        self.position = position
-
+    def __init__(self, posX, posY, mass, area, hull):
         # Static properties
         self.mass = mass
         self.sailArea = area
         self.hullArea = hull
 
         # Dynamic properties
+        self.posX = posX
+        self.posY = posY
+
         self.speed = 0
-        self.accel = 0
         self.boatDirection = 0
         self.sailDirection = 0
 
