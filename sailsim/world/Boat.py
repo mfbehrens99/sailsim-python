@@ -1,3 +1,5 @@
+from math import pi
+
 class Boat:
     """Holds all information about the boat and calculates forces and torques"""
 
@@ -62,3 +64,9 @@ class Boat:
 
     def waterLift(self):
         return (0,0) #TODO waterLift
+
+
+    def __repr__(self):
+        ret  = "Boat @(" + str(self.posX) + "|" + str(self.posY) + ")\n"
+        ret += "v=" + str(self.speed) + "m/s twds " + str(round(self.sailDirection*360/pi, 2)) + "°"
+        return ret

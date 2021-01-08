@@ -18,3 +18,10 @@ class Simulation:
 
     def runStep(self):
         """Runs Simulation one step"""
+
+
+    def __repr__(self):
+        ret  = "sailsim (" + str(self.__class__) + ")\n"
+        ret += "@" + str(self.frequence) + "Hz, frame " + str(self.frame) + "/" + str(self.maxFrames) + "\n"
+        ret += self.world.__str__()
+        return ret

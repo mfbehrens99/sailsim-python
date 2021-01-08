@@ -5,3 +5,9 @@ class World:
         self.boat = boat
         self.wind = wind
         self.waterarea = waterarea
+
+
+    def __repr__(self):
+        ret = str(self.boat) + "\n\n"
+        ret += str(self.wind)
+        return ret
