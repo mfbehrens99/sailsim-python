@@ -67,6 +67,4 @@ class Boat:
 
 
     def __repr__(self):
-        ret  = "Boat @(" + str(self.posX) + "|" + str(self.posY) + ")\n"
-        ret += "v=" + str(self.speed) + "m/s twds " + str(round(self.sailDirection*360/pi, 2)) + "°"
-        return ret
+        return "Boat @(%s|%s)\nv=%sm/s twds %s°" % (self.posX, self.posY, self.speed, round(self.sailDirection*360/pi, 2))

@@ -29,7 +29,4 @@ class Wind:
         #TODO make nicer
         windfields = sum(isinstance(x, Windfield) for x in self.winds)
         squallfields = sum(isinstance(x, Squallfield) for x in self.winds)
-        ret  = "Wind made up of " + str(len(self.winds)) + " winds:\n"
-        ret += "\t" + str(windfields) + " Windfields\n"
-        ret += "\t" + str(squallfields) + " Squallfield\n"
-        return ret
+        return "Wind made up of %s winds:\n\t%s Windfields\n\t%s Squallfields" % (len(self.winds), windfields, squallfields)
