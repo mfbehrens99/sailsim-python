@@ -1,5 +1,5 @@
 class Boat:
-    """Holds all information about the boat and calculates forces and torques"""
+    """Holds all information about the boat and calculates its speed, forces and torques"""
 
     def __init__(self, posX, posY, mass, area, hull):
         # Static properties
@@ -27,6 +27,23 @@ class Boat:
     def apparentWindDirection(self, trueWindAngle):
         """Apparent wind as it can be measured on the boat with reference to north"""
         return self.apparentWindAngle(trueWindAngle) + self.sailDirection # actually not needed
+
+
+    # Simulation
+    def applyForces(self, forceX, forceY, interval):
+        """Changes speed according a force given"""
+        #TODO apply forces method
+        # v = a * t ; F = m * a
+        # v = F / m * t
+
+    def moveInterval(self, interval):
+        """Changes position according to sailsDirection and speed"""
+        #TODO moveInterval
+        (speedX, speedY) = (0, 0) # Get partial speed on each axis
+
+        # s = v * t
+        self.posX += speedX * interval
+        self.posY += speedY * interval
 
 
     # Force calculations
