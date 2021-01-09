@@ -30,11 +30,13 @@ class Boat:
 
 
     # Simulation
-    def applyForces(self, forceX, forceY, interval):
+    def applyForce(self, forceX, forceY, interval):
         """Changes speed according a force given"""
-        #TODO apply forces method
-        # v = a * t ; F = m * a
-        # v = F / m * t
+        # △v = a * t ; F = m * a
+        # △v = F / m * t
+        deltaVX = forceX / self.mass * interval
+        deltaVY = forceY / self.mass * interval
+        #TODO add velosiy to speed and sailDirection
 
     def moveInterval(self, interval):
         """Changes position according to sailsDirection and speed"""
