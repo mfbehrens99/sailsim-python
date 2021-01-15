@@ -10,5 +10,16 @@ setuptools.setup(
     url='github.com/mfbehrens99/sailsim',
     long_description=open('README.md').read(),
     python_requires='>=3',
-    install_requires=['opensimplex']
+    install_requires=['opensimplex'],
+    classifiers=[
+        'Development Status :: 2 - Pre-Alpha',
+        'Intended Audience :: Education',
+        'Intended Audience :: Science/Research',
+        'Topic :: Scientific/Engineering :: Physics',
+    ],
+    #entry_points={
+    #    'console_scripts': [
+    #        'sailsim.gui:main',
+    #    ]
+    #}
 )
