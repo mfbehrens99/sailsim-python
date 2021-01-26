@@ -49,7 +49,7 @@ class Boat:
 
 
     # Force calculations
-    def resultingForce(self,trueWindDirection, trueWindSpeed):
+    def resultingForce(self, trueWindDirection, trueWindSpeed):
         """Adds up all reacting forces and returns them as a tuple"""
         apparentWindSpeed = trueWindSpeed #TODO apparentWindSpeed
         apparentWindAngle = self.apparentWindAngle(self.trueWindAngle(trueWindDirection))
@@ -57,14 +57,18 @@ class Boat:
         #TODO check if this can be implemented nicer
         sumX, sumY = 0, 0
         (forceX, forceY) = self.sailResistance(apparentWindAngle, apparentWindSpeed)
-        sumX += forceX; sumY += forceY
+        sumX += forceX
+        sumY += forceY
         (forceX, forceY) = self.sailLift(apparentWindAngle, apparentWindSpeed)
-        sumX += forceX; sumY += forceY
+        sumX += forceX
+        sumY += forceY
 
-        (forceX, forceY) = self.waterResistance()
-        sumX += forceX; sumY += forceY
-        (forceX, forceY) = self.waterLift()
-        sumX += forceX; sumY += forceY
+        # (forceX, forceY) = self.waterResistance()
+        # sumX += forceX
+        # sumY += forceY
+        # (forceX, forceY) = self.waterLift()
+        # sumX += forceX
+        # sumY += forceY
 
         return (sumX, sumY)
 
