@@ -11,9 +11,9 @@ class Boat:
         self.posX = posX
         self.posY = posY
 
-        self.speed = 0
+        self.speedX = 0
+        self.speedY = 0
         self.boatDirection = 0
-        self.sailDirection = 0
 
         self.mainSailAngle = 0
 
@@ -34,29 +34,25 @@ class Boat:
         """Changes speed according a force given"""
         # △v = a * t ; F = m * a
         # △v = F / m * t
-        deltaVX = forceX / self.mass * interval
-        deltaVY = forceY / self.mass * interval
-        #TODO add velosiy to speed and sailDirection
+        self.speedX += forceX / self.mass * interval
+        self.speedY += forceY / self.mass * interval
 
     def moveInterval(self, interval):
         """Changes position according to sailsDirection and speed"""
-        #TODO moveInterval
-        (speedX, speedY) = (0, 0) # Get partial speed on each axis
-
         # s = v * t
-        self.posX += speedX * interval
-        self.posY += speedY * interval
+        self.posX += self.speedX * interval
+        self.posY += self.speedY * interval
 
 
     # Force calculations
-    def resultingForce(self, trueWindDirection, trueWindSpeed):
+    def resultingForce(self, trueWindX, trueWindY):
         """Adds up all reacting forces and returns them as a tuple"""
         apparentWindSpeed = trueWindSpeed #TODO apparentWindSpeed
         apparentWindAngle = self.apparentWindAngle(self.trueWindAngle(trueWindDirection))
 
         #TODO check if this can be implemented nicer
         sumX, sumY = 0, 0
-        (forceX, forceY) = self.sailResistance(apparentWindAngle, apparentWindSpeed)
+        (forceX, forceY) = self.sailDrag(apparentWindAngle, apparentWindSpeed)
         sumX += forceX
         sumY += forceY
         (forceX, forceY) = self.sailLift(apparentWindAngle, apparentWindSpeed)
@@ -72,7 +68,7 @@ class Boat:
 
         return (sumX, sumY)
 
-    def sailResistance(self, apparentWindAngle, apparentWindSpeed):
+    def sailDrag(self, apparentWindAngle, apparentWindSpeed):
         """Calculates the force that is created when wind blows against the boat"""
         return (0,0) #TODO sailResistance
 
