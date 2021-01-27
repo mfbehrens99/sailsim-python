@@ -15,7 +15,11 @@ def cartToRadius(cartX, cartY):
 def cartToArg(cartX, cartY):
     """Converts Cartesian coordinates into their corresponding argument (angle)"""
     if cartY != 0: # Don't divide by 0
-        return atan(cartX/cartY)
+        if cartY < 0:                       # 2nd and 3rd quadrant
+            return atan(cartX/cartY)+pi
+        if cartX < 0:                       # 4st quadrant
+            return atan(cartX/cartY)+2*pi
+        return atan(cartX/cartY)            # else 1th quadrant
     if cartX >= 0:
         return pi/2 # 90  degrees
     return 3/2*pi   # 270 degrees
