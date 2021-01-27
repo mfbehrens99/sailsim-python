@@ -115,4 +115,9 @@ class Boat:
         return 0
 
     def coefficientLift(self, angleOfAttack):
-        return 0 #TODO
+        return 0 #TODO Xfoil
+
+
+    # leeway angle
+    def calcLeewayAngle(self):
+        pass
