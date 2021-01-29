@@ -23,20 +23,6 @@ class Boat:
         self.sailor = sailor # Sail algorithm
         self.mainSailAngle = 0
 
-    # Angle calculations
-    def apparentWind(self, trueWindX, trueWindY):
-        return (trueWindX - self.speedX, trueWindY - self.speedY)
-
-    def apparentWindAngle(self, apparentWindX, apparentWindY):
-        """Calculates the apparent wind angle based on the carthesian true wind"""
-        return cartToArg(apparentWindX, apparentWindY) - cartToArg(self.speedX, self.speedY) #TODO %(2*pi) ???
-
-    def apparentWindSpeedSq(self, apparentWindX, apparentWindY):
-        return pow(apparentWindX, 2) + pow(apparentWindY, 2)
-
-    def angleOfAttack(self, apparentWindAngle):
-        return pi - apparentWindAngle - self.mainSailAngle - self.leewayAngle  #TODO angleOfAttack oder vielleicht Segeleinstellung? Zusammenhang mit apparentWindAngle und Abdrift?
-
 
     # Simulation
     def applyForce(self, forceX, forceY, interval):
@@ -118,6 +104,19 @@ class Boat:
         return 0 #TODO Xfoil
 
 
-    # leeway angle
+    # Angle calculations
     def calcLeewayAngle(self):
         pass
+
+    def apparentWind(self, trueWindX, trueWindY):
+        return (trueWindX - self.speedX, trueWindY - self.speedY)
+
+    def apparentWindAngle(self, apparentWindX, apparentWindY):
+        """Calculates the apparent wind angle based on the carthesian true wind"""
+        return cartToArg(apparentWindX, apparentWindY) - cartToArg(self.speedX, self.speedY) #TODO %(2*pi) ???
+
+    def apparentWindSpeedSq(self, apparentWindX, apparentWindY):
+        return pow(apparentWindX, 2) + pow(apparentWindY, 2)
+
+    def angleOfAttack(self, apparentWindAngle):
+        return pi - apparentWindAngle - self.mainSailAngle - self.leewayAngle  #TODO angleOfAttack oder vielleicht Segeleinstellung? Zusammenhang mit apparentWindAngle und Abdrift?
