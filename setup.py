@@ -1,3 +1,5 @@
+"""Install the package sailsim."""
+
 import setuptools
 
 setuptools.setup(
@@ -17,9 +19,9 @@ setuptools.setup(
         'Intended Audience :: Science/Research',
         'Topic :: Scientific/Engineering :: Physics',
     ],
-    #entry_points={
-    #    'console_scripts': [
-    #        'sailsim.gui:main',
-    #    ]
-    #}
+    # entry_points={
+    #     'console_scripts': [
+    #         'sailsim.gui:main',
+    #     ]
+    # }
 )
