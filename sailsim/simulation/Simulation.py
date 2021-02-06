@@ -1,20 +1,20 @@
 class Simulation:
     """Main simulation class in this project"""
 
-    interval = 1
-
-
-    def __init__(self, interval, world, start=None, end=None):
-        self.interval = interval
-
+    def __init__(self, world, timestep, lastFrame=None):
         self.world = world
 
-        self.start = start
-        self.end = end
+        # Timing
+        self.timestep = timestep
+        self.frame = 0
+        self.lastFrame = lastFrame
 
     def run(self):
         """Runs Simulation"""
-        #TODO write simulation
+        if self.lastFrame is None:
+            raise Exception('Simulation has no lastFrame')
+        while self.frame < self.lastFrame:
+            self.step()
 
     def runStep(self):
         """Runs Simulation one step"""
