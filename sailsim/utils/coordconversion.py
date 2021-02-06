@@ -8,24 +8,32 @@ found on a compass. So this definition differs from the standard definition of a
 
 from math import sin, cos, atan, pi, sqrt
 
+
 def cartToRadius(cartX, cartY):
-    """Converts Cartesian coordinates into their corresponding radius"""
+    """Convert Cartesian coordinates into their corresponding radius."""
     return sqrt(cartX**2 + cartY**2)
 
+
 def cartToArg(cartX, cartY):
-    """Converts Cartesian coordinates into their corresponding argument (angle)"""
+    """Convert Cartesian coordinates into their corresponding argument (angle)."""
     if cartY != 0: # Don't divide by 0
-        return atan(cartX/cartY)
+        if cartY < 0:               # 2nd and 3rd quadrant
+            return atan(cartX / cartY) + pi
+        if cartX < 0:               # 4st quadrant
+            return atan(cartX / cartY) + 2 * pi
+        return atan(cartX / cartY)  # else 1th quadrant
     if cartX >= 0:
-        return pi/2 # 90  degrees
-    return 3/2*pi   # 270 degrees
+        return pi / 2               # 90  degrees
+    return 3 / 2 * pi               # 270 degrees
+
 
 def cartToPolar(cartX, cartY):
-    """Convert Cartesian coordinates into polar coordinates"""
+    """Convert Cartesian coordinates into polar coordinates."""
     return (cartToRadius(cartX, cartY), cartToArg(cartX, cartY))
 
+
 def polarToCart(radius, argument):
-    """Convert polar coordinates into Cartesian coordinates"""
+    """Convert polar coordinates into Cartesian coordinates."""
     cartX = radius * sin(argument)
     cartY = radius * cos(argument)
     return (cartX, cartY)

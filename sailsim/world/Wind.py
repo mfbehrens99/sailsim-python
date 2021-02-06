@@ -3,14 +3,15 @@ from sailsim.utils.coordconversion import cartToPolar
 from sailsim.world.Squallfield import Squallfield
 from sailsim.world.Windfield import Windfield
 
+
 class Wind:
-    """Generates and calculates speed and direction of wind"""
+    """This class holds all windfields and calculates speed and direction of wind."""
 
     def __init__(self, winds):
         self.winds = winds
 
     def getWindCart(self, x, y, t):
-        """Summs and returns the speed and direction of all windfields"""
+        """Summ up and returns the speed and direction of all windfields."""
         sumX = 0
         sumY = 0
         for wind in self.winds:
@@ -20,7 +21,7 @@ class Wind:
         return (sumX, sumY)
 
     def getWind(self, x, y, t):
-        """Returns direction and speed of the windfield at the position (x,y) as a tuple"""
+        """Return direction and speed of the windfield at the position (x,y) as a tuple."""
         (cartX, cartY) = self.getWindCart(x, y, t)
         return cartToPolar(cartX, cartY)
 
