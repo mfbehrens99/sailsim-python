@@ -21,4 +21,4 @@ class Simulation:
 
 
     def __repr__(self):
-        return "sailsim\n@%sHz, frame %s/%s\n%s" % (1/self.interval, self.frame, self.maxFrames, self.world.__str()__)
+        return "sailsim\nstepSize: %sms, frame %s/%s\n%s" % (self.stepSize * 1000, self.frame, self.lastFrame, self.world)

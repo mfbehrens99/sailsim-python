@@ -26,7 +26,7 @@ class Wind:
 
 
     def __repr__(self):
-        #TODO make nicer
+        # TODO make nicer
         windfields = sum(isinstance(x, Windfield) for x in self.winds)
         squallfields = sum(isinstance(x, Squallfield) for x in self.winds)
         return "Wind made up of %s winds:\n\t%s Windfields\n\t%s Squallfields" % (len(self.winds), windfields, squallfields)
