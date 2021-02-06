@@ -1,5 +1,5 @@
 class Simulation:
-    """Main simulation class in this project"""
+    """Main simulation class in this project."""
 
     def __init__(self, world, timestep, lastFrame=None):
         self.world = world
@@ -19,7 +19,6 @@ class Simulation:
 
     def step(self):
         """Run one step of the Simulation."""
-
         # Preperations
         time = self.frame * self.timestep
 
