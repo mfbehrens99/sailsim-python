@@ -136,12 +136,14 @@ class Boat:
         # TODO calculate coefficient using Xfoil
         return self.coefficientAirLift(angleOfAttack)
 
+
+    # Speed calculations
     def boatSpeedSq(self):
-        """Return speed of the boat but squared"""
+        """Return speed of the boat but squared."""
         return pow(self.speedX, 2) + pow(self.speedY, 2)
 
     def apparentWindSpeedSq(self, apparentWindX, apparentWindY):
-        """"""
+        """Calculate speed of apparent wind but squared."""
         return pow(apparentWindX, 2) + pow(apparentWindY, 2) # TODO stay in (-pi;pi] => %(2*pi)
 
 
@@ -160,5 +162,5 @@ class Boat:
         return cartToArg(apparentWindX, apparentWindY) - cartToArg(self.speedX, self.speedY) # TODO stay in (-pi;pi] => %(2*pi)
 
     def angleOfAttack(self, apparentWindAngle): # TODO angleOfAttack oder vielleicht Segeleinstellung? Zusammenhang mit apparentWindAngle und Abdrift?
-        """Calculate angle between main sail and apparent wind vector"""
+        """Calculate angle between main sail and apparent wind vector."""
         return pi - apparentWindAngle - self.mainSailAngle - self.leewayAngle # TODO stay in (-pi;pi] => %(2*pi)
