@@ -41,7 +41,7 @@ class Boat:
 
     def runSailor(self):
         """Activate the sailing algorithm to decide what the boat should do."""
-
+        # TODO interact with sailor library
 
     # Force calculations
     def resultingForce(self, trueWindX, trueWindY):
@@ -57,6 +57,7 @@ class Boat:
         # TODO calculate leewayAngle
         angleOfAttack = self.angleOfAttack(apparentWindAngle)
 
+        # Sum up all acting forces
         # FIXME check if this can be implemented nicer
         sumX, sumY = 0, 0
         (forceX, forceY) = self.sailDrag(apparentWindNormX, apparentWindNormY, apparentWindSpeedSq, angleOfAttack)
@@ -66,12 +67,12 @@ class Boat:
         sumX += forceX
         sumY += forceY
 
-        # (forceX, forceY) = self.waterResistance()
-        # sumX += forceX
-        # sumY += forceY
-        # (forceX, forceY) = self.waterLift()
-        # sumX += forceX
-        # sumY += forceY
+        (forceX, forceY) = self.waterDrag()
+        sumX += forceX
+        sumY += forceY
+        (forceX, forceY) = self.waterLift()
+        sumX += forceX
+        sumY += forceY
 
         return (sumX, sumY)
 
@@ -87,9 +88,9 @@ class Boat:
             return (-force * apparentWindNormY, force * apparentWindNormX) # rotate by -90°
         return (force * apparentWindNormY, -force * apparentWindNormX) # rotate by  90°
 
-    def waterResistance(self):
-        """Calculate the restance force of the water that is decelerating the boat."""
-        return (0, 0) # TODO waterResistance
+    def waterDrag(self):
+        """Calculate the drag force of the water that is decelerating the boat."""
+        return (0, 0) # TODO waterDrag
 
     def waterLift(self):
         """Calculate force that is caused by lift forces in the water."""
@@ -100,28 +101,28 @@ class Boat:
     def coefficientDrag(self, angleOfAttack):
         # TODO Widerstandsbeiwert mit Xfoil berechnen
         """Calculate the wind resitance coefficient based on the angle of attack."""
-        return 0
 
     def coefficientLift(self, angleOfAttack):
         """Calculate the wind lift coefficient based on the angle of attack."""
         # TODO Auftriebsbeiwert mit Xfoil berechnen
-        return 0
 
 
     # Angle calculations
     def calcLeewayAngle(self):
         """Calculate and return the leeway angle."""
+        # TODO exact calculation
+        return 3
 
     def apparentWind(self, trueWindX, trueWindY):
         """Return apparent wind by adding true wind and speed."""
-        return (trueWindX - self.speedX, trueWindY - self.speedY)
+        return (trueWindX - self.speedX, trueWindY - self.speedY) # TODO stay in (-pi;pi] => %(2*pi)
 
     def apparentWindAngle(self, apparentWindX, apparentWindY):
         """Calculate the apparent wind angle based on the carthesian true wind."""
-        return cartToArg(apparentWindX, apparentWindY) - cartToArg(self.speedX, self.speedY) # TODO %(2*pi) ???
+        return cartToArg(apparentWindX, apparentWindY) - cartToArg(self.speedX, self.speedY) # TODO stay in (-pi;pi] => %(2*pi)
 
     def apparentWindSpeedSq(self, apparentWindX, apparentWindY):
-        return pow(apparentWindX, 2) + pow(apparentWindY, 2)
+        return pow(apparentWindX, 2) + pow(apparentWindY, 2) # TODO stay in (-pi;pi] => %(2*pi)
 
-    def angleOfAttack(self, apparentWindAngle):
-        return pi - apparentWindAngle - self.mainSailAngle - self.leewayAngle  # TODO angleOfAttack oder vielleicht Segeleinstellung? Zusammenhang mit apparentWindAngle und Abdrift?
+    def angleOfAttack(self, apparentWindAngle): # TODO angleOfAttack oder vielleicht Segeleinstellung? Zusammenhang mit apparentWindAngle und Abdrift?
+        return pi - apparentWindAngle - self.mainSailAngle - self.leewayAngle # TODO stay in (-pi;pi] => %(2*pi)
