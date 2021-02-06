@@ -49,15 +49,18 @@ class Boat:
     # Force calculations
     def resultingForce(self, trueWindX, trueWindY):
         """Add up all reacting forces and return them as a tuple."""
+        # calculate apparent wind angle
         (apparentWindX, apparentWindY) = self.apparentWind(trueWindX, trueWindY)
-
         apparentWindAngle = self.apparentWindAngle(apparentWindX, apparentWindY)
-        apparentWindSpeedSq = self.apparentWindSpeedSq(apparentWindX, apparentWindY)
-        boatSpeedSq = self.boatSpeedSq()
 
+        apparentWindSpeedSq = self.apparentWindSpeedSq(apparentWindX, apparentWindY)
         apparentWindSpeed = sqrt(apparentWindSpeedSq)
+        boatSpeedSq = self.boatSpeedSq()
+        boatSpeed = sqrt(boatSpeedSq)
+
+        # normalise apparent wind vector and boat speed vetor
         (apparentWindNormX, apparentWindNormY) = (apparentWindX / apparentWindSpeed, apparentWindY / apparentWindSpeed) # normalised apparent wind vector
-        (speedNormX, speedNormY) = (self.speedX / boatSpeedSq, self.speedY / boatSpeedSq) # normalised speed vector
+        (speedNormX, speedNormY) = (self.speedX / boatSpeed, self.speedY / boatSpeed) # normalised speed vector
 
         leewayAngle = self.calcLeewayAngle()
         angleOfAttack = self.angleOfAttack(apparentWindAngle)
