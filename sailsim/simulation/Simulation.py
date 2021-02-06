@@ -10,30 +10,28 @@ class Simulation:
         self.lastFrame = lastFrame
 
     def run(self):
-        """Runs Simulation"""
+        """Run whole Simulation if lastFrame is set."""
+        # Check if lastFrame exisists
         if self.lastFrame is None:
             raise Exception('Simulation has no lastFrame')
         while self.frame < self.lastFrame:
             self.step()
 
     def step(self):
-        """Runs Simulation one step"""
+        """Run one step of the Simulation."""
 
         # Preperations
         time = self.frame * self.timestep
 
         # Simulation starts
-        # Fetch boat position
-        (boatX, boatY) = (self.world.boat.posX, self.world.boat.posY)
-
-        # Get wind
-        (windX, windY) = self.world.wind.getWindCart(boatX, boatY, time)
+        (boatX, boatY) = (self.world.boat.posX, self.world.boat.posY)       # Fetch boat position
+        (windX, windY) = self.world.wind.getWindCart(boatX, boatY, time)    # Get wind
 
         # Let wind interact with boat
-        (forceX, forceY) = self.world.boat.resultingForce(windX, windY) # TODO it is probaply better to not pass the force back to the simulation
+        (forceX, forceY) = self.world.boat.resultingForce(windX, windY)
         self.world.boat.applyForce(forceX, forceY, self.timestep)
         self.world.boat.moveInterval(self.timestep)
 
-        #TODO gather information for display
+        # TODO gather information for display
 
         self.frame += 1
