@@ -34,3 +34,7 @@ class Simulation:
         # TODO gather information for display
 
         self.frame += 1
+
+
+    def __repr__(self):
+        return "sailsim\nstepSize: %sms, frame %s/%s\n%s" % (self.stepSize * 1000, self.frame, self.lastFrame, self.world)

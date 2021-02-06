@@ -5,3 +5,7 @@ class World:
         self.boat = boat
         self.wind = wind
         self.waterarea = waterarea
+
+
+    def __repr__(self):
+        return "%s\n\n%s" % (self.boat, self.wind)

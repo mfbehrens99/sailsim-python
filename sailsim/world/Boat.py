@@ -164,3 +164,7 @@ class Boat:
     def angleOfAttack(self, apparentWindAngle): # TODO angleOfAttack oder vielleicht Segeleinstellung? Zusammenhang mit apparentWindAngle und Abdrift?
         """Calculate angle between main sail and apparent wind vector."""
         return pi - apparentWindAngle - self.mainSailAngle - self.leewayAngle # TODO stay in (-pi;pi] => %(2*pi)
+
+
+    def __repr__(self):
+        return "Boat @(%s|%s)\nv=%sm/s twds %s°" % (self.posX, self.posY, round(sqrt(self.boatSpeedSq()), 2), round(cartToArg(self.speedX, self.speedY) * 360 / pi, 2))
