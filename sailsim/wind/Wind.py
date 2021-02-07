@@ -1,7 +1,7 @@
 from sailsim.utils.coordconversion import cartToPolar
 
-from sailsim.world.Squallfield import Squallfield
-from sailsim.world.Windfield import Windfield
+from sailsim.wind.Squallfield import Squallfield
+from sailsim.wind.Windfield import Windfield
 
 
 class Wind:

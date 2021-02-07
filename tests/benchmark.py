@@ -1,7 +1,7 @@
-from sailsim.world.Wind import Wind
+from sailsim.wind.Wind import Wind
 
-from sailsim.world.Windfield import Windfield
-from sailsim.world.Squallfield import Squallfield
+from sailsim.wind.Windfield import Windfield
+from sailsim.wind.Squallfield import Squallfield
 
 
 # TODO this should test a simulation step
