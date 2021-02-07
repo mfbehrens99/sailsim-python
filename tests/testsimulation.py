@@ -3,12 +3,12 @@
 # Import basic modules
 from sailsim.simulation.Simulation import Simulation
 from sailsim.world.World import World
-from sailsim.world.Boat import Boat
-from sailsim.world.Wind import Wind
+from sailsim.boat.Boat import Boat
+from sailsim.wind.Wind import Wind
 
 # Import Winds
-from sailsim.world.Windfield import Windfield
-from sailsim.world.Squallfield import Squallfield
+from sailsim.wind.Windfield import Windfield
+from sailsim.wind.Squallfield import Squallfield
 
 wf = Windfield(10, 0)
 sqf = Squallfield(0, 0, 100, 1, 0) # TODO has to be enabled later

@@ -2,8 +2,8 @@ from random import getrandbits
 
 from opensimplex import OpenSimplex # Noise function
 
-from sailsim.world.Windfield import Windfield
-from sailsim.world.Squall import Squall
+from sailsim.wind.Windfield import Windfield
+from sailsim.wind.Squall import Squall
 
 
 class Squallfield(Windfield):
