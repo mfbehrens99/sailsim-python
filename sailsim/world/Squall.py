@@ -15,7 +15,7 @@ class Squall(Windfield):
     def getWindCart(self, x, y):
         """Return cartesian components of the windfield at the position (x,y) as a tuple."""
         windWeight = self.calcWindWeight(x, y)
-        return (self.x * windWeight, self.y * windWeight)
+        return (self.speedX * windWeight, self.speedY * windWeight)
 
     def calcWindWeight(self, x, y):
         """Return a factor for the strength of the wind depending on the form of the squall."""
@@ -34,7 +34,7 @@ class Squall(Windfield):
 
     def rotatePosition(self, x, y):
         """Rotate position around center of squall as if squall was rotated."""
-        direction = cartToArg(self.x, self.y)
+        direction = cartToArg(self.speedX, self.speedY)
         # A visualation of this calculation can be found in the docs foulder
         # less calculations, saves time
         sinDirection = sin(direction)

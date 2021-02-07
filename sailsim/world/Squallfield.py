@@ -66,6 +66,6 @@ class Squallfield(Windfield):
 
     def transformPositionTime(self, x, y, t):
         """Transform position based on speed and point in time (easier than to move the whole windfield)."""
-        x -= self.x * t
-        y -= self.y * t
+        x -= self.speedX * t
+        y -= self.speedY * t
         return (x, y)
