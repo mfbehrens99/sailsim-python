@@ -37,4 +37,4 @@ class Simulation:
 
 
     def __repr__(self):
-        return "sailsim\nstepSize: %sms, frame %s/%s\n%s" % (self.timestep * 1000, self.frame, self.lastFrame, self.world)
+        return "sailsim @%sms, frame %s/%s\n%s\n----------" % (self.timestep * 1000, self.frame, self.lastFrame, self.world)

@@ -167,4 +167,5 @@ class Boat:
 
 
     def __repr__(self):
-        return "Boat @(%s|%s)\nv=%sm/s twds %s°" % (self.posX, self.posY, round(sqrt(self.boatSpeedSq()), 2), round(cartToArg(self.speedX, self.speedY) * 360 / pi, 2))
+        heading = round(cartToArg(self.speedX, self.speedY) * 180 / pi, 2)
+        return "Boat @(%s|%s), v=%sm/s twds %s°" % (round(self.posX, 3), round(self.posY, 3), round(sqrt(self.boatSpeedSq()), 2), heading)
