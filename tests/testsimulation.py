@@ -10,15 +10,18 @@ from sailsim.wind.Wind import Wind
 from sailsim.wind.Windfield import Windfield
 from sailsim.wind.Squallfield import Squallfield
 
-wf = Windfield(10, 0)
+wf = Windfield(0, 10)
 sqf = Squallfield(0, 0, 100, 1, 0) # TODO has to be enabled later
 
 wind = Wind([wf, sqf])
 b = Boat(0, 0, 100, 10, None)
 
+b.speedX = 0
+b.speedY = 1
+
 # Create world and simulation
 w = World(b, wind, None)
-s = Simulation(w, 0.01, 2048)
+s = Simulation(w, 0.01, 256)
 
 # Simulate 2 steps with print
 print(s)
