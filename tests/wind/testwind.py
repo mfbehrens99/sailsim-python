@@ -1,8 +1,8 @@
 import unittest
 from math import pi, sqrt
 
-from sailsim.world.Wind import Wind
-from sailsim.world.Windfield import Windfield
+from sailsim.wind.Wind import Wind
+from sailsim.wind.Windfield import Windfield
 
 ALMOST_GET_WIND = 8
 
