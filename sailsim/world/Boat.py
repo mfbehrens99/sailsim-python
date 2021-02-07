@@ -59,8 +59,9 @@ class Boat:
         boatSpeed = sqrt(boatSpeedSq)
 
         # normalise apparent wind vector and boat speed vetor
-        (apparentWindNormX, apparentWindNormY) = (apparentWindX / apparentWindSpeed, apparentWindY / apparentWindSpeed) # normalised apparent wind vector
-        (speedNormX, speedNormY) = (self.speedX / boatSpeed, self.speedY / boatSpeed) # normalised speed vector
+        # if vector is (0, 0) set normalised vector to (0, 0) aswell
+        (apparentWindNormX, apparentWindNormY) = (apparentWindX / apparentWindSpeed, apparentWindY / apparentWindSpeed) if not apparentWindSpeed == 0 else (0, 0) # normalised apparent wind vector
+        (speedNormX, speedNormY) = (self.speedX / boatSpeed, self.speedY / boatSpeed) if not boatSpeed == 0 else (0, 0) # normalised speed vector
 
         leewayAngle = self.calcLeewayAngle()
         angleOfAttack = self.angleOfAttack(apparentWindAngle)
