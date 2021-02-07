@@ -36,5 +36,21 @@ class Simulation:
         self.frame += 1
 
 
+    def getTime(self):
+        """Return the elapsed time since the start of the simulation."""
+        return self.timestep * self.frame
+
+    def totalTime(self):
+        """Return the total time that will elapse throughout the simulation."""
+        return self.timestep * self.lastFrame
+
+
     def __repr__(self):
-        return "sailsim @%sms, frame %s/%s\n%s\n----------" % (self.timestep * 1000, self.frame, self.lastFrame, self.world)
+        """Return basic information about the simulation."""
+        if self.lastFrame is None:
+            return "sailsim @frm%s(%ss), %sms\n%s\n----------" % (self.frame, self.getTime(), self.timestep * 1000, self.world)
+        return "sailsim @frm%s/%s(%ss,%s%%), %sms\n%s\n----------" % (self.frame, self.lastFrame - 1, self.getTime(), self.frame * 100 / self.lastFrame, self.timestep * 1000, self.world)
+
+    def __len__(self):
+        """Return number of frames. Might be None."""
+        return self.lastFrame
