@@ -69,19 +69,19 @@ class Boat:
         # Sum up all acting forces
         # FIXME check if this can be implemented nicer
         sumX, sumY = 0, 0
-        (forceX, forceY) = self.sailDrag(apparentWindNormX, apparentWindNormY, apparentWindSpeedSq, angleOfAttack)
-        sumX += forceX
-        sumY += forceY
-        (forceX, forceY) = self.sailLift(apparentWindNormX, apparentWindNormY, apparentWindSpeedSq, apparentWindAngle, angleOfAttack)
-        sumX += forceX
-        sumY += forceY
+        (sailDragX, sailDragY) = self.sailDrag(apparentWindNormX, apparentWindNormY, apparentWindSpeedSq, angleOfAttack)
+        sumX += sailDragX
+        sumY += sailDragY
+        (sailLiftX, sailLiftY) = self.sailLift(apparentWindNormX, apparentWindNormY, apparentWindSpeedSq, apparentWindAngle, angleOfAttack)
+        sumX += sailLiftX
+        sumY += sailLiftY
 
-        (forceX, forceY) = self.waterDrag(speedNormX, speedNormY, boatSpeedSq, leewayAngle)
-        sumX += forceX
-        sumY += forceY
-        (forceX, forceY) = self.waterLift(speedNormX, speedNormY, boatSpeedSq, leewayAngle, apparentWindAngle)
-        sumX += forceX
-        sumY += forceY
+        (waterDragX, waterDragY) = self.waterDrag(speedNormX, speedNormY, boatSpeedSq, leewayAngle)
+        sumX += waterDragX
+        sumY += waterDragY
+        (waterLiftX, waterLiftY) = self.waterLift(speedNormX, speedNormY, boatSpeedSq, leewayAngle, apparentWindAngle)
+        sumX += waterLiftX
+        sumY += waterLiftY
 
         return (sumX, sumY)
 
