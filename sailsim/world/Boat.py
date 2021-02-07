@@ -69,6 +69,10 @@ class Boat:
         leewayAngle = self.calcLeewayAngle()
         angleOfAttack = self.angleOfAttack(apparentWindAngle)
 
+        # print("apWind:", apparentWindX, apparentWindY)
+        # print("apWindAng:", apparentWindAngle * 180 / pi)
+        # print("angOfAtk:", angleOfAttack * 180 / pi)
+
         # Sum up all acting forces
         # FIXME check if this can be implemented nicer
         sumX, sumY = 0, 0
@@ -85,6 +89,14 @@ class Boat:
         (waterLiftX, waterLiftY) = self.waterLift(speedNormX, speedNormY, boatSpeedSq, leewayAngle, apparentWindAngle)
         sumX += waterLiftX
         sumY += waterLiftY
+
+        # print(self.speedX, self.speedY)
+        # print(sailDragX, sailDragY, self.coefficientAirDrag(angleOfAttack))
+        # print(sailLiftX, sailLiftY, self.coefficientAirLift(angleOfAttack))
+        # print(waterDragX, waterDragY, self.coefficientWaterDrag(angleOfAttack))
+        # print(waterLiftX, waterLiftY, self.coefficientWaterLift(angleOfAttack))
+        # print(sumX, sumY)
+        # print("----------")
 
         return (sumX, sumY)
 
