@@ -11,7 +11,7 @@ from sailsim.world.Windfield import Windfield
 from sailsim.world.Squallfield import Squallfield
 
 wf = Windfield(10, 0)
-sqf = Squallfield(0, 0, 100, 1, 0)
+sqf = Squallfield(0, 0, 100, 1, 0) # TODO has to be enabled later
 
 wind = Wind([wf, sqf])
 b = Boat(0, 0, 100, 10, None)
