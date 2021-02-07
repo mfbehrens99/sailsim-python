@@ -49,7 +49,7 @@ class Simulation:
         """Return basic information about the simulation."""
         if self.lastFrame is None:
             return "sailsim @frm%s(%ss), %sms\n%s\n----------" % (self.frame, self.getTime(), self.timestep * 1000, self.world)
-        return "sailsim @frm%s/%s(%ss,%s%%), %sms\n%s\n----------" % (self.frame, self.lastFrame - 1, self.getTime(), self.frame * 100 / self.lastFrame, self.timestep * 1000, self.world)
+        return "sailsim @frm%s/%s(%ss,%s%%), %sms\n%s\n----------" % (self.frame, self.lastFrame - 1, self.getTime(), str(round(self.frame * 100 / self.lastFrame, 1)).zfill(4), self.timestep * 1000, self.world)
 
     def __len__(self):
         """Return number of frames. Might be None."""
