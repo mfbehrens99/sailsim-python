@@ -21,14 +21,10 @@ b.speedY = 1
 
 # Create world and simulation
 w = World(b, wind, None)
-s = Simulation(w, 0.01, 256)
+s = Simulation(w, 0.01, 1024)
 
-# Simulate 2 steps with print
-print(s)
+# Simulate 1 step
 s.step()
-print(s)
-s.step()
-print(s)
 
 # Finish simulation
 s.run()

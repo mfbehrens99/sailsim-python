@@ -33,6 +33,8 @@ class Simulation:
 
         # TODO gather information for display
 
+        print(self)
+
         self.frame += 1
 
 
