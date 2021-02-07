@@ -8,4 +8,4 @@ class World:
 
 
     def __repr__(self):
-        return "%s\n\n%s" % (self.boat, self.wind)
+        return str(self.boat)
