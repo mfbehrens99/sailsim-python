@@ -29,7 +29,7 @@ class FrameList():
 
     def getCSVHeader(self):
         """Generate head of .csv file."""
-        return "\n"
+        return "time,boatPosX,boatPosY,boatSpeedX,boatSpeedY\n"
 
     def saveCSV(self, name="output.csv"):
         if not name.endswith(".csv"):

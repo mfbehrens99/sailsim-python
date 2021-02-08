@@ -1,8 +1,11 @@
+from sailsim.simulation.FrameList import FrameList
+
 class Simulation:
     """Main simulation class in this project."""
 
     def __init__(self, world, timestep, lastFrame=None):
         self.world = world
+        self.frameList = FrameList()
 
         # Timing
         self.timestep = timestep
@@ -31,9 +34,7 @@ class Simulation:
         self.world.boat.applyForce(forceX, forceY, self.timestep)
         self.world.boat.moveInterval(self.timestep)
 
-        # TODO gather information for display
-
-        print(self)
+        self.frameList.grabFrame(self)
 
         self.frame += 1
 
