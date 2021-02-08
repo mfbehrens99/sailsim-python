@@ -20,6 +20,7 @@ class Frame():
                 row.append(wind.getWindCart(coordX, coordY, self.time))
             self.windTable.append(row)
 
-    def toCSVLine(self):
+    def getCSVLine(self):
+        """Return string that contains all data about this frame."""
         # TODO write toCSVLine
         return "\n"
