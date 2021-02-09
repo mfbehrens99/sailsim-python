@@ -4,7 +4,7 @@ from math import pi
 
 
 def angleKeepInterval(angle):
-    """Keep angle inside the range of [-pi; pi]."""
+    """Keep angle inside the range of (-pi; pi]."""
     if angle > pi:
         return angle - 2 * pi
     if angle <= -pi:
@@ -13,5 +13,5 @@ def angleKeepInterval(angle):
 
 
 def directionKeepInterval(direction):
-    """Keep direction inside the range of [0; 2*pi]."""
+    """Keep direction inside the range of [0; 2*pi)."""
     return direction % (2 * pi)
