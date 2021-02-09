@@ -8,14 +8,16 @@ from sailsim.wind.Wind import Wind
 
 # Import Winds
 from sailsim.wind.Windfield import Windfield
+from sailsim.wind.Fluctuationfield import Fluctuationfield
 from sailsim.wind.Squallfield import Squallfield
 
 wf = Windfield(0, 10)
+flctf = Fluctuationfield(2, 0.1, 0.1, 0, 0, 1200)
 sqf = Squallfield(0, 0, 100, 1, 0) # TODO has to be enabled later
+wind = Wind([wf, flctf, sqf])
+print(wind)
 
-wind = Wind([wf, sqf])
 b = Boat(0, 0, 100, 10, None)
-
 b.speedX = 0
 b.speedY = 1
 
