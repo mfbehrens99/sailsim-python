@@ -26,7 +26,7 @@ class Boat:
 
         self.speedX = 0
         self.speedY = 0
-        self.leewayAngle = 0
+        self.direction = 0
 
         self.sailor = sailor # Sail algorithm
         self.mainSailAngle = 45 * pi / 180
@@ -92,10 +92,10 @@ class Boat:
         sumY += waterLiftY
 
         # print(self.speedX, self.speedY)
-        # print(sailDragX, sailDragY, self.coefficientAirDrag(angleOfAttack))
-        # print(sailLiftX, sailLiftY, self.coefficientAirLift(angleOfAttack))
-        # print(waterDragX, waterDragY, self.coefficientWaterDrag(angleOfAttack))
-        # print(waterLiftX, waterLiftY, self.coefficientWaterLift(angleOfAttack))
+        # print(sailDragX, sailDragY)
+        # print(sailLiftX, sailLiftY)
+        # print(waterDragX, waterDragY)
+        # print(waterLiftX, waterLiftY)
         # print(sumX, sumY)
         # print("----------")
 
@@ -167,8 +167,7 @@ class Boat:
     # Angle calculations
     def calcLeewayAngle(self):
         """Calculate and return the leeway angle."""
-        # TODO exact calculation
-        return 3 * pi / 180
+        return angleKeepInterval(self.direction - cartToArg(self.speedX, self.speedY))
 
     def apparentWind(self, trueWindX, trueWindY):
         """Return apparent wind by adding true wind and speed."""
@@ -180,7 +179,7 @@ class Boat:
 
     def angleOfAttack(self, apparentWindAngle): # TODO angleOfAttack oder vielleicht Segeleinstellung? Zusammenhang mit apparentWindAngle und Abdrift?
         """Calculate angle between main sail and apparent wind vector."""
-        return angleKeepInterval(pi - apparentWindAngle - self.mainSailAngle - self.leewayAngle)
+        return angleKeepInterval(pi - apparentWindAngle - self.mainSailAngle - self.calcLeewayAngle()) # Don't calculate leeway every time
 
 
     def __repr__(self):
