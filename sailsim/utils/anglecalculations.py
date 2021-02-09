@@ -14,8 +14,4 @@ def angleKeepInterval(angle):
 
 def directionKeepInterval(direction):
     """Keep direction inside the range of [0; 2*pi]."""
-    if direction >= 2 * pi:
-        return direction - 2 * pi
-    if direction < 0:
-        return direction + 2 * pi
-    return direction
+    return direction % (2 * pi)
