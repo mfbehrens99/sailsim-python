@@ -1,6 +1,7 @@
 from math import sin, sqrt, pi
 
 from sailsim.utils.constants import DENSITY_AIR, DENSITY_WATER
+from sailsim.utils.anglecalculations import angleKeepInterval
 from sailsim.utils.coordconversion import cartToArg
 
 
@@ -175,17 +176,11 @@ class Boat:
 
     def apparentWindAngle(self, apparentWindX, apparentWindY):
         """Calculate the apparent wind angle based on the carthesian true wind."""
-        angle = cartToArg(apparentWindX, apparentWindY) - cartToArg(self.speedX, self.speedY)
-        if angle > pi:
-            return angle - 2 * pi
-        return angle # TODO stay in (-pi;pi] => %(2*pi)
+        return angleKeepInterval(cartToArg(apparentWindX, apparentWindY) - cartToArg(self.speedX, self.speedY))
 
     def angleOfAttack(self, apparentWindAngle): # TODO angleOfAttack oder vielleicht Segeleinstellung? Zusammenhang mit apparentWindAngle und Abdrift?
         """Calculate angle between main sail and apparent wind vector."""
-        angle = pi - apparentWindAngle - self.mainSailAngle - self.leewayAngle
-        if angle > pi:
-            return angle - 2 * pi
-        return angle # TODO stay in (-pi;pi] => %(2*pi)
+        return angleKeepInterval(pi - apparentWindAngle - self.mainSailAngle - self.leewayAngle)
 
 
     def __repr__(self):
