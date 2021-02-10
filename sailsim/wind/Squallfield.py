@@ -59,9 +59,8 @@ class Squallfield(Windfield):
 
     def displacePoint(self, x, y):
         """Pseudo randomly displaces point of a squall in x and y direction."""
-        # Bitshift for scaling the noise so it is 'more' random
-        positionX = x * self.gridDistance + self.noiseX.noise2d(x << 4, y << 4) * self.displacementFactor
-        positionY = y * self.gridDistance + self.noiseY.noise2d(x << 4, y << 4) * self.displacementFactor
+        positionX = x * self.gridDistance + self.noiseX.noise2d(x, y) * self.displacementFactor
+        positionY = y * self.gridDistance + self.noiseY.noise2d(x, y) * self.displacementFactor
         return (positionX, positionY)
 
     def relativePosSquall(self, x, y, indexX, indexY):
