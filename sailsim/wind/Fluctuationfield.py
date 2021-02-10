@@ -7,7 +7,7 @@ from sailsim.wind.Windfield import Windfield
 class Fluctuationfield(Windfield):
     """Field that is usually added on top of a windfield to create pseudo random fluctuations."""
 
-    def __init__(self, amplitude=1, scale=64, speed=16, x=0, y=0, noiseSeed=None):
+    def __init__(self, amplitude=1, scale=64, speed=16, x=0, y=0, noiseSeed=0):
         """
         Create a Fluctuationfield.
 
@@ -17,7 +17,7 @@ class Fluctuationfield(Windfield):
          - speed:       theoretical time (in seconds) it takes from min to max, default: 16 s
          - x:           constant wind in x direction, default: 0 m/s
          - y:           constant wind in y direction, default: 0 m/s
-         - noiseSeed:   seed for seedX, seedY = seedX + 1, default: random number [0; 2^32]
+         - noiseSeed:   seed for seedX, seedY = seedX + 1, default: 0
         """
         super().__init__(x, y)
 
@@ -28,11 +28,9 @@ class Fluctuationfield(Windfield):
         self.speedX = x
         self.speedY = y
 
-        if noiseSeed is None:
-            noiseSeed = getrandbits(32)
+        self.noiseSeed = noiseSeed
         self.noiseX = OpenSimplex(noiseSeed)
         self.noiseY = OpenSimplex(noiseSeed + 1)
-        self.noiseSeed = noiseSeed
 
     def getWindCart(self, x, y, t):
         """Return cartesian components of the windfield at the position (x,y) as a tuple."""

@@ -8,7 +8,7 @@ from sailsim.wind.Squall import Squall
 class Squallfield(Windfield):
     """Simulate a field of squalls."""
 
-    def __init__(self, x, y, gridDistance, displacementFactor=1, noiseSeed=None):
+    def __init__(self, x, y, gridDistance, displacementFactor=1, noiseSeed=0):
         super().__init__(x, y)
 
         self.squall = Squall(x, y)
@@ -18,12 +18,9 @@ class Squallfield(Windfield):
         self.displacementFactor = displacementFactor
 
         # Noise object creation
-        # Apply random seed if no seed is provided
-        if noiseSeed is None:
-            noiseSeed = getrandbits(32) # Just a random time efficent algorithm
+        self.noiseSeed = noiseSeed
         self.noiseX = OpenSimplex(noiseSeed)
         self.noiseY = OpenSimplex(noiseSeed + 1)
-        self.noiseSeed = noiseSeed
 
     def getWindCart(self, x, y, t):
         """Return cartesian components of the windfield at the position (x,y) as a tuple."""
