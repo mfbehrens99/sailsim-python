@@ -3,6 +3,8 @@ from math import sin, sqrt, pi
 from sailsim.utils.constants import DENSITY_AIR, DENSITY_WATER
 from sailsim.utils.coordconversion import cartToArg
 
+from sailsim.boat.BoatDataHolder import BoatDataHolder
+
 
 class Boat:
     """Holds all information about the boat and calculates its speed, forces and torques."""
@@ -30,6 +32,8 @@ class Boat:
         self.sailor = sailor # Sail algorithm
         self.mainSailAngle = 45 * pi / 180
 
+        self.dataHolder = BoatDataHolder()
+
 
     # Simulation
     def applyForce(self, forceX, forceY, interval):
@@ -52,75 +56,78 @@ class Boat:
     # Force calculations
     def resultingForce(self, trueWindX, trueWindY):
         """Add up all reacting forces and return them as a tuple."""
-        # calculate apparent wind angle
-        (apparentWindX, apparentWindY) = self.apparentWind(trueWindX, trueWindY)
-        apparentWindAngle = self.apparentWindAngle(apparentWindX, apparentWindY)
+        h = self.dataHolder
 
-        apparentWindSpeedSq = self.apparentWindSpeedSq(apparentWindX, apparentWindY)
-        apparentWindSpeed = sqrt(apparentWindSpeedSq)
+        # calculate apparent wind angle
+        (h.apparentWindX, h.apparentWindY) = self.apparentWind(trueWindX, trueWindY)
+        h.apparentWindAngle = self.apparentWindAngle(h.apparentWindX, h.apparentWindY)
+
+        apparentWindSpeedSq = self.apparentWindSpeedSq(h.apparentWindX, h.apparentWindY)
+        h.apparentWindSpeed = sqrt(apparentWindSpeedSq)
         boatSpeedSq = self.boatSpeedSq()
-        boatSpeed = sqrt(boatSpeedSq)
+        h.boatSpeed = sqrt(boatSpeedSq)
 
         # normalise apparent wind vector and boat speed vetor
         # if vector is (0, 0) set normalised vector to (0, 0) aswell
-        (apparentWindNormX, apparentWindNormY) = (apparentWindX / apparentWindSpeed, apparentWindY / apparentWindSpeed) if not apparentWindSpeed == 0 else (0, 0) # normalised apparent wind vector
-        (speedNormX, speedNormY) = (self.speedX / boatSpeed, self.speedY / boatSpeed) if not boatSpeed == 0 else (0, 0) # normalised speed vector
+        (apparentWindNormX, apparentWindNormY) = (h.apparentWindX / h.apparentWindSpeed, h.apparentWindY / h.apparentWindSpeed) if not h.apparentWindSpeed == 0 else (0, 0) # normalised apparent wind vector
+        (speedNormX, speedNormY) = (self.speedX / h.boatSpeed, self.speedY / h.boatSpeed) if not h.boatSpeed == 0 else (0, 0) # normalised speed vector
 
-        leewayAngle = self.calcLeewayAngle()
-        angleOfAttack = self.angleOfAttack(apparentWindAngle)
+        h.leewayAngle = self.calcLeewayAngle()
+        h.angleOfAttack = self.angleOfAttack(h.apparentWindAngle)
 
-        # print("apWind:", apparentWindX, apparentWindY)
-        # print("apWindAng:", apparentWindAngle * 180 / pi)
-        # print("angOfAtk:", angleOfAttack * 180 / pi)
+        # print("apWind:", h.apparentWindX, h.apparentWindY)
+        # print("apWindAng:", h.apparentWindAngle * 180 / pi)
+        # print("angOfAtk:", h.angleOfAttack * 180 / pi)
 
         # Sum up all acting forces
         # FIXME check if this can be implemented nicer
-        sumX, sumY = 0, 0
-        (sailDragX, sailDragY) = self.sailDrag(apparentWindNormX, apparentWindNormY, apparentWindSpeedSq, angleOfAttack)
-        sumX += sailDragX
-        sumY += sailDragY
-        (sailLiftX, sailLiftY) = self.sailLift(apparentWindNormX, apparentWindNormY, apparentWindSpeedSq, apparentWindAngle, angleOfAttack)
-        sumX += sailLiftX
-        sumY += sailLiftY
+        forceX, forceY = 0, 0
+        (h.sailDragX, h.sailDragY) = self.sailDrag(apparentWindNormX, apparentWindNormY, apparentWindSpeedSq)
+        forceX += h.sailDragX
+        forceY += h.sailDragY
+        (h.sailLiftX, h.sailLiftY) = self.sailLift(apparentWindNormX, apparentWindNormY, apparentWindSpeedSq)
+        forceX += h.sailLiftX
+        forceY += h.sailLiftY
 
-        (waterDragX, waterDragY) = self.waterDrag(speedNormX, speedNormY, boatSpeedSq, leewayAngle)
-        sumX += waterDragX
-        sumY += waterDragY
-        (waterLiftX, waterLiftY) = self.waterLift(speedNormX, speedNormY, boatSpeedSq, leewayAngle, apparentWindAngle)
-        sumX += waterLiftX
-        sumY += waterLiftY
+        (h.waterDragX, h.waterDragY) = self.waterDrag(speedNormX, speedNormY, boatSpeedSq)
+        forceX += h.waterDragX
+        forceY += h.waterDragY
+        (h.waterLiftX, h.waterLiftY) = self.waterLift(speedNormX, speedNormY, boatSpeedSq)
+        forceX += h.waterLiftX
+        forceY += h.waterLiftY
 
         # print(self.speedX, self.speedY)
-        # print(sailDragX, sailDragY, self.coefficientAirDrag(angleOfAttack))
-        # print(sailLiftX, sailLiftY, self.coefficientAirLift(angleOfAttack))
-        # print(waterDragX, waterDragY, self.coefficientWaterDrag(angleOfAttack))
-        # print(waterLiftX, waterLiftY, self.coefficientWaterLift(angleOfAttack))
-        # print(sumX, sumY)
+        # print(h.sailDragX, h.sailDragY)
+        # print(h.sailLiftX, h.sailLiftY)
+        # print(h.waterDragX, h.waterDragY)
+        # print(h.waterLiftX, h.waterLiftY)
+        # print(forceX, forceY)
         # print("----------")
 
-        return (sumX, sumY)
+        (h.forceX, h.forceY) = (forceX, forceY)
+        return (forceX, forceY)
 
-    def sailDrag(self, apparentWindNormX, apparentWindNormY, apparentWindSpeedSq, angleOfAttack):
+    def sailDrag(self, apparentWindNormX, apparentWindNormY, apparentWindSpeedSq):
         """Calculate the force that is created when wind blows against the boat."""
-        force = self.FORCE_CONST_AIR * apparentWindSpeedSq * sin(angleOfAttack) * self.coefficientAirDrag(angleOfAttack)
+        force = self.FORCE_CONST_AIR * apparentWindSpeedSq * sin(self.dataHolder.angleOfAttack) * self.coefficientAirDrag(self.dataHolder.angleOfAttack)
         return (force * apparentWindNormX, force * apparentWindNormY)
 
-    def sailLift(self, apparentWindNormX, apparentWindNormY, apparentWindSpeedSq, apparentWindAngle, angleOfAttack):
+    def sailLift(self, apparentWindNormX, apparentWindNormY, apparentWindSpeedSq):
         """Calculate the lift force that is created when the wind changes its direction in the sail."""
-        force = self.FORCE_CONST_AIR * apparentWindSpeedSq * sin(angleOfAttack) * self.coefficientAirLift(angleOfAttack)
-        if apparentWindAngle > 0: # NOTE potential error
+        force = self.FORCE_CONST_AIR * apparentWindSpeedSq * sin(self.dataHolder.angleOfAttack) * self.coefficientAirLift(self.dataHolder.angleOfAttack)
+        if self.dataHolder.apparentWindAngle > 0: # NOTE potential error
             return (-force * apparentWindNormY, force * apparentWindNormX)  # rotate by -90°
         return (force * apparentWindNormY, -force * apparentWindNormX)      # rotate by  90°
 
-    def waterDrag(self, speedNormX, speedNormY, boatSpeedSq, leewayAngle):
+    def waterDrag(self, speedNormX, speedNormY, boatSpeedSq):
         """Calculate the drag force of the water that is decelerating the boat."""
-        force = self.FORCE_CONST_WATER * boatSpeedSq * sin(leewayAngle) * self.coefficientWaterDrag(leewayAngle)
+        force = self.FORCE_CONST_WATER * boatSpeedSq * sin(self.dataHolder.leewayAngle) * self.coefficientWaterDrag(self.dataHolder.leewayAngle)
         return (-force * speedNormX, -force * speedNormY) # TODO waterDrag
 
-    def waterLift(self, speedNormX, speedNormY, boatSpeedSq, leewayAngle, apparentWindAngle):
+    def waterLift(self, speedNormX, speedNormY, boatSpeedSq):
         """Calculate force that is caused by lift forces in the water."""
-        force = self.FORCE_CONST_WATER_LIFT * boatSpeedSq * sin(leewayAngle) * self.coefficientWaterLift(leewayAngle)
-        if apparentWindAngle > 0: # NOTE potential error
+        force = self.FORCE_CONST_WATER_LIFT * boatSpeedSq * sin(self.dataHolder.leewayAngle) * self.coefficientWaterLift(self.dataHolder.leewayAngle)
+        if self.dataHolder.apparentWindAngle > 0: # NOTE potential error
             return (-force * speedNormY, force * speedNormX)    # rotate by  90°
         return (force * speedNormY, -force * speedNormX)        # rotate by -90°
 
