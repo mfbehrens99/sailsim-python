@@ -9,6 +9,16 @@ class Squallfield(Windfield):
     """Simulate a field of squalls."""
 
     def __init__(self, x, y, gridDistance, displacementFactor=1, noiseSeed=0):
+        """
+        Create a Squallfield.
+
+        Args:
+            x:                  x component of wind in squall
+            y:                  y component of wind in squall
+            gridDistance:       theoretical distance between squalls
+            displacementFactor: displacement of squalls in gridDistance, Note: will be scaled down by 0.8 due to simplex noise, default: 1
+            noiseSeed:          seed for seedX, seedY = seedX + 1, default: random number [0; 2^32]
+        """
         super().__init__(x, y)
 
         self.squall = Squall(x, y)
