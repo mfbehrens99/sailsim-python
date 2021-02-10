@@ -103,27 +103,27 @@ class Boat:
 
     def sailDrag(self, apparentWindNormX, apparentWindNormY, apparentWindSpeedSq, angleOfAttack):
         """Calculate the force that is created when wind blows against the boat."""
-        force = self.FORCE_CONST_AIR * apparentWindSpeedSq * sin(angleOfAttack) * self.coefficientAirDrag(angleOfAttack)
+        force = self.FORCE_CONST_AIR * apparentWindSpeedSq * self.coefficientAirDrag(angleOfAttack)
         return (force * apparentWindNormX, force * apparentWindNormY)
 
     def sailLift(self, apparentWindNormX, apparentWindNormY, apparentWindSpeedSq, apparentWindAngle, angleOfAttack):
         """Calculate the lift force that is created when the wind changes its direction in the sail."""
-        force = self.FORCE_CONST_AIR * apparentWindSpeedSq * sin(angleOfAttack) * self.coefficientAirLift(angleOfAttack)
+        force = self.FORCE_CONST_AIR * apparentWindSpeedSq * self.coefficientAirLift(angleOfAttack)
         if apparentWindAngle > 0: # NOTE potential error
             return (-force * apparentWindNormY, force * apparentWindNormX)  # rotate by -90°
         return (force * apparentWindNormY, -force * apparentWindNormX)      # rotate by  90°
 
     def waterDrag(self, speedNormX, speedNormY, boatSpeedSq, leewayAngle):
         """Calculate the drag force of the water that is decelerating the boat."""
-        force = self.FORCE_CONST_WATER * boatSpeedSq * sin(leewayAngle) * self.coefficientWaterDrag(leewayAngle)
-        return (-force * speedNormX, -force * speedNormY) # TODO waterDrag
+        force = -self.FORCE_CONST_WATER * boatSpeedSq * self.coefficientWaterDrag(leewayAngle)
+        return (force * speedNormX, force * speedNormY) # TODO waterDrag
 
     def waterLift(self, speedNormX, speedNormY, boatSpeedSq, leewayAngle, apparentWindAngle):
         """Calculate force that is caused by lift forces in the water."""
-        force = self.FORCE_CONST_WATER_LIFT * boatSpeedSq * sin(leewayAngle) * self.coefficientWaterLift(leewayAngle)
+        force = -self.FORCE_CONST_WATER_LIFT * boatSpeedSq * self.coefficientWaterLift(leewayAngle)
         if apparentWindAngle > 0: # NOTE potential error
-            return (-force * speedNormY, force * speedNormX)    # rotate by  90°
-        return (force * speedNormY, -force * speedNormX)        # rotate by -90°
+            return (force * speedNormY, -force * speedNormX)    # rotate by -90°
+        return (-force * speedNormY, force * speedNormX)        # rotate by  90°
 
 
     # Coefficient calculations
@@ -167,19 +167,19 @@ class Boat:
     # Angle calculations
     def calcLeewayAngle(self):
         """Calculate and return the leeway angle."""
-        return angleKeepInterval(self.direction - cartToArg(self.speedX, self.speedY))
+        return angleKeepInterval(cartToArg(self.speedX, self.speedY) - self.direction)
 
     def apparentWind(self, trueWindX, trueWindY):
         """Return apparent wind by adding true wind and speed."""
-        return (trueWindX - self.speedX, trueWindY - self.speedY) # TODO stay in (-pi;pi] => %(2*pi)
+        return (trueWindX - self.speedX, trueWindY - self.speedY)
 
     def apparentWindAngle(self, apparentWindX, apparentWindY):
         """Calculate the apparent wind angle based on the carthesian true wind."""
-        return angleKeepInterval(cartToArg(apparentWindX, apparentWindY) - cartToArg(self.speedX, self.speedY))
+        return angleKeepInterval(cartToArg(apparentWindX, apparentWindY) - self.direction)
 
-    def angleOfAttack(self, apparentWindAngle): # TODO angleOfAttack oder vielleicht Segeleinstellung? Zusammenhang mit apparentWindAngle und Abdrift?
+    def angleOfAttack(self, apparentWindAngle):
         """Calculate angle between main sail and apparent wind vector."""
-        return angleKeepInterval(pi - apparentWindAngle - self.mainSailAngle - self.calcLeewayAngle()) # Don't calculate leeway every time
+        return angleKeepInterval(pi - apparentWindAngle - self.mainSailAngle)
 
 
     def __repr__(self):
