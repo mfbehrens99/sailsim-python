@@ -1,7 +1,8 @@
 from sailsim.utils.coordconversion import cartToPolar
 
-from sailsim.wind.Squallfield import Squallfield
 from sailsim.wind.Windfield import Windfield
+from sailsim.wind.Fluctuationfield import Fluctuationfield
+from sailsim.wind.Squallfield import Squallfield
 
 
 class Wind:
@@ -29,5 +30,6 @@ class Wind:
     def __repr__(self):
         # TODO make nicer
         windfields = sum(isinstance(x, Windfield) for x in self.winds)
-        squallfields = sum(isinstance(x, Squallfield) for x in self.winds)
-        return "Wind made up of %s winds:\n\t%s Windfields\n\t%s Squallfields" % (len(self.winds), windfields, squallfields)
+        fluctuationfields = sum(type(x) is Fluctuationfield for x in self.winds)
+        squallfields = sum(type(x) is Squallfield for x in self.winds)
+        return "Wind made up of %s winds:\n\t%s Windfields\n\t%s Fluctuationfields\n\t%s Squallfields" % (len(self.winds), windfields, fluctuationfields, squallfields)
