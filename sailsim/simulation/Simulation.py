@@ -1,5 +1,6 @@
 from sailsim.simulation.FrameList import FrameList
 
+
 class Simulation:
     """Main simulation class in this project."""
 
