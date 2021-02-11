@@ -109,9 +109,9 @@ class Boat:
     def sailLift(self, apparentWindNormX, apparentWindNormY, apparentWindSpeedSq, apparentWindAngle, angleOfAttack):
         """Calculate the lift force that is created when the wind changes its direction in the sail."""
         force = self.FORCE_CONST_AIR * apparentWindSpeedSq * self.coefficientAirLift(angleOfAttack)
-        if apparentWindAngle > 0: # NOTE potential error
-            return (-force * apparentWindNormY, force * apparentWindNormX)  # rotate by -90°
-        return (force * apparentWindNormY, -force * apparentWindNormX)      # rotate by  90°
+        if angleOfAttack < 0:
+            return (-force * apparentWindNormY, force * apparentWindNormX)  # rotate by 90° counterclockwise
+        return (force * apparentWindNormY, -force * apparentWindNormX)      # rotate by 90° clockwise
 
     def waterDrag(self, speedNormX, speedNormY, boatSpeedSq, leewayAngle):
         """Calculate the drag force of the water that is decelerating the boat."""
@@ -121,9 +121,9 @@ class Boat:
     def waterLift(self, speedNormX, speedNormY, boatSpeedSq, leewayAngle, apparentWindAngle):
         """Calculate force that is caused by lift forces in the water."""
         force = -self.FORCE_CONST_WATER_LIFT * boatSpeedSq * self.coefficientWaterLift(leewayAngle)
-        if apparentWindAngle > 0: # NOTE potential error
-            return (force * speedNormY, -force * speedNormX)    # rotate by -90°
-        return (-force * speedNormY, force * speedNormX)        # rotate by  90°
+        if leewayAngle < 0: # NOTE potential error
+            return (-force * speedNormY, force * speedNormX)    # rotate by 90° counterclockwise
+        return (force * speedNormY, -force * speedNormX)        # rotate by 90° clockwise
 
 
     # Coefficient calculations
@@ -161,7 +161,7 @@ class Boat:
 
     def apparentWindSpeedSq(self, apparentWindX, apparentWindY):
         """Calculate speed of apparent wind but squared."""
-        return pow(apparentWindX, 2) + pow(apparentWindY, 2) # TODO stay in (-pi;pi] => %(2*pi)
+        return pow(apparentWindX, 2) + pow(apparentWindY, 2)
 
 
     # Angle calculations
@@ -179,7 +179,7 @@ class Boat:
 
     def angleOfAttack(self, apparentWindAngle):
         """Calculate angle between main sail and apparent wind vector."""
-        return angleKeepInterval(pi - apparentWindAngle - self.mainSailAngle)
+        return angleKeepInterval(apparentWindAngle - self.mainSailAngle + pi)
 
 
     def __repr__(self):

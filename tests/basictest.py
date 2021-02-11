@@ -16,9 +16,6 @@ sqf = Squallfield(0, 0, 100, 1, 0) # TODO has to be enabled later
 wind = Wind([wf, sqf])
 b = Boat(0, 0, 100, 10, None)
 
-b.speedX = 0
-b.speedY = 1
-
 # Create world and simulation
 w = World(b, wind, None)
 s = Simulation(w, 0.01, 1024)
