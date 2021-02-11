@@ -2,6 +2,14 @@ class Simulation:
     """Main simulation class in this project."""
 
     def __init__(self, world, timestep, lastFrame=None):
+        """
+        Create Simulation.
+
+        Args:
+            world:      world object that contains all information about the world to simulate
+            timestep:   time difference between frames
+            lastFrame:  number of frames to be simulated, default: no end
+        """
         self.world = world
 
         # Timing

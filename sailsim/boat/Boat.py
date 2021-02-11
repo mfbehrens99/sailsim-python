@@ -9,6 +9,16 @@ class Boat:
     """Holds all information about the boat and calculates its speed, forces and torques."""
 
     def __init__(self, posX, posY, mass, area, sailor):
+        """
+        Create a boat.
+
+        Args:
+            posX:   x position of the boat (in m)
+            posY:   y position of the boat (in m)
+            mass:   mass of the boat (in kg)
+            area:   sail area of the boat (in m^2)
+            sailor: object for autopiloting
+        """
         # Static properties
         self.mass = mass
         self.sailArea = area
