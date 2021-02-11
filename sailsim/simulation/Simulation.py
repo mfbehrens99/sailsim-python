@@ -41,7 +41,7 @@ class Simulation:
 
         # TODO gather information for display
 
-        print(self)
+        # print(self.world.boat.posX, self.world.boat.posY, sep="\t")
 
         self.frame += 1
 

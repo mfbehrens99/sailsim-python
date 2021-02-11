@@ -18,8 +18,6 @@ wind = Wind([wf, flctf, sqf])
 print(wind)
 
 b = Boat(0, 0, 100, 10, None)
-b.speedX = 0
-b.speedY = 1
 
 # Create world and simulation
 w = World(b, wind, None)
