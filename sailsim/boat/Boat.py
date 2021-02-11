@@ -8,20 +8,32 @@ from sailsim.utils.coordconversion import cartToArg
 class Boat:
     """Holds all information about the boat and calculates its speed, forces and torques."""
 
-    def __init__(self, posX, posY, mass, area, sailor):
+    def __init__(self, posX, posY, direction, speedX=0, speedY=0):
         """
         Create a boat.
 
         Args:
-            posX:   x position of the boat (in m)
-            posY:   y position of the boat (in m)
-            mass:   mass of the boat (in kg)
-            area:   sail area of the boat (in m^2)
-            sailor: object for autopiloting
+            posX:       x position of the boat (in m)
+            posY:       y position of the boat (in m)
+            direction:  direction the boat is pointing
+            speedX:     speed in x direction (in m/s)
+            speedY:     speed in y direction (in m/s)
         """
+        # Dynamic properties
+        self.posX = posX
+        self.posY = posY
+
+        self.speedX = speedX
+        self.speedY = speedY
+        self.direction = direction
+
+        self.sailor = None # Sail algorithm
+        self.mainSailAngle = 45 * pi / 180
+
+
         # Static properties
-        self.mass = mass
-        self.sailArea = area
+        self.mass = 80
+        self.sailArea = 7.45
         self.hullArea = 4 # arbitrary
         self.centerboardArea = 1
 
@@ -29,17 +41,6 @@ class Boat:
         # self.FORCE_CONST_AIR_LIFT = 0.5 * DENSITY_AIR * self.sailArea
         self.FORCE_CONST_WATER = 0.5 * DENSITY_WATER * (self.hullArea + self.centerboardArea) # kg / m
         self.FORCE_CONST_WATER_LIFT = 0.5 * DENSITY_WATER * self.centerboardArea
-
-        # Dynamic properties
-        self.posX = posX
-        self.posY = posY
-
-        self.speedX = 0
-        self.speedY = 0
-        self.direction = 0
-
-        self.sailor = sailor # Sail algorithm
-        self.mainSailAngle = 45 * pi / 180
 
 
     # Simulation

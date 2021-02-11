@@ -1,5 +1,7 @@
 """This is a basic simulation program. It is intended to serve as a basis for testing with a know output."""
 
+from math import pi
+
 # Import basic modules
 from sailsim.simulation.Simulation import Simulation
 from sailsim.world.World import World
@@ -17,7 +19,8 @@ sqf = Squallfield(0, 0, 100, 1, 0) # TODO has to be enabled later
 wind = Wind([wf, flctf, sqf])
 print(wind)
 
-b = Boat(0, 0, 100, 10, None)
+b = Boat(0, 0, 0)
+b.mainSailAngle = 45 / pi * 180
 
 # Create world and simulation
 w = World(b, wind, None)
