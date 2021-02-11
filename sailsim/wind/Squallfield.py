@@ -1,5 +1,4 @@
 from random import getrandbits
-
 from opensimplex import OpenSimplex # Noise function
 
 from sailsim.wind.Windfield import Windfield
@@ -9,7 +8,17 @@ from sailsim.wind.Squall import Squall
 class Squallfield(Windfield):
     """Simulate a field of squalls."""
 
-    def __init__(self, x, y, gridDistance, displacementFactor=1, noiseSeed=None):
+    def __init__(self, x, y, gridDistance, displacementFactor=1, noiseSeed=0):
+        """
+        Create a Squallfield.
+
+        Args:
+            x:                  x component of wind in squall
+            y:                  y component of wind in squall
+            gridDistance:       theoretical distance between squalls
+            displacementFactor: displacement of squalls in gridDistance, Note: will be scaled down by 0.8 due to simplex noise, default: 1
+            noiseSeed:          seed for seedX, seedY = seedX + 1, default: random number [0; 2^32]
+        """
         super().__init__(x, y)
 
         self.squall = Squall(x, y)
@@ -19,12 +28,9 @@ class Squallfield(Windfield):
         self.displacementFactor = displacementFactor
 
         # Noise object creation
-        # Apply random seed if no seed is provided
-        if noiseSeed is None:
-            noiseSeed = getrandbits(32) # Just a random time efficent algorithm
+        self.noiseSeed = noiseSeed
         self.noiseX = OpenSimplex(noiseSeed)
         self.noiseY = OpenSimplex(noiseSeed + 1)
-        self.noiseSeed = noiseSeed
 
     def getWindCart(self, x, y, t):
         """Return cartesian components of the windfield at the position (x,y) as a tuple."""
@@ -53,9 +59,8 @@ class Squallfield(Windfield):
 
     def displacePoint(self, x, y):
         """Pseudo randomly displaces point of a squall in x and y direction."""
-        # Bitshift for scaling the noise so it is 'more' random
-        positionX = x * self.gridDistance + self.noiseX.noise2d(x << 4, y << 4) * self.displacementFactor
-        positionY = y * self.gridDistance + self.noiseY.noise2d(x << 4, y << 4) * self.displacementFactor
+        positionX = x * self.gridDistance + self.noiseX.noise2d(x, y) * self.displacementFactor
+        positionY = y * self.gridDistance + self.noiseY.noise2d(x, y) * self.displacementFactor
         return (positionX, positionY)
 
     def relativePosSquall(self, x, y, indexX, indexY):
