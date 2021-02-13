@@ -11,6 +11,8 @@ from sailsim.wind.Windfield import Windfield
 from sailsim.wind.Fluctuationfield import Fluctuationfield
 from sailsim.wind.Squallfield import Squallfield
 
+OUTPUT_PATH = "/to/output/path/basictest.csv"
+
 wf = Windfield(0, 10)
 flctf = Fluctuationfield(2, 0.1, 0.1, 0, 0, 1200)
 sqf = Squallfield(0, 0, 100, 1, 0) # TODO has to be enabled later
@@ -29,3 +31,5 @@ s.step()
 # Finish simulation
 s.run()
 print(s)
+
+s.frameList.saveCSV(OUTPUT_PATH)
