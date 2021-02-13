@@ -11,15 +11,18 @@ from sailsim.wind.Windfield import Windfield
 from sailsim.wind.Fluctuationfield import Fluctuationfield
 from sailsim.wind.Squallfield import Squallfield
 
-OUTPUT_PATH = "/to/output/path/basictest.csv"
+from sailsim.gui.ConfigBoat import ConfigBoat
+
+OUTPUT_PATH = "C:\\Users\\mfbeh\\Documents\\MATLAB\\sailsim\\out.csv"
 
 wf = Windfield(0, 10)
-flctf = Fluctuationfield(2, 0.1, 0.1, 0, 0, 1200)
+flctf = Fluctuationfield(0, 0.1, 0.1, 0, 0, 1200) # TODO has to be enabled later
 sqf = Squallfield(0, 0, 100, 1, 0) # TODO has to be enabled later
 wind = Wind([wf, flctf, sqf])
 print(wind)
 
 b = Boat(0, 0, 100, 10, None)
+ConfigBoat(b).mainloop()
 
 # Create world and simulation
 w = World(b, wind, None)
