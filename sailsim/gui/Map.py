@@ -1,15 +1,19 @@
-import tkinter as tk
-import random
+from tkinter import *
+# import random
+from math import pi, sin, cos
 
 
-class Map(tk.Frame):
-    def __init__(self, root):
-        tk.Frame.__init__(self, root)
-        self.canvas = tk.Canvas(self, width=400, height=400)
-        self.xsb = tk.Scrollbar(self, orient="horizontal", command=self.canvas.xview)
-        self.ysb = tk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
+class Map(Frame):
+    def __init__(self, root, frameList):
+        super().__init__(root)
+
+        self.framelist = frameList
+
+        self.canvas = Canvas(self, width=400, height=400)
+        self.xsb = Scrollbar(self, orient="horizontal", command=self.canvas.xview)
+        self.ysb = Scrollbar(self, orient="vertical", command=self.canvas.yview)
         self.canvas.configure(yscrollcommand=self.ysb.set, xscrollcommand=self.xsb.set)
-        self.canvas.configure(scrollregion=(0, 0, 1000, 1000))
+        self.canvas.configure(scrollregion=(-1000, -1000, 1000, 1000))
 
         # self.xsb.grid(row=1, column=0, sticky="ew")
         # self.ysb.grid(row=0, column=1, sticky="ns")
@@ -27,7 +31,9 @@ class Map(tk.Frame):
         #     self.canvas.create_rectangle(x0, y0, x1, y1, outline="black", fill=color, activefill="black", tags=n)
         # self.canvas.create_text(50, 10, anchor="nw", text="Click and drag to move the canvas\nScroll to zoom.")
 
-        coords = [0,0,10,1,20,2,30,3,40,4,50,5]
+        self.canvasBoat = self.canvas.create_line(0, 0, 0, 0, width=10)
+
+        coords = self.framelist.getCoordinateList()
         self.boatPath = self.canvas.create_line(coords)
 
         # This is what enables using the mouse:
@@ -38,6 +44,15 @@ class Map(tk.Frame):
         self.canvas.bind("<Button-5>", self.zoomerM)
         # windows scroll
         self.canvas.bind("<MouseWheel>", self.zoomer)
+
+    # update Canvas
+    def updateBoat(self, posX, posY, direction):
+        boatLength = 4.2 * 10
+        posY *= -1
+        coords = [posX - sin(direction) * boatLength * 0.5, posY - cos(direction) * boatLength * 0.5, posX + sin(direction) * boatLength * 0.5, posY + cos(direction) * boatLength * 0.5]
+        # coords = [posX, posY, 0, 0]
+        print(posX, posY)
+        self.canvas.coords(self.canvasBoat, coords)
 
     # move
     def move_start(self, event):

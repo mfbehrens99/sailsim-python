@@ -6,6 +6,8 @@ class ControlBar(Frame):
     def __init__(self, root):
         super().__init__(root)
 
+        self.root = root
+
         self.buttonStart = Button(self, text="|<", command=None)
         self.buttonStart.pack(side=LEFT)
         self.buttonPlay = Button(self, text=">", command=None)
@@ -23,5 +25,6 @@ class ControlBar(Frame):
         self.scaleTime.pack(fill='x')
 
     def updateFrame(self, value):
-        self.labelFrameText.set(str(value).zfill(4) + "/1023")
-        self.frame = value
+        self.labelFrameText.set(value.zfill(4) + "/1023")
+        self.frame = int(value)
+        self.root.updateBoat()

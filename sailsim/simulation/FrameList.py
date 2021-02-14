@@ -20,6 +20,18 @@ class FrameList():
         self.frames.append(frame)
 
 
+    def getCoordinateList(self):
+        out = []
+        for f in self.frames:
+            out.append(f.boatPosX * 10)
+            out.append(-f.boatPosY * 10)
+        return out
+
+    def getBoat(self, frame):
+        frameObject = self.frames[frame]
+        return (frameObject.boatPosX, frameObject.boatPosY, frameObject.boatDirection)
+
+
     def getCSV(self):
         """Generate .csv file and write it to drive."""
         output = self.getCSVHeader() + "\n"
@@ -31,7 +43,7 @@ class FrameList():
         """Generate head of .csv file."""
         headers = [
             "frame", "time",
-            "boatPosX", "boatPosY", "boatSpeedX", "boatSpeedY", # "boatDirection",
+            "boatPosX", "boatPosY", "boatSpeedX", "boatSpeedY", "boatDirection",
             "boatApparentWindX", "boatApparentWindY", "boatApparentWindAngle", "boatLeewayAngle", "boatAngleOfAttack",
             "boatForceX", "boatForceY",
             "boatSailDragX", "boatSailDragY", "boatSailLiftX", "boatSailLiftY",
