@@ -1,7 +1,5 @@
 """This is a basic simulation program. It is intended to serve as a basis for testing with a know output."""
 
-from math import pi
-
 # Import basic modules
 from sailsim.simulation.Simulation import Simulation
 from sailsim.world.World import World
