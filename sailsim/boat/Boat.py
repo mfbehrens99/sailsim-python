@@ -1,14 +1,17 @@
-from math import sin, sqrt, pi
+from math import sqrt, pi
 
 from sailsim.utils.constants import DENSITY_AIR, DENSITY_WATER
-from sailsim.utils.anglecalculations import angleKeepInterval
+from sailsim.utils.anglecalculations import angleKeepInterval, directionKeepInterval
 from sailsim.utils.coordconversion import cartToArg
 
 from sailsim.boat.BoatDataHolder import BoatDataHolder
+from sailsim.boat.coefficientsapprox import coefficientAirDrag, coefficientAirLift, coefficientWaterDrag, coefficientWaterLift
 
 
 class Boat:
     """Holds all information about the boat and calculates its speed, forces and torques."""
+
+    from .boatgetset import getPos, getSpeed, setDirection, setMainSailAngle, setMainSailAngleDeg, setConstants
 
     def __init__(self, posX, posY, direction, speedX=0, speedY=0):
         """
@@ -27,12 +30,12 @@ class Boat:
 
         self.speedX = speedX
         self.speedY = speedY
-        self.direction = direction
+        self.direction = directionKeepInterval(direction)
 
-        self.sailor = None # Sail algorithm
         self.mainSailAngle = 45 * pi / 180
-        
+
         self.dataHolder = BoatDataHolder()
+        self.sailor = None # TODO implement sailor
 
 
         # Static properties
@@ -41,10 +44,12 @@ class Boat:
         self.hullArea = 4 # arbitrary
         self.centerboardArea = 1
 
-        self.FORCE_CONST_AIR = 0.5 * DENSITY_AIR * self.sailArea # kg / m
-        # self.FORCE_CONST_AIR_LIFT = 0.5 * DENSITY_AIR * self.sailArea
-        self.FORCE_CONST_WATER = 0.5 * DENSITY_WATER * (self.hullArea + self.centerboardArea) # kg / m
-        self.FORCE_CONST_WATER_LIFT = 0.5 * DENSITY_WATER * self.centerboardArea
+
+        # Coefficients
+        self.coefficientAirDrag = coefficientAirDrag
+        self.coefficientAirLift = coefficientAirLift
+        self.coefficientWaterDrag = coefficientWaterDrag
+        self.coefficientWaterLift = coefficientWaterLift
 
 
     # Simulation
@@ -64,6 +69,7 @@ class Boat:
     def runSailor(self):
         """Activate the sailing algorithm to decide what the boat should do."""
         # TODO interact with sailor library
+
 
     # Force calculations
     def resultingForce(self, trueWindX, trueWindY):
@@ -108,55 +114,27 @@ class Boat:
 
     def sailDrag(self, apparentWindNormX, apparentWindNormY, apparentWindSpeedSq):
         """Calculate the force that is created when wind blows against the boat."""
-        force = self.FORCE_CONST_AIR * apparentWindSpeedSq * self.coefficientAirDrag(self.dataHolder.angleOfAttack)
+        force = 0.5 * DENSITY_AIR * self.sailArea * apparentWindSpeedSq * self.coefficientAirDrag(self.dataHolder.angleOfAttack)
         return (force * apparentWindNormX, force * apparentWindNormY)
 
     def sailLift(self, apparentWindNormX, apparentWindNormY, apparentWindSpeedSq):
         """Calculate the lift force that is created when the wind changes its direction in the sail."""
-        force = self.FORCE_CONST_AIR * apparentWindSpeedSq * self.coefficientAirLift(self.dataHolder.angleOfAttack)
+        force = 0.5 * DENSITY_AIR * self.sailArea * apparentWindSpeedSq * self.coefficientAirLift(self.dataHolder.angleOfAttack)
         if self.dataHolder.angleOfAttack < 0:
             return (-force * apparentWindNormY, force * apparentWindNormX)  # rotate by 90° counterclockwise
         return (force * apparentWindNormY, -force * apparentWindNormX)      # rotate by 90° clockwise
 
     def waterDrag(self, speedNormX, speedNormY, boatSpeedSq):
         """Calculate the drag force of the water that is decelerating the boat."""
-        force = -self.FORCE_CONST_WATER * boatSpeedSq * self.coefficientWaterDrag(self.dataHolder.leewayAngle)
+        force = -0.5 * DENSITY_WATER * (self.hullArea + self.centerboardArea) * boatSpeedSq * self.coefficientWaterDrag(self.dataHolder.leewayAngle)
         return (force * speedNormX, force * speedNormY) # TODO waterDrag
 
     def waterLift(self, speedNormX, speedNormY, boatSpeedSq):
         """Calculate force that is caused by lift forces in the water."""
-        force = -self.FORCE_CONST_WATER_LIFT * boatSpeedSq * self.coefficientWaterLift(self.dataHolder.leewayAngle)
+        force = -0.5 * DENSITY_WATER * self.centerboardArea * boatSpeedSq * self.coefficientWaterLift(self.dataHolder.leewayAngle)
         if self.dataHolder.leewayAngle < 0:
             return (-force * speedNormY, force * speedNormX)    # rotate by 90° counterclockwise
         return (force * speedNormY, -force * speedNormX)        # rotate by 90° clockwise
-
-
-    # Coefficient calculations
-    def coefficientAirDrag(self, angleOfAttack):
-        """Calculate the wind resitance coefficient based on the angle of attack."""
-        # NOTE function has been approximated!
-        # TODO calculate coefficient using Xfoil
-        return 0.41 * pow(angleOfAttack, 2) + 0.13 * abs(angleOfAttack) + 0.3
-
-    def coefficientAirLift(self, angleOfAttack):
-        """Calculate the wind lift coefficient based on the angle of attack."""
-        # NOTE function has been approximated!
-        # TODO calculate coefficient using Xfoil
-        if abs(angleOfAttack) > 1.07:
-            return 1.67
-        return 11 * pow(angleOfAttack, 4) - 22.46 * pow(abs(angleOfAttack), 3) + 7.39 * pow(angleOfAttack, 2) + 5.88 * abs(angleOfAttack)
-
-    def coefficientWaterDrag(self, angleOfAttack):
-        """Calculate the water drag coefficient based on the angle of attack."""
-        # NOTE function has been approximated!
-        # TODO calculate coefficient using Xfoil
-        return self.coefficientAirDrag(angleOfAttack)
-
-    def coefficientWaterLift(self, angleOfAttack):
-        """Calculate the water lift coefficient based on the angle of attack."""
-        # NOTE function has been approximated!
-        # TODO calculate coefficient using Xfoil
-        return self.coefficientAirLift(angleOfAttack)
 
 
     # Speed calculations

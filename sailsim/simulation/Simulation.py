@@ -35,7 +35,7 @@ class Simulation:
         time = self.frame * self.timestep
 
         # Simulation starts
-        (boatX, boatY) = (self.world.boat.posX, self.world.boat.posY)       # Fetch boat position
+        (boatX, boatY) = self.world.boat.getPos()                           # Fetch boat position
         (windX, windY) = self.world.wind.getWindCart(boatX, boatY, time)    # Get wind
 
         # Let wind interact with boat

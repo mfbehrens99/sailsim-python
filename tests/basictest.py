@@ -22,7 +22,7 @@ wind = Wind([wf, flctf, sqf])
 print(wind)
 
 b = Boat(0, 0, 0)
-b.mainSailAngle = 45 / pi * 180
+b.setMainSailAngleDeg(45)
 
 # Create world and simulation
 w = World(b, wind, None)
