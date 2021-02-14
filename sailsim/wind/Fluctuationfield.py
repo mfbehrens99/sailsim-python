@@ -1,4 +1,3 @@
-from random import getrandbits
 from opensimplex import OpenSimplex # Noise function
 
 from sailsim.wind.Windfield import Windfield

@@ -16,7 +16,7 @@ from sailsim.wind.Squallfield import Squallfield
 OUTPUT_PATH = "/to/output/path/basictest.csv"
 
 wf = Windfield(0, 10)
-flctf = Fluctuationfield(2, 0.1, 0.1, 0, 0, 1200)
+flctf = Fluctuationfield(2, 10, 10, 0, 0, 1200)
 sqf = Squallfield(0, 0, 100, 1, 0) # TODO has to be enabled later
 wind = Wind([wf, flctf, sqf])
 print(wind)

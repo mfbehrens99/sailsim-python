@@ -13,7 +13,7 @@ class Boat:
 
     from .boatgetset import getPos, getSpeed, setDirection, setMainSailAngle, setMainSailAngleDeg, setConstants
 
-    def __init__(self, posX, posY, direction, speedX=0, speedY=0):
+    def __init__(self, posX=0, posY=0, direction=0, speedX=0, speedY=0):
         """
         Create a boat.
 
@@ -32,7 +32,7 @@ class Boat:
         self.speedY = speedY
         self.direction = directionKeepInterval(direction)
 
-        self.mainSailAngle = 45 * pi / 180
+        self.mainSailAngle = 0
 
         self.dataHolder = BoatDataHolder()
         self.sailor = None # TODO implement sailor
@@ -45,7 +45,7 @@ class Boat:
         self.centerboardArea = 1
 
 
-        # Coefficients
+        # Coefficients methods
         self.coefficientAirDrag = coefficientAirDrag
         self.coefficientAirLift = coefficientAirLift
         self.coefficientWaterDrag = coefficientWaterDrag
