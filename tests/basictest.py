@@ -23,7 +23,7 @@ sqf = Squallfield(0, 0, 100, 1, 0) # TODO has to be enabled later
 wind = Wind([wf, flctf, sqf])
 ConfigWind(wind).mainloop()
 
-b = Boat(0, 0, 100, 10, None)
+b = Boat(0, 0, 0)
 ConfigBoat(b).mainloop()
 
 # Create world and simulation
