@@ -38,7 +38,7 @@ class ConfigBoat(Tk):
         Entry(self.posControl, textvar=self.varSpeedX, width=5, justify="center").grid(row=1, column=1)
         Entry(self.posControl, textvar=self.varSpeedY, width=5, justify="center").grid(row=1, column=2)
 
-        self.scaleDir = Scale(self.posControl, from_=-180, to=180, length=250, command=self.updateCanvasBoat, label="Boat Direction:", resolution=0.1, orient=HORIZONTAL, showvalue=True)
+        self.scaleDir = Scale(self.posControl, from_=-180, to=180, length=250, command=self.updateCanvasBoat, label="Boat Direction:", orient=HORIZONTAL, showvalue=True)
         self.scaleDir.set(round(self.boat.direction * 180 / pi, 1))
         self.scaleDir.grid(row=2, column=0, columnspan=3)
 

@@ -1,5 +1,6 @@
 from tkinter import Tk, Label, Button
 
+
 def exitMsg(save, dest):
     def saveFunc():
         save()

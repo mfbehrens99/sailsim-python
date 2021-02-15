@@ -49,9 +49,7 @@ class Map(Frame):
     def updateBoat(self, posX, posY, direction):
         boatLength = 4.2 * 10
         posY *= -1
-        coords = [posX - sin(direction) * boatLength * 0.5, posY - cos(direction) * boatLength * 0.5, posX + sin(direction) * boatLength * 0.5, posY + cos(direction) * boatLength * 0.5]
-        # coords = [posX, posY, 0, 0]
-        print(posX, posY)
+        coords = [posX - sin(direction) * boatLength * 0.5, posY + cos(direction) * boatLength * 0.5, posX + sin(direction) * boatLength * 0.5, posY - cos(direction) * boatLength * 0.5]
         self.canvas.coords(self.canvasBoat, coords)
 
     # move
