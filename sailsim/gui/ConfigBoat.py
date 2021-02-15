@@ -3,6 +3,9 @@ from tkinter import HORIZONTAL, RIGHT
 from math import pi, sin, cos
 
 from sailsim.utils.anglecalculations import angleKeepInterval, directionKeepInterval
+from sailsim.utils.conversion import stringToFloat
+
+from sailsim.gui.dialogs import exitMsg
 
 
 class ConfigBoat(Tk):
@@ -101,22 +104,22 @@ class ConfigBoat(Tk):
 
     def commandExit(self):
         """Exit without saving."""
-        self.destroy()
+        exitMsg(self.commandSave, self)
 
     def commandSave(self):
         """Save all settings in self.boat."""
         # TODO this method can be improved after Boat() got some more setter methods
-        self.boat.posX = parseToFloat(self.varPosX.get())
-        self.boat.posY = parseToFloat(self.varPosY.get())
-        self.boat.speedX = parseToFloat(self.varSpeedX.get())
-        self.boat.speedY = parseToFloat(self.varSpeedY.get())
+        self.boat.posX = stringToFloat(self.varPosX.get())
+        self.boat.posY = stringToFloat(self.varPosY.get())
+        self.boat.speedX = stringToFloat(self.varSpeedX.get())
+        self.boat.speedY = stringToFloat(self.varSpeedY.get())
         self.boat.direction = angleKeepInterval(self.scaleDir.get() * pi / 180)
         self.boat.mainSailAngle = directionKeepInterval(self.scaleMainSail.get() * pi / 180)
 
-        self.boat.mass = parseToFloat(self.varMass.get())
-        self.boat.sailArea = parseToFloat(self.varSailArea.get())
-        self.boat.hullArea = parseToFloat(self.varHullArea.get())
-        self.boat.centerboardArea = parseToFloat(self.varCenterboardArea.get())
+        self.boat.mass = stringToFloat(self.varMass.get())
+        self.boat.sailArea = stringToFloat(self.varSailArea.get())
+        self.boat.hullArea = stringToFloat(self.varHullArea.get())
+        self.boat.centerboardArea = stringToFloat(self.varCenterboardArea.get())
 
     # Canvas update methods
     def updateCanvasBoat(self, *args):
@@ -134,17 +137,6 @@ class ConfigBoat(Tk):
 
     def updateCanvasSpeedVector(self, *args):
         """Update initial boat speed vector based on entry fields."""
-        entryX = parseToFloat(self.varSpeedX.get())
-        entryY = parseToFloat(self.varSpeedY.get())
+        entryX = stringToFloat(self.varSpeedX.get())
+        entryY = stringToFloat(self.varSpeedY.get())
         self.canvasDisp.coords(self.speedVector, self.cpX, self.cpY, self.cpX + entryX * 10, self.cpY - entryY * 10)
-
-
-
-def parseToFloat(val):
-    """Convert a string to int or float. Return 0 if it is NaN."""
-    if val.isnumeric():
-        return int(val)
-    try:
-        return float(val)
-    except ValueError:
-        return 0

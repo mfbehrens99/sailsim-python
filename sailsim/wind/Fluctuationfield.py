@@ -20,10 +20,12 @@ class Fluctuationfield(Windfield):
          - noiseSeed:   seed for seedX, seedY = seedX + 1, default: 0
         """
         super().__init__(x, y)
+        self.name = "Fluctuationfield"
 
         self.amplitude = amplitude
-        self.scale = 1 / scale
-        self.speed = 1 / (speed * 2)
+        self.scale = self.speed = None
+        self.setScale(scale)
+        self.setSpeed(speed)
 
         self.speedX = x
         self.speedY = y
@@ -37,3 +39,15 @@ class Fluctuationfield(Windfield):
         windX = self.noiseX.noise3d(x * self.scale, y * self.scale, t * self.speed) * self.amplitude + self.speedX
         windY = self.noiseY.noise3d(x * self.scale, y * self.scale, t * self.speed) * self.amplitude + self.speedY
         return (windX, windY)
+
+    def setScale(self, scale):
+        self.scale = 1 / scale
+
+    def setSpeed(self, speed):
+        self.speed = 1 / (speed * 2)
+
+    def getScale(self):
+        return 1 / self.scale
+
+    def getSpeed(self):
+        return 1 / (self.speed * 2)

@@ -20,6 +20,7 @@ class Squallfield(Windfield):
             noiseSeed:          seed for seedX, seedY = seedX + 1, default: random number [0; 2^32]
         """
         super().__init__(x, y)
+        self.name = "Squallfield"
 
         self.squall = Squall(x, y)
 
