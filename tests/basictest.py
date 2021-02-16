@@ -15,14 +15,16 @@ from sailsim.gui.ConfigWind import ConfigWind
 from sailsim.gui.ConfigBoat import ConfigBoat
 from sailsim.gui.SailsimGUI import SailsimGUI
 
-OUTPUT_PATH = "C:\\Users\\mfbeh\\Documents\\MATLAB\\sailsim\\out.csv"
+OUTPUT_PATH = "..\\..\\MATLAB\\sailsim\\out.csv"
 
+# Define Wind
 wf = Windfield(0, 10)
 flctf = Fluctuationfield(1)
 sqf = Squallfield(0, 0, 100, 1, 0) # TODO has to be enabled later
 wind = Wind([wf, flctf, sqf])
 ConfigWind(wind).mainloop()
 
+# Boat definition
 b = Boat(0, 0)
 b.setDirectionDeg(45)
 b.setMainSailAngleDeg(45)
@@ -37,6 +39,6 @@ s.step()
 
 # Finish simulation
 s.run()
-SailsimGUI(s).mainloop()
-
 s.frameList.saveCSV(OUTPUT_PATH)
+
+SailsimGUI(s).mainloop()
