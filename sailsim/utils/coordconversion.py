@@ -14,6 +14,11 @@ def cartToRadius(cartX, cartY):
     return sqrt(cartX**2 + cartY**2)
 
 
+def cartToRadiusSq(cartX, cartY):
+    """Convert Cartesian coordinates into their corresponding radius squared."""
+    return cartX**2 + cartY**2
+
+
 def cartToArg(cartX, cartY):
     """Convert Cartesian coordinates into their corresponding argument (angle)."""
     if cartY != 0: # Don't divide by 0
