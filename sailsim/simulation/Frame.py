@@ -35,7 +35,7 @@ class Frame():
         self.boatPosY = boat.posY
         self.boatSpeedX = boat.speedX
         self.boatSpeedY = boat.speedY
-        # self.boatDirection = boat.direction
+        self.boatDirection = boat.direction
 
         self.boatMainSailAngle = boat.mainSailAngle
         # self.boatRudderAngle = boat.rudderAngle

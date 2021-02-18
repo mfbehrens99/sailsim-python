@@ -26,7 +26,7 @@ class Simulation:
         # Check if lastFrame exisists
         if self.lastFrame is None:
             raise Exception('Simulation has no lastFrame')
-        while self.frame < self.lastFrame:
+        while self.frame <= self.lastFrame:
             self.step()
 
     def step(self):
@@ -34,18 +34,18 @@ class Simulation:
         # Preperations
         time = self.frame * self.timestep
 
-        # Simulation starts
+        # Calculate Forces on boat
         (boatX, boatY) = self.world.boat.getPos()                           # Fetch boat position
         (windX, windY) = self.world.wind.getWindCart(boatX, boatY, time)    # Get wind
-
-        # Let wind interact with boat
         (forceX, forceY) = self.world.boat.resultingForce(windX, windY)
+
+        # Save frame
+        self.frameList.grabFrame(self)
+        self.frame += 1
+
+        # Move Boat
         self.world.boat.applyForce(forceX, forceY, self.timestep)
         self.world.boat.moveInterval(self.timestep)
-
-        self.frameList.grabFrame(self)
-
-        self.frame += 1
 
 
     def getTime(self):
@@ -57,11 +57,24 @@ class Simulation:
         return self.timestep * self.lastFrame
 
 
+    def reset(self):
+        """Set simulation to the first frame recorded."""
+        # Reset Boat
+        fl = self.frameList.frames[0]
+        self.world.boat.setBoat(fl.boatPosX, fl.boatPosY, fl.boatSpeedX, fl.boatSpeedY)
+        self.world.boat.setDirection(fl.boatDirection)
+        self.world.boat.setMainSailAngle(fl.boatMainSailAngle)
+
+        # Reset Simulation
+        self.frameList.reset()
+        self.frame = 0
+
+
     def __repr__(self):
         """Return basic information about the simulation."""
         if self.lastFrame is None:
             return "sailsim @frm%s(%ss), %sms\n%s\n----------" % (self.frame, self.getTime(), self.timestep * 1000, self.world)
-        return "sailsim @frm%s/%s(%ss,%s%%), %sms\n%s\n----------" % (self.frame, self.lastFrame - 1, self.getTime(), str(round(self.frame * 100 / self.lastFrame, 1)).zfill(4), self.timestep * 1000, self.world)
+        return "sailsim @frm%s/%s(%ss,%s%%), %sms\n%s\n----------" % (self.frame, self.lastFrame, self.getTime(), str(round(self.frame * 100 / self.lastFrame, 1)).zfill(4), self.timestep * 1000, self.world)
 
     def __len__(self):
         """Return number of frames. Might be None."""
