@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 from sailsim.simulation.FrameList import FrameList
 
 
@@ -14,6 +16,7 @@ class Simulation:
             lastFrame:  number of frames to be simulated, default: no end
         """
         self.world = world
+        self.initWorld = deepcopy(world)
         self.frameList = FrameList()
 
         # Timing
@@ -60,10 +63,7 @@ class Simulation:
     def reset(self):
         """Set simulation to the first frame recorded."""
         # Reset Boat
-        fl = self.frameList.frames[0]
-        self.world.boat.setBoat(fl.boatPosX, fl.boatPosY, fl.boatSpeedX, fl.boatSpeedY)
-        self.world.boat.setDirection(fl.boatDirection)
-        self.world.boat.setMainSailAngle(fl.boatMainSailAngle)
+        self.world = deepcopy(self.initWorld)
 
         # Reset Simulation
         self.frameList.reset()
