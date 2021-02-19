@@ -24,7 +24,7 @@ b.setMainSailAngleDeg(45)
 
 # Create world and simulation
 w = World(b, wind, None)
-s = Simulation(w, 0.01, 1024)
+s = Simulation(w, .03125, 256)
 
 # Simulate 1 step
 s.step()
