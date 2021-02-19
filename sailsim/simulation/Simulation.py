@@ -44,24 +44,31 @@ class Simulation:
         # Calculate Forces on boat
         (boatX, boatY) = self.world.boat.getPos()                           # Fetch boat position
         (windX, windY) = self.world.wind.getWindCart(boatX, boatY, time)    # Get wind
-        (forceX, forceY) = self.world.boat.resultingForce(windX, windY)
+        (forceX, forceY) = self.world.boat.resultingForce(windX, windY)     # Get resulting Force
 
-        thresh = 0.01
+        # Subframing
+        oldSubFrame = self.subframe                         # Save old subframe
+        subframeThreshold = 2 ** 4                          # 1 / maxValue until new substep
+        deltav = cartToRadius(forceX, forceY) * self.timestep / self.world.boat.mass # calculate change of speed of boat
+        subframe = ceil(log2(deltav * subframeThreshold))   # calculate ideal subframe
+        self.subframe = min(8, max(0, subframe))            # keep subframe in interval
 
-        force = cartToRadius(forceX, forceY)
-        deltav = force * self.timestep / self.world.boat.mass
-        self.subframe = min(4, max(0, ceil(log2(deltav / thresh))))
+        # Bring frame to integer values (get all binary decimal places to 0)
+        if oldSubFrame > self.subframe:     # Only run this part when simulation wants to run on a lower subframe value
+            while oldSubFrame > self.subframe and self.frame % 2**(-oldSubFrame + 1) == 0: # If ... and the oldSubFrame'th place in binary is 0
+                oldSubFrame -= 1            # decrease subframe by one
+            self.subframe = oldSubFrame     # Use calculated subframe as subframe
+
         subfrFactor = 1 / (2 ** self.subframe)
-        subfrTimestep = self.timestep * subfrFactor
-        # TODO delete print(force, deltav, ceil(log2(deltav / thresh)), self.subframe, sep="\t")
+        # print(deltav, deltav * subfrFactor, subframe, self.subframe, sep="\t")
 
         # Save frame
         self.frameList.grabFrame(self)
-        self.frame += 1 / (2 ** self.subframe)
+        self.frame += 1 * subfrFactor
 
         # Move Boat
-        self.world.boat.applyForce(forceX, forceY, subfrTimestep)
-        self.world.boat.moveInterval(subfrTimestep)
+        self.world.boat.applyForce(forceX, forceY, self.timestep * subfrFactor)
+        self.world.boat.moveInterval(self.timestep * subfrFactor)
 
 
     def getTime(self):
