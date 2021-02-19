@@ -7,7 +7,7 @@ class FrameList():
     def __init__(self):
         self.frames = []
 
-        self.windSize = 2
+        self.windSize = 0
         self.windDistance = 10
 
     def grabFrame(self, simulation):
