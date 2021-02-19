@@ -33,7 +33,7 @@ class FrameList():
     def getCSVHeader(self):
         """Generate head of .csv file."""
         headers = [
-            "frame", "time",
+            "frame", "time", "subframe",
             "boatPosX", "boatPosY", "boatSpeedX", "boatSpeedY", # "boatDirection",
             "boatApparentWindX", "boatApparentWindY", "boatApparentWindAngle", "boatLeewayAngle", "boatAngleOfAttack",
             "boatForceX", "boatForceY",

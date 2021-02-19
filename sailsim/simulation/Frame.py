@@ -3,6 +3,7 @@ class Frame():
 
     def __init__(self):
         self.frameNr = self.time = None
+        self.subframe = None
 
         self.windTable = []
 
@@ -28,6 +29,7 @@ class Frame():
     def collectSimulation(self, simulation):
         self.frameNr = simulation.frame
         self.time = simulation.getTime()
+        self.subframe = simulation.subframe
 
     def collectBoat(self, boat):
         """Collect and save all information about the boat."""
@@ -72,7 +74,7 @@ class Frame():
     def getCSVLine(self):
         """Return string that contains all data about this frame."""
         data = [
-            self.frameNr, self.time,
+            self.frameNr, self.time, self.subframe,
             self.boatPosX, self.boatPosY, self.boatSpeedX, self.boatSpeedY, # self.boatDirection,
             self.boatApparentWindX, self.boatApparentWindY, self.boatApparentWindAngle, self.boatLeewayAngle, self.boatAngleOfAttack,
             self.boatForceX, self.boatForceY,

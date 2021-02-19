@@ -1,4 +1,7 @@
 from copy import deepcopy
+from math import ceil, log2
+
+from sailsim.utils.coordconversion import cartToRadius
 
 from sailsim.simulation.FrameList import FrameList
 
@@ -22,6 +25,7 @@ class Simulation:
         # Timing
         self.timestep = timestep
         self.frame = 0
+        self.subframe = 0
         self.lastFrame = lastFrame
 
     def run(self):
@@ -42,13 +46,22 @@ class Simulation:
         (windX, windY) = self.world.wind.getWindCart(boatX, boatY, time)    # Get wind
         (forceX, forceY) = self.world.boat.resultingForce(windX, windY)
 
+        thresh = 0.01
+
+        force = cartToRadius(forceX, forceY)
+        deltav = force * self.timestep / self.world.boat.mass
+        self.subframe = min(4, max(0, ceil(log2(deltav / thresh))))
+        subfrFactor = 1 / (2 ** self.subframe)
+        subfrTimestep = self.timestep * subfrFactor
+        # TODO delete print(force, deltav, ceil(log2(deltav / thresh)), self.subframe, sep="\t")
+
         # Save frame
         self.frameList.grabFrame(self)
-        self.frame += 1
+        self.frame += 1 / (2 ** self.subframe)
 
         # Move Boat
-        self.world.boat.applyForce(forceX, forceY, self.timestep)
-        self.world.boat.moveInterval(self.timestep)
+        self.world.boat.applyForce(forceX, forceY, subfrTimestep)
+        self.world.boat.moveInterval(subfrTimestep)
 
 
     def getTime(self):
