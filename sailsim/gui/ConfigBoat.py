@@ -9,12 +9,13 @@ from sailsim.gui.dialogs import exitMsg
 
 
 class ConfigBoat(Tk):
-    def __init__(self, boat, windDir=None):
+    def __init__(self, boat, wind=None):
         """Create a boat config window."""
         super().__init__()
         self.title("Configure Boat")
 
         self.boat = boat
+        self.wind = wind
 
         # Position and rotation control
         self.posControl = Frame(self)
@@ -22,8 +23,10 @@ class ConfigBoat(Tk):
 
         self.varPosX = StringVar()
         self.varPosX.set(str(self.boat.posX))
+        self.varPosX.trace("w", self.updateCanvasWindVector)
         self.varPosY = StringVar()
         self.varPosY.set(str(self.boat.posY))
+        self.varPosY.trace("w", self.updateCanvasWindVector)
         Label(self.posControl, text="Position").grid(row=0, column=0)
         Entry(self.posControl, textvar=self.varPosX, width=5, justify="center").grid(row=0, column=1)
         Entry(self.posControl, textvar=self.varPosY, width=5, justify="center").grid(row=0, column=2)
@@ -54,8 +57,9 @@ class ConfigBoat(Tk):
         self.arrLen = 75
 
         self.drawCompass(10, 80, "grey", "white")
-        if windDir is not None:
-            self.canvasDisp.create_line(self.cpX, self.cpY, self.cpX + sin(windDir) * self.arrLen, self.cpY - cos(windDir) * self.arrLen, tags=("line"), arrow="last", fill="blue")
+        if wind is not None:
+            (windSpeed, windDir) = self.wind.getWind(self.boat.posX, self.boat.posY, 0)
+            self.windArrow = self.canvasDisp.create_line(self.cpX, self.cpY, self.cpX + sin(windDir) * self.arrLen, self.cpY - cos(windDir) * self.arrLen, tags=("line"), arrow="last", fill="blue")
         self.boatArrow = self.canvasDisp.create_line(self.cpX, self.cpY + self.arrLen, self.cpX, self.cpY - self.arrLen, tags=("line"), arrow="last", width=4)
         self.mainSailArrow = self.canvasDisp.create_line(self.cpX, self.cpY, self.cpX, self.cpY + self.arrLen) # mainSailAngle
         self.speedVector = self.canvasDisp.create_line(self.cpX, self.cpY, self.cpX, self.cpY, tags=("line"), arrow="last", fill="orange") # speedVector
@@ -141,6 +145,14 @@ class ConfigBoat(Tk):
         entryX = stringToFloat(self.varSpeedX.get())
         entryY = stringToFloat(self.varSpeedY.get())
         self.canvasDisp.coords(self.speedVector, self.cpX, self.cpY, self.cpX + entryX * 10, self.cpY - entryY * 10)
+
+    def updateCanvasWindVector(self, *args):
+        """Update initial boat speed vector based on entry fields."""
+        if self.wind is not None:
+            entryX = stringToFloat(self.varPosX.get())
+            entryY = stringToFloat(self.varPosY.get())
+            (windSpeed, windDir) = self.wind.getWind(entryX, entryY, 0)
+            self.canvasDisp.coords(self.windArrow, self.cpX, self.cpY, self.cpX + sin(windDir) * self.arrLen, self.cpY - cos(windDir) * self.arrLen)
 
     def drawCompass(self, compR1, compR2, fill1, fill2):
         font = ("Broadway", 16)
