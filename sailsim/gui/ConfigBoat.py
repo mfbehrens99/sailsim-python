@@ -1,5 +1,5 @@
 from tkinter import Tk, Frame, Label, Entry, Scale, StringVar, Canvas, Button
-from tkinter import HORIZONTAL, RIGHT
+from tkinter import HORIZONTAL, RIGHT, N, E, S, W
 from math import pi, sin, cos
 
 from sailsim.utils.anglecalculations import angleKeepInterval, directionKeepInterval
@@ -9,7 +9,7 @@ from sailsim.gui.dialogs import exitMsg
 
 
 class ConfigBoat(Tk):
-    def __init__(self, boat):
+    def __init__(self, boat, windDir=None):
         """Create a boat config window."""
         super().__init__()
         self.title("Configure Boat")
@@ -53,8 +53,9 @@ class ConfigBoat(Tk):
         self.cpX, self.cpY = (125, 100)
         self.arrLen = 75
 
-        self.canvasDisp.create_oval(self.cpX - self.arrLen * 1.25, self.cpY - self.arrLen * 1.25, self.cpX + self.arrLen * 1.25, self.cpY + self.arrLen * 1.25)
-        # TODO draw compass
+        self.drawCompass(10, 80, "grey", "white")
+        if windDir is not None:
+            self.canvasDisp.create_line(self.cpX, self.cpY, self.cpX + sin(windDir) * self.arrLen, self.cpY - cos(windDir) * self.arrLen, tags=("line"), arrow="last", fill="blue")
         self.boatArrow = self.canvasDisp.create_line(self.cpX, self.cpY + self.arrLen, self.cpX, self.cpY - self.arrLen, tags=("line"), arrow="last", width=4)
         self.mainSailArrow = self.canvasDisp.create_line(self.cpX, self.cpY, self.cpX, self.cpY + self.arrLen) # mainSailAngle
         self.speedVector = self.canvasDisp.create_line(self.cpX, self.cpY, self.cpX, self.cpY, tags=("line"), arrow="last", fill="orange") # speedVector
@@ -140,3 +141,19 @@ class ConfigBoat(Tk):
         entryX = stringToFloat(self.varSpeedX.get())
         entryY = stringToFloat(self.varSpeedY.get())
         self.canvasDisp.coords(self.speedVector, self.cpX, self.cpY, self.cpX + entryX * 10, self.cpY - entryY * 10)
+
+    def drawCompass(self, compR1, compR2, fill1, fill2):
+        font = ("Broadway", 16)
+        self.canvasDisp.create_oval(self.cpX - self.arrLen * 1.25, self.cpY - self.arrLen * 1.25, self.cpX + self.arrLen * 1.25, self.cpY + self.arrLen * 1.25)
+        self.canvasDisp.create_polygon(self.cpX, self.cpY - compR2, self.cpX + compR1, self.cpY - compR1, self.cpX, self.cpY, fill=fill1)
+        self.canvasDisp.create_polygon(self.cpX + compR2, self.cpY, self.cpX + compR1, self.cpY - compR1, self.cpX, self.cpY, fill=fill2)
+        self.canvasDisp.create_polygon(self.cpX + compR2, self.cpY, self.cpX + compR1, self.cpY + compR1, self.cpX, self.cpY, fill=fill1)
+        self.canvasDisp.create_polygon(self.cpX, self.cpY + compR2, self.cpX + compR1, self.cpY + compR1, self.cpX, self.cpY, fill=fill2)
+        self.canvasDisp.create_polygon(self.cpX, self.cpY + compR2, self.cpX - compR1, self.cpY + compR1, self.cpX, self.cpY, fill=fill1)
+        self.canvasDisp.create_polygon(self.cpX - compR2, self.cpY, self.cpX - compR1, self.cpY + compR1, self.cpX, self.cpY, fill=fill2)
+        self.canvasDisp.create_polygon(self.cpX - compR2, self.cpY, self.cpX - compR1, self.cpY - compR1, self.cpX, self.cpY, fill=fill1)
+        self.canvasDisp.create_polygon(self.cpX, self.cpY - compR2, self.cpX - compR1, self.cpY - compR1, self.cpX, self.cpY, fill=fill2)
+        self.canvasDisp.create_text(self.cpX, self.cpY - compR2, anchor=S, font=font, text="N")
+        self.canvasDisp.create_text(self.cpX + compR2, self.cpY, anchor=W, font=font, text=" E")
+        self.canvasDisp.create_text(self.cpX, self.cpY + compR2, anchor=N, font=font, text="S")
+        self.canvasDisp.create_text(self.cpX - compR2, self.cpY, anchor=E, font=font, text="W ")

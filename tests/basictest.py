@@ -23,12 +23,13 @@ flctf = Fluctuationfield(1)
 sqf = Squallfield(0, 0, 100, 1, 0) # TODO has to be enabled later
 wind = Wind([wf, flctf, sqf])
 ConfigWind(wind).mainloop()
+(windSpeed, windDir) = wind.getWind(0, 0, 0)
 
 # Boat definition
 b = Boat(0, 0)
 b.setDirectionDeg(45)
 b.setMainSailAngleDeg(45)
-ConfigBoat(b).mainloop()
+ConfigBoat(b, windDir).mainloop()
 
 # Create world and simulation
 w = World(b, wind, None)
