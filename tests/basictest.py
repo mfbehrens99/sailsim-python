@@ -4,6 +4,7 @@
 from sailsim.simulation.Simulation import Simulation
 from sailsim.world.World import World
 from sailsim.boat.Boat import Boat
+from sailsim.sailor.Sailor import Sailor
 from sailsim.wind.Wind import Wind
 
 # Import Winds
@@ -19,17 +20,21 @@ sqf = Squallfield(0, 0, 100, 1, 0) # TODO has to be enabled later
 wind = Wind([wf, flctf, sqf])
 print(wind)
 
+# Create and configure boat and sailor
 b = Boat(0, 0, 0)
 b.setMainSailAngleDeg(45)
+
+sailor = Sailor()
+sailor.importBoat(b)
+
+
 
 # Create world and simulation
 w = World(b, wind, None)
 s = Simulation(w, 0.01, 1024)
 
-# Simulate 1 step
-s.step()
 
-# Finish simulation
+# Run simulation
 s.run()
 print(s)
 

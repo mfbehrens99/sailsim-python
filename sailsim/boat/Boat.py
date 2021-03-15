@@ -32,7 +32,11 @@ class Boat:
         self.speedY = speedY
         self.direction = directionKeepInterval(direction)
 
+        self.rudderAngle = 0
+        self.maxRudderAngle = 80 / 180 * pi
+
         self.mainSailAngle = 0
+        self.maxMainSailAngle = 80 / 180 * pi
 
         self.dataHolder = BoatDataHolder()
         self.sailor = None # TODO implement sailor
@@ -51,6 +55,9 @@ class Boat:
         self.coefficientWaterDrag = coefficientWaterDrag
         self.coefficientWaterLift = coefficientWaterLift
 
+        self.tackingAngleUpwind = 140 / 180 * pi
+        self.tackingAngleDownwind = 20 / 180 * pi
+
 
     # Simulation
     def applyForce(self, forceX, forceY, interval):
@@ -68,7 +75,12 @@ class Boat:
 
     def runSailor(self):
         """Activate the sailing algorithm to decide what the boat should do."""
-        # TODO interact with sailor library
+        # self.sailor.run(self.posX, self.posY, gpsSpeed, gpsDir, compass, windSpeed, windDir) # Run sailor
+
+        # Set boat properties
+        # self.mainSailAngle = self.sailor.mainSailAngle
+        # self.boatDirection = self.sailor.boatDirection
+        # TODO runSailor method
 
 
     # Force calculations
