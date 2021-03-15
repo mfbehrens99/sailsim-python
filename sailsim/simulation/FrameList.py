@@ -19,6 +19,9 @@ class FrameList():
         frame.collectWind(simulation.world.wind, posX, posY, self.windSize, self.windDistance)
         self.frames.append(frame)
 
+    def reset(self):
+        self.frames = []
+
 
     def getCSV(self):
         """Generate .csv file and write it to drive."""

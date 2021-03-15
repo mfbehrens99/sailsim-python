@@ -11,7 +11,7 @@ from sailsim.boat.coefficientsapprox import coefficientAirDrag, coefficientAirLi
 class Boat:
     """Holds all information about the boat and calculates its speed, forces and torques."""
 
-    from .boatgetset import getPos, getSpeed, setDirection, setMainSailAngle, setMainSailAngleDeg, setConstants
+    from .boatgetset import setBoat, getPos, getSpeed, setDirection, setMainSailAngle, setMainSailAngleDeg, setConstants
 
     def __init__(self, posX=0, posY=0, direction=0, speedX=0, speedY=0):
         """

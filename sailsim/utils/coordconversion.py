@@ -27,8 +27,10 @@ def cartToArg(cartX, cartY):
         if cartX < 0:               # 4st quadrant
             return atan(cartX / cartY) + 2 * pi
         return atan(cartX / cartY)  # else 1th quadrant
-    if cartX >= 0:
-        return pi / 2               # 90  degrees
+    if cartX > 0:
+        return pi / 2               # 90 degrees
+    if cartX == 0:
+        return 0                    # 0 degrees when speed is 0
     return 3 / 2 * pi               # 270 degrees
 
 
