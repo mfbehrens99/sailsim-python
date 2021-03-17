@@ -45,6 +45,8 @@ class Simulation:
         # Save frame
         self.frameList.grabFrame(self)
         self.frame += 1
+        
+        self.world.boat.runSailor()
 
         # Move Boat
         self.world.boat.applyForce(forceX, forceY, self.timestep)

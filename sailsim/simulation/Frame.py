@@ -73,7 +73,7 @@ class Frame():
         """Return string that contains all data about this frame."""
         data = [
             self.frameNr, self.time,
-            self.boatPosX, self.boatPosY, self.boatSpeedX, self.boatSpeedY, # self.boatDirection,
+            self.boatPosX, self.boatPosY, self.boatSpeedX, self.boatSpeedY, self.boatDirection,
             self.boatApparentWindX, self.boatApparentWindY, self.boatApparentWindAngle, self.boatLeewayAngle, self.boatAngleOfAttack,
             self.boatForceX, self.boatForceY,
             self.boatSailDragX, self.boatSailDragY, self.boatSailLiftX, self.boatSailLiftY,

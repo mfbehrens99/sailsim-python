@@ -22,12 +22,12 @@ print(wind)
 
 # Create and configure boat and sailor
 b = Boat(0, 0, 0)
-b.setMainSailAngleDeg(45)
+b.setMainSailAngleDeg(0)
 
 sailor = Sailor()
 sailor.importBoat(b)
-
-
+b.sailor = sailor
+sailor.commandList = [(1, -10, 1), (-10, -10, 1), (-30, 30, 1), (0, 0, 0)]
 
 # Create world and simulation
 w = World(b, wind, None)

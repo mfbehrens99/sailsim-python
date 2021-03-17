@@ -1,8 +1,11 @@
+from math import pi, sqrt
+
 from sailsim.utils.coordconversion import polarToCart, cartToArg
+from sailsim.utils.anglecalculations import angleKeepInterval, directionKeepInterval
 
 
 class Sailor:
-    """Calculate mainSailAngle and mainRudderAngle"""
+    """Calculate mainSailAngle and mainRudderAngle."""
 
     from .sailorgetset import setCommandList, configBoat, configSailor, importBoat
 
@@ -11,6 +14,17 @@ class Sailor:
 
     mainSailAngle = None
 
+    mass = None
+    sailArea = None
+    hullArea = None
+    centerboardArea = None
+
+    maxMainSailAngle = None
+    maxRudderAngle = None
+
+    tackingAngleUpwind = None
+    tackingAngleDownwind = None
+
     def __init__(self, boat=None):
         if boat is not None:
             self.importBoat(boat)
@@ -18,14 +32,45 @@ class Sailor:
         self.commandList = []
         self.commandIndex = 0
 
+        self.tackingAngleBufferSize = 10 / 180 * pi
+
+        self.straightCourse = 0
+        self.trueWindDir = 0
+
 
     def run(self, posX, posY, gpsSpeed, gpsDir, compass, windSpeed, windDir):
+        """Execute Sailor calculations and save resultes in object properties."""
+        self.checkCommand(posX, posY)
+        (destX, destY, destR) = self.commandList[self.commandIndex]
 
-        self.checkCommand()
+        straightCourse = cartToArg(destX - posX, destY - posY)
+        trueWindDir = trueWindDirection(gpsSpeed, gpsDir, windSpeed, directionKeepInterval(windDir + compass))
+        windCourseAngle = angleKeepInterval(trueWindDir - straightCourse)
 
-        trueWindDir = trueWindDirection(gpsSpeed, gpsDir, windSpeed, windDir)
+        leewayAngle = angleKeepInterval(gpsDir - compass)
 
-        # reachable in a straight line
+        # reachable in a straight line ?
+        if abs(windCourseAngle) > pi - self.tackingAngleUpwind - self.tackingAngleBufferSize:
+            # upwind tacking
+            llp = directionKeepInterval(trueWindDir + self.tackingAngleUpwind + pi)
+            lln = directionKeepInterval(trueWindDir - self.tackingAngleUpwind + pi)
+            if abs(angleKeepInterval(llp - straightCourse)) < self.tackingAngleBufferSize:
+                self.boatDirection = llp
+            elif abs(angleKeepInterval(lln - straightCourse)) < self.tackingAngleBufferSize:
+                self.boatDirection = lln
+            else:
+                # choose closest layline
+                if angleKeepInterval(trueWindDir - compass) > 0:
+                    self.boatDirection = llp
+                else:
+                    self.boatDirection = lln
+        elif abs(windCourseAngle) < angleKeepInterval(self.tackingAngleDownwind + self.tackingAngleBufferSize) and False:
+            # downwind tacking
+            pass
+        else:
+            # print("Straight")
+            self.boatDirection = straightCourse - (leewayAngle if abs(leewayAngle) < 0.5 else 0) # TODO improve leeway calculations
+
         #   compensate leewayAngle
 
         # else tacking
@@ -33,15 +78,17 @@ class Sailor:
 
         # moaaaaar ...
 
-        self.boatDirection = 0
-        self.mainRudderAngle = 0
 
-        self.mainSailAngle = 0 # TODO calculate mainSailAngle
+        self.mainSailAngle = angleKeepInterval(-windDir * 1 / 2 + pi) # NOTE calculate mainSailAngle
+
+        # print(round(straightCourse / pi * 180, 4), round(abs(angleKeepInterval(lln - straightCourse)) / pi * 180, 4), sep="\t")
 
 
-    def checkCommand(self):
-        """Run command or check if the active command has finished"""
-        pass
+    def checkCommand(self, posX, posY):
+        """Run command or check if the active command has finished."""
+        (destX, destY, destR) = self.commandList[self.commandIndex]
+        if sqrt(pow(destX - posX, 2) + pow(destY - posY, 2)) <= destR:
+            self.commandIndex += 1
 
 
 def trueWindDirection(gpsSpeed, gpsDir, windSpeed, windDir):
