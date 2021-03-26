@@ -1,13 +1,15 @@
-from tkinter import Tk, Frame, Entry, Button, Listbox, StringVar
+from tkinter import Tk, Frame, Label, Entry, Button, Listbox, StringVar, Canvas, messagebox
+from math import pi
 
 from sailsim.utils.conversion import stringToFloat
+from sailsim.utils.coordconversion import cartToPolar, polarToCart
 
 from sailsim.wind.Wind import Wind
 from sailsim.wind.Windfield import Windfield
 from sailsim.wind.Fluctuationfield import Fluctuationfield
 from sailsim.wind.Squallfield import Squallfield
 
-from sailsim.gui.dialogs import exitMsg
+from sailsim.gui.tkinterutils import exitMsg, sureMsg, drawCompass
 
 
 class ConfigWind(Tk):
@@ -18,7 +20,7 @@ class ConfigWind(Tk):
         self.wind = wind
 
         self.list = Listbox(self, selectmode="browse", exportselection=False)
-        self.list.grid(row=0, column=0, columnspan=2)
+        self.list.grid(row=0, column=0, columnspan=2, sticky="ns")
         self.list.bind("<<ListboxSelect>>", self.windChanged)
 
         self.info = Frame()
@@ -27,15 +29,17 @@ class ConfigWind(Tk):
 
         self.insertWinds()
 
+        self.selection = 0
         self.list.select_set(0)
         self.showWind(0)
 
-        Button(self, text="Add").grid(row=1, column=0)
-        Button(self, text="Remove").grid(row=1, column=1)
+        Button(self, text="Add").grid(row=1, column=0, sticky="w")
+        Button(self, text="Remove", command=self.remove).grid(row=1, column=1, sticky="w")
+        # TODO implement these functions
 
-        Button(self, text="Save", command=self.buttonSave).grid(row=1, column=2)
-        Button(self, text="Exit", command=self.buttonExit).grid(row=1, column=3)
-        Button(self, text="Ok", command=self.buttonOk).grid(row=1, column=4)
+        Button(self, text="Cancel", command=self.buttonCancel).grid(row=1, column=2, sticky="e")
+        Button(self, text="Save", command=self.buttonSave).grid(row=1, column=3, sticky="e")
+        Button(self, text="Ok", command=self.buttonOk).grid(row=1, column=4, sticky="e")
 
 
 
@@ -52,8 +56,8 @@ class ConfigWind(Tk):
 
 
     def windChanged(self, event):
-        selection = event.widget.curselection()[0]
-        self.showWind(selection)
+        self.selection = event.widget.curselection()[0]
+        self.showWind(self.selection)
 
     def showWind(self, nr):
         windFrame = self.windFrames[nr]
@@ -63,12 +67,22 @@ class ConfigWind(Tk):
         for windFrame in self.windFrames:
             windFrame.write()
 
-    def buttonExit(self):
+    def buttonCancel(self):
         exitMsg(self.buttonSave, self)
 
     def buttonOk(self):
         self.buttonSave()
         self.destroy()
+
+    def remove(self):
+        if messagebox.askyesno("Delete", "Are You Sure?", icon='question', default='no'):
+            del self.wind.winds[self.selection]
+            if len(self.wind) > 0:
+                self.list.delete(self.selection)
+                self.selection = max(0, self.selection - 1)
+                self.showWind(self.selection)
+            else:
+                self.destoy()
 
 
 class FrameWindfield(Frame):
@@ -77,23 +91,49 @@ class FrameWindfield(Frame):
         self.wind = wind
 
         self.varName = StringVar()
-        self.varX = StringVar()
-        self.varY = StringVar()
-        Entry(self, textvar=self.varName).pack()
-        Entry(self, textvar=self.varX).pack()
-        Entry(self, textvar=self.varY).pack()
+        self.varSpeed = StringVar()
+        self.varSpeed.trace("w", self.updateWindVector)
+        self.varDir = StringVar()
+        self.varDir.trace("w", self.updateWindVector)
+        Label(self, text="Name").grid(row=0, column=0, sticky="W")
+        Entry(self, textvar=self.varName).grid(row=0, column=1)
+
+        self.cp = 75
+        self.windCanvas = Canvas(self, width=150, height=150)
+        drawCompass(self.windCanvas, self.cp, self.cp, 10, 50, 73, "grey", "white")
+        self.windCanvas.grid(row=1, column=0, columnspan=2, sticky="W")
+        self.windArrow = self.windCanvas.create_line(self.cp, self.cp, self.cp, self.cp, tags=("line"), arrow="last", fill="blue")
+
+        Label(self, text="Wind speed").grid(row=2, column=0, sticky="W")
+        Entry(self, textvar=self.varSpeed).grid(row=2, column=1)
+        Label(self, text="m/s").grid(row=2, column=2, sticky="W")
+        Label(self, text="Wind dir").grid(row=3, column=0, sticky="W")
+        Entry(self, textvar=self.varDir).grid(row=3, column=1)
+        Label(self, text="°").grid(row=3, column=2, sticky="W")
+
+        self.updateWindVector()
 
     def read(self):
         w = self.wind
         self.varName.set(w.name)
-        self.varX.set(w.speedX)
-        self.varY.set(w.speedY)
+        (speed, direction) = cartToPolar(w.speedX, w.speedY)
+        self.varSpeed.set(speed)
+        self.varDir.set(direction * 180 / pi)
 
     def write(self):
         w = self.wind
         w.name = self.varName.get()
-        w.speedX = stringToFloat(self.varX.get())
-        w.speedY = stringToFloat(self.varY.get())
+        speed = stringToFloat(self.varSpeed.get())
+        direction = stringToFloat(self.varDir.get()) * pi / 180
+        (w.speedX, w.speedY) = polarToCart(speed, direction)
+
+    def updateWindVector(self, *args):
+        if stringToFloat(self.varSpeed.get()) == 0:
+            self.windCanvas.coords(self.windArrow, 0, 0, -10, -10)
+        else:
+            direction = stringToFloat(self.varDir.get()) * pi / 180
+            (vecX, vecY) = polarToCart(70, direction)
+            self.windCanvas.coords(self.windArrow, self.cp, self.cp, self.cp + vecX, self.cp - vecY)
 
 
 class FrameFluctuationfield(FrameWindfield):
@@ -102,23 +142,28 @@ class FrameFluctuationfield(FrameWindfield):
 
         self.varAmplitude = StringVar()
         self.varScale = StringVar()
-        self.varSpeed = StringVar()
-        Entry(self, textvar=self.varAmplitude).pack()
-        Entry(self, textvar=self.varScale).pack()
-        Entry(self, textvar=self.varSpeed).pack()
+        self.varRate = StringVar()
+        Label(self, text="Amplitude").grid(row=4, column=0, sticky="W")
+        Entry(self, textvar=self.varAmplitude).grid(row=4, column=1)
+        Label(self, text="m/s").grid(row=4, column=2, sticky="W")
+        Label(self, text="Scale").grid(row=5, column=0, sticky="W")
+        Entry(self, textvar=self.varScale).grid(row=5, column=1)
+        Label(self, text="m").grid(row=5, column=2, sticky="W")
+        Label(self, text="Speed").grid(row=6, column=0, sticky="W")
+        Entry(self, textvar=self.varRate).grid(row=6, column=1)
 
     def read(self):
         super().read()
         self.varAmplitude.set(self.wind.amplitude)
         self.varScale.set(self.wind.getScale())
-        self.varSpeed.set(self.wind.getSpeed())
+        self.varRate.set(self.wind.getSpeed())
 
     def write(self):
         super().write()
         w = self.wind
         w.amplitude = stringToFloat(self.varAmplitude.get())
         w.setScale(stringToFloat(self.varScale.get()))
-        w.setSpeed(stringToFloat(self.varSpeed.get()))
+        w.setSpeed(stringToFloat(self.varRate.get()))
 
 
 class FrameSquallfield(FrameWindfield):
@@ -127,8 +172,11 @@ class FrameSquallfield(FrameWindfield):
 
         self.varGridDistance = StringVar()
         self.varDisplacementFactor = StringVar()
-        Entry(self, textvar=self.varGridDistance).pack()
-        Entry(self, textvar=self.varDisplacementFactor).pack()
+        Label(self, text="Grid distance").grid(row=4, column=0, sticky="W")
+        Entry(self, textvar=self.varGridDistance).grid(row=4, column=1)
+        Label(self, text="m").grid(row=4, column=2, sticky="W")
+        Label(self, text="Displ factor").grid(row=5, column=0, sticky="W")
+        Entry(self, textvar=self.varDisplacementFactor).grid(row=5, column=1)
 
     def read(self):
         super().read()

@@ -5,7 +5,8 @@ from math import pi, sin, cos
 from sailsim.utils.anglecalculations import angleKeepInterval, directionKeepInterval
 from sailsim.utils.conversion import stringToFloat
 
-from sailsim.gui.dialogs import exitMsg
+from sailsim.boat.Boat import Boat
+from sailsim.gui.tkinterutils import exitMsg, drawCompass
 
 
 class ConfigBoat(Tk):
@@ -56,7 +57,7 @@ class ConfigBoat(Tk):
         self.cpX, self.cpY = (125, 100)
         self.arrLen = 75
 
-        self.drawCompass(10, 80, "grey", "white")
+        drawCompass(self.canvasDisp, self.cpX, self.cpY, 10, 80, 93, "grey", "white")
         if wind is not None:
             (windSpeed, windDir) = self.wind.getWind(self.boat.posX, self.boat.posY, 0)
             self.windArrow = self.canvasDisp.create_line(self.cpX, self.cpY, self.cpX + sin(windDir) * self.arrLen, self.cpY - cos(windDir) * self.arrLen, tags=("line"), arrow="last", fill="blue")
@@ -154,18 +155,6 @@ class ConfigBoat(Tk):
             (windSpeed, windDir) = self.wind.getWind(entryX, entryY, 0)
             self.canvasDisp.coords(self.windArrow, self.cpX, self.cpY, self.cpX + sin(windDir) * self.arrLen, self.cpY - cos(windDir) * self.arrLen)
 
-    def drawCompass(self, compR1, compR2, fill1, fill2):
-        font = ("Broadway", 16)
-        self.canvasDisp.create_oval(self.cpX - self.arrLen * 1.25, self.cpY - self.arrLen * 1.25, self.cpX + self.arrLen * 1.25, self.cpY + self.arrLen * 1.25)
-        self.canvasDisp.create_polygon(self.cpX, self.cpY - compR2, self.cpX + compR1, self.cpY - compR1, self.cpX, self.cpY, fill=fill1)
-        self.canvasDisp.create_polygon(self.cpX + compR2, self.cpY, self.cpX + compR1, self.cpY - compR1, self.cpX, self.cpY, fill=fill2)
-        self.canvasDisp.create_polygon(self.cpX + compR2, self.cpY, self.cpX + compR1, self.cpY + compR1, self.cpX, self.cpY, fill=fill1)
-        self.canvasDisp.create_polygon(self.cpX, self.cpY + compR2, self.cpX + compR1, self.cpY + compR1, self.cpX, self.cpY, fill=fill2)
-        self.canvasDisp.create_polygon(self.cpX, self.cpY + compR2, self.cpX - compR1, self.cpY + compR1, self.cpX, self.cpY, fill=fill1)
-        self.canvasDisp.create_polygon(self.cpX - compR2, self.cpY, self.cpX - compR1, self.cpY + compR1, self.cpX, self.cpY, fill=fill2)
-        self.canvasDisp.create_polygon(self.cpX - compR2, self.cpY, self.cpX - compR1, self.cpY - compR1, self.cpX, self.cpY, fill=fill1)
-        self.canvasDisp.create_polygon(self.cpX, self.cpY - compR2, self.cpX - compR1, self.cpY - compR1, self.cpX, self.cpY, fill=fill2)
-        self.canvasDisp.create_text(self.cpX, self.cpY - compR2, anchor=S, font=font, text="N")
-        self.canvasDisp.create_text(self.cpX + compR2, self.cpY, anchor=W, font=font, text=" E")
-        self.canvasDisp.create_text(self.cpX, self.cpY + compR2, anchor=N, font=font, text="S")
-        self.canvasDisp.create_text(self.cpX - compR2, self.cpY, anchor=E, font=font, text="W ")
+if __name__ == "__main__":
+    b = Boat()
+    ConfigBoat(b).mainloop()
