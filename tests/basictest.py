@@ -13,7 +13,6 @@ from sailsim.wind.Squallfield import Squallfield
 
 from sailsim.gui.ConfigWind import ConfigWind
 from sailsim.gui.ConfigBoat import ConfigBoat
-from sailsim.gui.SailsimGUI import SailsimGUI
 
 OUTPUT_PATH = "..\\..\\MATLAB\\sailsim\\out.csv"
 
@@ -40,5 +39,3 @@ s.step()
 # Finish simulation
 s.run()
 s.frameList.saveCSV(OUTPUT_PATH)
-
-SailsimGUI(s).mainloop()
