@@ -3,6 +3,14 @@ from math import pi
 from sailsim.utils.anglecalculations import angleKeepInterval, directionKeepInterval
 
 
+def setBoat(self, posX, posY, speedX=0, speedY=0):
+    """Set important properties of boat."""
+    self.posX = posX
+    self.posY = posY
+    self.speedX = speedX
+    self.speedY = speedY
+
+
 def getPos(self):
     """Return coordinates of the boat."""
     return (self.posX, self.posY)

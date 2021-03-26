@@ -14,6 +14,11 @@ def cartToRadius(cartX, cartY):
     return sqrt(cartX**2 + cartY**2)
 
 
+def cartToRadiusSq(cartX, cartY):
+    """Convert Cartesian coordinates into their corresponding radius squared."""
+    return cartX**2 + cartY**2
+
+
 def cartToArg(cartX, cartY):
     """Convert Cartesian coordinates into their corresponding argument (angle)."""
     if cartY != 0: # Don't divide by 0
@@ -22,8 +27,10 @@ def cartToArg(cartX, cartY):
         if cartX < 0:               # 4st quadrant
             return atan(cartX / cartY) + 2 * pi
         return atan(cartX / cartY)  # else 1th quadrant
-    if cartX >= 0:
-        return pi / 2               # 90  degrees
+    if cartX > 0:
+        return pi / 2               # 90 degrees
+    if cartX == 0:
+        return 0                    # 0 degrees when speed is 0
     return 3 / 2 * pi               # 270 degrees
 
 

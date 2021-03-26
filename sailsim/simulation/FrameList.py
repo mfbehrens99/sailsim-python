@@ -7,7 +7,7 @@ class FrameList():
     def __init__(self):
         self.frames = []
 
-        self.windSize = 2
+        self.windSize = 0
         self.windDistance = 10
 
     def grabFrame(self, simulation):
@@ -18,6 +18,9 @@ class FrameList():
         frame.collectBoat(simulation.world.boat)
         frame.collectWind(simulation.world.wind, posX, posY, self.windSize, self.windDistance)
         self.frames.append(frame)
+
+    def reset(self):
+        self.frames = []
 
 
     def getCoordinateList(self):

@@ -2,7 +2,7 @@ from math import sqrt, pi
 
 from sailsim.utils.constants import DENSITY_AIR, DENSITY_WATER
 from sailsim.utils.anglecalculations import angleKeepInterval, directionKeepInterval
-from sailsim.utils.coordconversion import cartToArg
+from sailsim.utils.coordconversion import cartToRadiusSq, cartToArg
 
 from sailsim.boat.BoatDataHolder import BoatDataHolder
 from sailsim.boat.coefficientsapprox import coefficientAirDrag, coefficientAirLift, coefficientWaterDrag, coefficientWaterLift
@@ -80,7 +80,7 @@ class Boat:
         (h.apparentWindX, h.apparentWindY) = self.apparentWind(trueWindX, trueWindY)
         h.apparentWindAngle = self.apparentWindAngle(h.apparentWindX, h.apparentWindY)
 
-        apparentWindSpeedSq = self.apparentWindSpeedSq(h.apparentWindX, h.apparentWindY)
+        apparentWindSpeedSq = cartToRadiusSq(h.apparentWindX, h.apparentWindY)
         h.apparentWindSpeed = sqrt(apparentWindSpeedSq)
         boatSpeedSq = self.boatSpeedSq()
         h.boatSpeed = sqrt(boatSpeedSq)
@@ -142,9 +142,9 @@ class Boat:
         """Return speed of the boat but squared."""
         return pow(self.speedX, 2) + pow(self.speedY, 2)
 
-    def apparentWindSpeedSq(self, apparentWindX, apparentWindY):
-        """Calculate speed of apparent wind but squared."""
-        return pow(apparentWindX, 2) + pow(apparentWindY, 2)
+    def boatSpeed(self):
+        """Return speed of the boat."""
+        return sqrt(pow(self.speedX, 2) + pow(self.speedY, 2))
 
 
     # Angle calculations
