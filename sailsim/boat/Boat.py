@@ -75,7 +75,15 @@ class Boat:
 
     def runSailor(self):
         """Activate the sailing algorithm to decide what the boat should do."""
-        self.sailor.run(self.posX, self.posY, self.dataHolder.boatSpeed, cartToArg(self.speedX, self.speedY), self.direction, self.dataHolder.apparentWindSpeed, self.dataHolder.apparentWindAngle) # Run sailor
+        self.sailor.run(
+            self.posX,
+            self.posY,
+            self.dataHolder.boatSpeed,
+            cartToArg(self.speedX, self.speedY),
+            self.direction,
+            self.dataHolder.apparentWindSpeed,
+            self.dataHolder.apparentWindAngle
+        ) # Run sailor
 
         # Set boat properties
         # TODO calculate mainSailAngle and import it here
