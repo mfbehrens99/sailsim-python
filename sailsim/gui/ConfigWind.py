@@ -9,7 +9,7 @@ from sailsim.wind.Windfield import Windfield
 from sailsim.wind.Fluctuationfield import Fluctuationfield
 from sailsim.wind.Squallfield import Squallfield
 
-from sailsim.gui.tkinterutils import exitMsg, sureMsg, drawCompass
+from sailsim.gui.tkinterutils import exitMsg, drawCompass
 
 
 class ConfigWind(Tk):
