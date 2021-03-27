@@ -147,7 +147,7 @@ class Boat:
     def waterDrag(self, speedNormX, speedNormY, boatSpeedSq):
         """Calculate the drag force of the water that is decelerating the boat."""
         force = -0.5 * DENSITY_WATER * (self.hullArea + self.centerboardArea) * boatSpeedSq * self.coefficientWaterDrag(self.dataHolder.leewayAngle)
-        return (force * speedNormX, force * speedNormY) # TODO waterDrag
+        return (force * speedNormX, force * speedNormY)
 
     def waterLift(self, speedNormX, speedNormY, boatSpeedSq):
         """Calculate force that is caused by lift forces in the water."""
