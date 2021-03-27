@@ -22,19 +22,6 @@ class FrameList():
     def reset(self):
         self.frames = []
 
-
-    def getCoordinateList(self):
-        out = []
-        for f in self.frames:
-            out.append(f.boatPosX * 10)
-            out.append(-f.boatPosY * 10)
-        return out
-
-    def getBoat(self, frame):
-        frameObject = self.frames[frame]
-        return (frameObject.boatPosX, frameObject.boatPosY, frameObject.boatDirection)
-
-
     def getCSV(self):
         """Generate .csv file and write it to drive."""
         output = self.getCSVHeader() + "\n"
