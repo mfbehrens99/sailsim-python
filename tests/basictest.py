@@ -1,5 +1,11 @@
 """This is a basic simulation program. It is intended to serve as a basis for testing with a know output."""
 
+# Import gui
+import sys
+from PySide6.QtWidgets import QApplication
+from sailsim.gui.main import MainWindow
+from sailsim.gui.mapView import pointsToPath
+
 # Import basic modules
 from sailsim.simulation.Simulation import Simulation
 from sailsim.world.World import World
@@ -33,4 +39,12 @@ s.step()
 s.run()
 print(s)
 
-s.frameList.saveCSV(OUTPUT_PATH)
+app = QApplication(sys.argv)
+
+window = MainWindow()
+window.ui.mapView.setPath(pointsToPath(s.frameList.getCoordinateList()))
+window.show()
+
+sys.exit(app.exec_())
+
+# s.frameList.saveCSV(OUTPUT_PATH)
