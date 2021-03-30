@@ -38,7 +38,7 @@ class ConfigWind(Tk):
         # TODO implement these functions
 
         Button(self, text="Cancel", command=self.buttonCancel).grid(row=1, column=2, sticky="e")
-        Button(self, text="Save", command=self.buttonSave).grid(row=1, column=3, sticky="e")
+        Button(self, text="Apply", command=self.buttonApply).grid(row=1, column=3, sticky="e")
         Button(self, text="Ok", command=self.buttonOk).grid(row=1, column=4, sticky="e")
 
 
@@ -63,15 +63,15 @@ class ConfigWind(Tk):
         windFrame = self.windFrames[nr]
         windFrame.tkraise()
 
-    def buttonSave(self):
+    def buttonApply(self):
         for windFrame in self.windFrames:
             windFrame.write()
 
     def buttonCancel(self):
-        exitMsg(self.buttonSave, self)
+        exitMsg(self.buttonApply, self)
 
     def buttonOk(self):
-        self.buttonSave()
+        self.buttonApply()
         self.destroy()
 
     def remove(self):
