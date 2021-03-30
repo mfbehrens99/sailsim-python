@@ -5,9 +5,10 @@ from sailsim.simulation.Simulation import Simulation
 from sailsim.world.World import World
 from sailsim.boat.Boat import Boat
 from sailsim.sailor.Sailor import Sailor
-from sailsim.wind.Wind import Wind
+from sailsim.sailor.Commands import commandListExample, Waypoint
 
 # Import Winds
+from sailsim.wind.Wind import Wind
 from sailsim.wind.Windfield import Windfield
 from sailsim.wind.Fluctuationfield import Fluctuationfield
 from sailsim.wind.Squallfield import Squallfield
@@ -21,13 +22,13 @@ wind = Wind([wf, flctf, sqf])
 print(wind)
 
 # Create and configure boat and sailor
+sailor = Sailor(commandListExample)
+
 b = Boat(0, 0, 0)
 b.setMainSailAngleDeg(0)
-
-sailor = Sailor()
-sailor.importBoat(b)
 b.sailor = sailor
-sailor.commandList = [(1, -10, 1), (-10, -10, 1), (-30, 30, 1), (0, 0, 0)]
+
+sailor.importBoat(b)
 
 # Create world and simulation
 w = World(b, wind, None)

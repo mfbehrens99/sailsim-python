@@ -3,11 +3,16 @@ from math import pi, sqrt
 from sailsim.utils.coordconversion import polarToCart, cartToArg
 from sailsim.utils.anglecalculations import angleKeepInterval, directionKeepInterval
 
+from sailsim.sailor.Commands import *
+
 
 class Sailor:
     """Calculate mainSailAngle and mainRudderAngle."""
 
     from .sailorgetset import setCommandList, configBoat, configSailor, importBoat
+
+    destX = 0
+    destY = 0
 
     rudderAngle = None
     boatDirection = None
@@ -25,12 +30,9 @@ class Sailor:
     tackingAngleUpwind = None
     tackingAngleDownwind = None
 
-    def __init__(self, boat=None):
-        if boat is not None:
-            self.importBoat(boat)
+    def __init__(self, commandList):
 
-        self.commandList = []
-        self.commandIndex = 0
+        self.commandList = commandList
 
         self.tackingAngleBufferSize = 10 / 180 * pi
 
@@ -41,9 +43,8 @@ class Sailor:
     def run(self, posX, posY, gpsSpeed, gpsDir, compass, windSpeed, windDir):
         """Execute Sailor calculations and save resultes in object properties."""
         self.checkCommand(posX, posY)
-        (destX, destY, destR) = self.commandList[self.commandIndex]
 
-        straightCourse = cartToArg(destX - posX, destY - posY)
+        straightCourse = cartToArg(self.destX - posX, self.destY - posY)
         trueWindDir = trueWindDirection(gpsSpeed, gpsDir, windSpeed, directionKeepInterval(windDir + compass))
         windCourseAngle = angleKeepInterval(trueWindDir - straightCourse)
 
@@ -83,13 +84,23 @@ class Sailor:
 
         # print(round(straightCourse / pi * 180, 4), round(abs(angleKeepInterval(lln - straightCourse)) / pi * 180, 4), sep="\t")
 
-
     def checkCommand(self, posX, posY):
-        """Run command or check if the active command has finished."""
-        (destX, destY, destR) = self.commandList[self.commandIndex]
-        if sqrt(pow(destX - posX, 2) + pow(destY - posY, 2)) <= destR:
-            self.commandIndex += 1
+        # TODO make prettier
+        while len(self.commandList) > 0:
+            success = False
+            if type(self.commandList[0]) == Waypoint:
+                success = self.commandList[0].checkWaypoint(self, posX, posY)
+            elif type(self.commandList[0]) == Command:
+                pass # TODO run Command
 
+            if success:
+                del self.commandList[0]
+            else:
+                break
+
+    def setDestination(self, destX, destY):
+        self.destX = destX
+        self.destY = destY
 
 def trueWindDirection(gpsSpeed, gpsDir, windSpeed, windDir):
     """Calculate trueWindDirection from gps and wind measurement."""
