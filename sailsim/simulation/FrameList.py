@@ -22,7 +22,6 @@ class FrameList():
     def reset(self):
         self.frames = []
 
-
     def getCSV(self):
         """Generate .csv file and write it to drive."""
         output = self.getCSVHeader() + "\n"

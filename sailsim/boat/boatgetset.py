@@ -26,6 +26,11 @@ def setDirection(self, direction):
     self.direction = directionKeepInterval(direction)
 
 
+def setDirectionDeg(self, direction):
+    """Map direction into valid range and save."""
+    self.direction = direction * pi / 180
+
+
 def setMainSailAngle(self, mainSailAngle):
     """Map angle into valid range and save."""
     self.mainSailAngle = angleKeepInterval(mainSailAngle)
