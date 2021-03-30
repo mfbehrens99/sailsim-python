@@ -22,7 +22,6 @@ class FrameList():
     def reset(self):
         self.frames = []
 
-
     def getCSV(self):
         """Generate .csv file and write it to drive."""
         output = self.getCSVHeader() + "\n"
@@ -34,7 +33,7 @@ class FrameList():
         """Generate head of .csv file."""
         headers = [
             "frame", "time",
-            "boatPosX", "boatPosY", "boatSpeedX", "boatSpeedY", # "boatDirection",
+            "boatPosX", "boatPosY", "boatSpeedX", "boatSpeedY", "boatDirection",
             "boatApparentWindX", "boatApparentWindY", "boatApparentWindAngle", "boatLeewayAngle", "boatAngleOfAttack",
             "boatForceX", "boatForceY",
             "boatSailDragX", "boatSailDragY", "boatSailLiftX", "boatSailLiftY",
