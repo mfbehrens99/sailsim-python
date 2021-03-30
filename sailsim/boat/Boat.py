@@ -87,7 +87,7 @@ class Boat:
 
         # Set boat properties
         # TODO calculate mainSailAngle and import it here
-        # self.mainSailAngle = self.sailor.mainSailAngle
+        self.mainSailAngle = self.sailor.mainSailAngle
         self.direction = self.sailor.boatDirection
 
 

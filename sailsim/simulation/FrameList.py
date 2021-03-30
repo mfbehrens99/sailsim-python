@@ -35,6 +35,7 @@ class FrameList():
         headers = [
             "frame", "time",
             "boatPosX", "boatPosY", "boatSpeedX", "boatSpeedY", "boatDirection",
+            "boatMainSailAngle", "boatRudderAngle",
             "boatApparentWindX", "boatApparentWindY", "boatApparentWindAngle", "boatLeewayAngle", "boatAngleOfAttack",
             "boatForceX", "boatForceY",
             "boatSailDragX", "boatSailDragY", "boatSailLiftX", "boatSailLiftY",

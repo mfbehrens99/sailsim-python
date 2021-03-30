@@ -40,12 +40,12 @@ class Sailor:
         self.trueWindDir = 0
 
 
-    def run(self, posX, posY, gpsSpeed, gpsDir, compass, windSpeed, windDir):
+    def run(self, posX, posY, gpsSpeed, gpsDir, compass, windSpeed, windAngle):
         """Execute Sailor calculations and save resultes in object properties."""
         self.checkCommand(posX, posY)
 
         straightCourse = cartToArg(self.destX - posX, self.destY - posY)
-        trueWindDir = trueWindDirection(gpsSpeed, gpsDir, windSpeed, directionKeepInterval(windDir + compass))
+        trueWindDir = trueWindDirection(gpsSpeed, gpsDir, windSpeed, directionKeepInterval(windAngle + compass))
         windCourseAngle = angleKeepInterval(trueWindDir - straightCourse)
 
         leewayAngle = angleKeepInterval(gpsDir - compass)
@@ -80,7 +80,7 @@ class Sailor:
         # moaaaaar ...
 
 
-        self.mainSailAngle = angleKeepInterval(-windDir * 1 / 2 + pi) # NOTE calculate mainSailAngle
+        self.mainSailAngle = angleKeepInterval((windAngle - pi)) / 2 # NOTE calculate mainSailAngle
 
         # print(round(straightCourse / pi * 180, 4), round(abs(angleKeepInterval(lln - straightCourse)) / pi * 180, 4), sep="\t")
 
@@ -102,8 +102,8 @@ class Sailor:
         self.destX = destX
         self.destY = destY
 
-def trueWindDirection(gpsSpeed, gpsDir, windSpeed, windDir):
+def trueWindDirection(gpsSpeed, gpsDir, windSpeed, windAngle):
     """Calculate trueWindDirection from gps and wind measurement."""
     (gpsX, gpsY) = polarToCart(gpsSpeed, gpsDir)
-    (windX, windY) = polarToCart(windSpeed, windDir)
+    (windX, windY) = polarToCart(windSpeed, windAngle)
     return cartToArg(gpsX + windX, gpsY + windY)
