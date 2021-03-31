@@ -30,4 +30,4 @@ class Waypoint:
 #         return True
 
 
-commandListExample = [Waypoint(1, -10, 1), Waypoint(-10, -10, 1), Waypoint(-30, 30, 1), Waypoint(0, 0, 0)]
+commandListExample = [Waypoint(10, -20, 1), Waypoint(-10, -10, 1), Waypoint(-30, 30, 1), Waypoint(20, 20, 1), Waypoint(10, -5, 1), Waypoint(100, 0, 1)]

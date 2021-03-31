@@ -1,9 +1,9 @@
-from math import pi, sqrt
+from math import pi
 
 from sailsim.utils.coordconversion import polarToCart, cartToArg
 from sailsim.utils.anglecalculations import angleKeepInterval, directionKeepInterval
 
-from sailsim.sailor.Commands import *
+from sailsim.sailor.Commands import Waypoint  # , Command
 
 
 class Sailor:
@@ -31,14 +31,18 @@ class Sailor:
     tackingAngleDownwind = None
 
     def __init__(self, commandList):
+        """
+        Create a Sailor for steering a Boat.
 
+        Args:
+            commandList:    List of command objects from sailsim.sailor.Commands
+        """
         self.commandList = commandList
 
         self.tackingAngleBufferSize = 10 / 180 * pi
 
         self.straightCourse = 0
         self.trueWindDir = 0
-
 
     def run(self, posX, posY, gpsSpeed, gpsDir, compass, windSpeed, windAngle):
         """Execute Sailor calculations and save resultes in object properties."""
@@ -67,40 +71,37 @@ class Sailor:
                     self.boatDirection = lln
         elif abs(windCourseAngle) < angleKeepInterval(self.tackingAngleDownwind + self.tackingAngleBufferSize) and False:
             # downwind tacking
+            # TODO implement downwind tacking
             pass
         else:
-            # print("Straight")
-            self.boatDirection = straightCourse - (leewayAngle if abs(leewayAngle) < 0.5 else 0) # TODO improve leeway calculations
+            # TODO improve leeway calculation
+            self.boatDirection = straightCourse - (leewayAngle if abs(leewayAngle) < 0.5 else 0)
 
-        #   compensate leewayAngle
-
-        # else tacking
-        #   maybe compensate leeway
-
-        # moaaaaar ...
-
-
-        self.mainSailAngle = angleKeepInterval((windAngle - pi)) / 2 # NOTE calculate mainSailAngle
-
-        # print(round(straightCourse / pi * 180, 4), round(abs(angleKeepInterval(lln - straightCourse)) / pi * 180, 4), sep="\t")
+        # NOTE this is a very simple approximation of the real curve
+        self.mainSailAngle = angleKeepInterval((windAngle - pi)) / 2
 
     def checkCommand(self, posX, posY):
+        """Execute commands from commandList."""
         # TODO make prettier
         while len(self.commandList) > 0:
-            success = False
-            if type(self.commandList[0]) == Waypoint:
-                success = self.commandList[0].checkWaypoint(self, posX, posY)
-            elif type(self.commandList[0]) == Command:
-                pass # TODO run Command
+            success = None
+            command = self.commandList[0]
+            if isinstance(command, Waypoint):
+                success = command.checkWaypoint(self, posX, posY)
+            # elif isinstance(command, Command):
+            #     pass # TODO run Command
 
+            # If command was run successfully run next command, if not continue sailing
             if success:
                 del self.commandList[0]
             else:
                 break
 
     def setDestination(self, destX, destY):
+        """Set Sailor's destination to speecific coordinates."""
         self.destX = destX
         self.destY = destY
+
 
 def trueWindDirection(gpsSpeed, gpsDir, windSpeed, windAngle):
     """Calculate trueWindDirection from gps and wind measurement."""

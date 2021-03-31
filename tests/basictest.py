@@ -5,7 +5,7 @@ from sailsim.simulation.Simulation import Simulation
 from sailsim.world.World import World
 from sailsim.boat.Boat import Boat
 from sailsim.sailor.Sailor import Sailor
-from sailsim.sailor.Commands import commandListExample, Waypoint
+from sailsim.sailor.Commands import commandListExample
 
 # Import Winds
 from sailsim.wind.Wind import Wind
