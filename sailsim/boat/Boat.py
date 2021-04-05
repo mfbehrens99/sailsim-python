@@ -1,6 +1,5 @@
-from math import sqrt, pi
+from math import sqrt, pi, sin, cos
 
-from sailsim.utils.constants import DENSITY_AIR, DENSITY_WATER
 from sailsim.utils.anglecalculations import angleKeepInterval, directionKeepInterval
 from sailsim.utils.coordconversion import cartToRadiusSq, cartToArg
 
@@ -43,10 +42,12 @@ class Boat:
 
         # Static properties
         self.mass = 80              # kg
-        self.momentumInertia = 128  # kg/m^2
+        self.momentumInertia = 5000 # kg/m^2
         self.sailArea = 7.45        # m^2
+        self.length = 4.2           # m
         self.hullArea = 4           # m^2
         self.centerboardArea = 1    # m^2
+        self.rudderArea = .175      # m^2
 
 
         # Coefficients methods
@@ -102,12 +103,15 @@ class Boat:
         # if vector is (0, 0) set normalised vector to (0, 0) aswell
         (apparentWindNormX, apparentWindNormY) = (h.apparentWindX / h.apparentWindSpeed, h.apparentWindY / h.apparentWindSpeed) if not h.apparentWindSpeed == 0 else (0, 0) # normalised apparent wind vector
         (speedNormX, speedNormY) = (self.speedX / h.boatSpeed, self.speedY / h.boatSpeed) if not h.boatSpeed == 0 else (0, 0) # normalised speed vector
+        (dirNormX, dirNormY) = (sin(self.direction), cos(self.direction))
 
         h.leewayAngle = self.calcLeewayAngle()
         h.angleOfAttack = self.angleOfAttack(h.apparentWindAngle)
 
         # Sum up all acting forces
         (forceX, forceY) = (0, 0)
+
+        # Sail forces
         (h.sailDragX, h.sailDragY) = self.sailDrag(apparentWindNormX, apparentWindNormY, apparentWindSpeedSq)
         forceX += h.sailDragX
         forceY += h.sailDragY
@@ -115,6 +119,7 @@ class Boat:
         forceX += h.sailLiftX
         forceY += h.sailLiftY
 
+        # Hull forces
         (h.waterDragX, h.waterDragY) = self.waterDrag(speedNormX, speedNormY, boatSpeedSq)
         forceX += h.waterDragX
         forceY += h.waterDragY
@@ -122,32 +127,18 @@ class Boat:
         forceX += h.waterLiftX
         forceY += h.waterLiftY
 
+        # Rudder forces
+        (h.waterDragRudderX, h.waterDragRudderY) = self.waterDragRudder(dirNormX, dirNormY, boatSpeedSq)
+        forceX += h.waterDragRudderX
+        forceY += h.waterDragRudderY
+        (h.waterLiftRudderX, h.waterLiftRudderY) = self.waterLiftRudder(dirNormX, dirNormY, boatSpeedSq)
+        forceX += h.waterLiftRudderX
+        forceY += h.waterLiftRudderY
+
         (h.forceX, h.forceY) = (forceX, forceY)
         return (forceX, forceY)
 
-    def sailDrag(self, apparentWindNormX, apparentWindNormY, apparentWindSpeedSq):
-        """Calculate the force that is created when wind blows against the boat."""
-        force = 0.5 * DENSITY_AIR * self.sailArea * apparentWindSpeedSq * self.coefficientAirDrag(self.dataHolder.angleOfAttack)
-        return (force * apparentWindNormX, force * apparentWindNormY)
-
-    def sailLift(self, apparentWindNormX, apparentWindNormY, apparentWindSpeedSq):
-        """Calculate the lift force that is created when the wind changes its direction in the sail."""
-        force = 0.5 * DENSITY_AIR * self.sailArea * apparentWindSpeedSq * self.coefficientAirLift(self.dataHolder.angleOfAttack)
-        if self.dataHolder.angleOfAttack < 0:
-            return (-force * apparentWindNormY, force * apparentWindNormX)  # rotate by 90° counterclockwise
-        return (force * apparentWindNormY, -force * apparentWindNormX)      # rotate by 90° clockwise
-
-    def waterDrag(self, speedNormX, speedNormY, boatSpeedSq):
-        """Calculate the drag force of the water that is decelerating the boat."""
-        force = -0.5 * DENSITY_WATER * (self.hullArea + self.centerboardArea) * boatSpeedSq * self.coefficientWaterDrag(self.dataHolder.leewayAngle)
-        return (force * speedNormX, force * speedNormY) # TODO waterDrag
-
-    def waterLift(self, speedNormX, speedNormY, boatSpeedSq):
-        """Calculate force that is caused by lift forces in the water."""
-        force = -0.5 * DENSITY_WATER * self.centerboardArea * boatSpeedSq * self.coefficientWaterLift(self.dataHolder.leewayAngle)
-        if self.dataHolder.leewayAngle < 0:
-            return (-force * speedNormY, force * speedNormX)    # rotate by 90° counterclockwise
-        return (force * speedNormY, -force * speedNormX)        # rotate by 90° clockwise
+    from .boat_forces import sailDrag, sailLift, waterDrag, waterLift, waterDragRudder, waterLiftRudder, waterLiftRudderScalar
 
 
     # Momentum calculations
@@ -156,14 +147,16 @@ class Boat:
         h = self.dataHolder
         resMomentum = 0
 
-        h.rudderMomentum = self.rudderMomentum()
+        h.waterDragMomentum = self.waterDragMomentum()
+        resMomentum += h.waterDragMomentum
+
+        h.rudderMomentum = self.rudderMomentum(self.boatSpeedSq())
         resMomentum += h.rudderMomentum
 
         h.momentum = resMomentum
         return resMomentum
 
-    def rudderMomentum(self):
-        return 0
+    from .boat_momenta import waterDragMomentum, rudderMomentum
 
 
     # Speed calculations

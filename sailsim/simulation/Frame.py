@@ -24,6 +24,10 @@ class Frame():
         self.boatWaterDragX = self.boatWaterDragY = None
         self.boatWaterLiftX = self.boatWaterLiftY = None
 
+        self.boatMomentum = None
+        self.boatWaterDragMomentum = None
+        self.boatRudderMomentum = None
+
 
     def collectSimulation(self, simulation):
         self.frameNr = simulation.frame
@@ -54,6 +58,7 @@ class Frame():
         (self.boatWaterLiftX, self.boatWaterLiftY) = (h.waterLiftX, h.waterLiftY)
 
         self.boatMomentum = h.momentum
+        self.boatWaterDragMomentum = h.waterDragMomentum
         self.boatRudderMomentum = h.rudderMomentum
 
     def collectWind(self, wind, x, y, size, distance):
@@ -82,7 +87,7 @@ class Frame():
             self.boatForceX, self.boatForceY,
             self.boatSailDragX, self.boatSailDragY, self.boatSailLiftX, self.boatSailLiftY,
             self.boatWaterDragX, self.boatWaterDragY, self.boatWaterLiftX, self.boatWaterLiftY,
-            self.boatMomentum, self.boatRudderMomentum,
+            self.boatMomentum, self.boatWaterDragMomentum, self.boatRudderMomentum,
         ]
         data.extend(self.getWindList())
         dataStr = [f'{x:.4f}'.rstrip('0').rstrip('.') for x in data] # FIXME very slow and inflexible

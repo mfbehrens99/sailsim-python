@@ -38,7 +38,7 @@ class FrameList():
             "boatForceX", "boatForceY",
             "boatSailDragX", "boatSailDragY", "boatSailLiftX", "boatSailLiftY",
             "boatWaterDragX", "boatWaterDragY", "boatWaterLiftX", "boatWaterLiftY",
-            "boatMomentum", "boatRudderMomentum",
+            "boatMomentum", "boatWaterDragMomentum", "boatRudderMomentum",
         ]
         headers.extend(self.getWindHeader())
         return ",".join(headers)
