@@ -13,3 +13,6 @@ class BoatDataHolder():
         self.sailLiftX = self.sailLiftY = None
         self.waterDragX = self.waterDragY = None
         self.waterLiftX = self.waterLiftY = None
+
+        self.momentum = None
+        self.rudderMomentum = None

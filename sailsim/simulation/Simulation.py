@@ -41,6 +41,7 @@ class Simulation:
         (boatX, boatY) = self.world.boat.getPos()                           # Fetch boat position
         (windX, windY) = self.world.wind.getWindCart(boatX, boatY, time)    # Get wind
         (forceX, forceY) = self.world.boat.resultingForce(windX, windY)
+        momentum = self.world.boat.resultingMomentum()
 
         # Save frame
         self.frameList.grabFrame(self)
@@ -48,6 +49,7 @@ class Simulation:
 
         # Move Boat
         self.world.boat.applyForce(forceX, forceY, self.timestep)
+        self.world.boat.applyMomentum(momentum, self.timestep)
         self.world.boat.moveInterval(self.timestep)
 
 

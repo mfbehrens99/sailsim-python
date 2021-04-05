@@ -13,36 +13,40 @@ class Boat:
 
     from .boatgetset import getPos, getSpeed, setDirection, setDirectionDeg, setMainSailAngle, setMainSailAngleDeg, setConstants
 
-    def __init__(self, posX=0, posY=0, direction=0, speedX=0, speedY=0):
+    def __init__(self, posX=0, posY=0, direction=0, speedX=0, speedY=0, angSpeed=0):
         """
         Create a boat.
 
         Args:
             posX:       x position of the boat (in m)
             posY:       y position of the boat (in m)
-            direction:  direction the boat is pointing
+            direction:  direction the boat is pointing (in rad)
             speedX:     speed in x direction (in m/s)
             speedY:     speed in y direction (in m/s)
+            angSpeed:   angular speed in z direction (in rad/s)
         """
         # Dynamic properties
         self.posX = posX
         self.posY = posY
-
         self.speedX = speedX
         self.speedY = speedY
-        self.direction = directionKeepInterval(direction)
 
-        self.mainSailAngle = 0
+        self.direction = directionKeepInterval(direction)
+        self.angSpeed = angSpeed    # rad/s
+
+        self.mainSailAngle = 0      # rad
+        self.rudderAngle = 0        # rad
 
         self.dataHolder = BoatDataHolder()
         self.sailor = None # TODO implement sailor
 
 
         # Static properties
-        self.mass = 80
-        self.sailArea = 7.45
-        self.hullArea = 4 # arbitrary
-        self.centerboardArea = 1
+        self.mass = 80              # kg
+        self.momentumInertia = 128  # kg/m^2
+        self.sailArea = 7.45        # m^2
+        self.hullArea = 4           # m^2
+        self.centerboardArea = 1    # m^2
 
 
         # Coefficients methods
@@ -60,11 +64,20 @@ class Boat:
         self.speedX += forceX / self.mass * interval
         self.speedY += forceY / self.mass * interval
 
+    def applyMomentum(self, momentum, interval):
+        """Change angular speed according to a momentum given."""
+        # NOTE copied from applyForce()
+        # FIXME move this into applyForce()? Rename applyForce() function?
+        # △ω = α * t; M = I * α
+        # △ω = M / I * t
+        self.angSpeed += momentum / self.momentumInertia
+
     def moveInterval(self, interval):
         """Change position according to sailsDirection and speed."""
         # s = v * t
         self.posX += self.speedX * interval
         self.posY += self.speedY * interval
+        self.direction = directionKeepInterval(self.direction + self.angSpeed * interval)
 
     def runSailor(self):
         """Activate the sailing algorithm to decide what the boat should do."""
@@ -73,7 +86,7 @@ class Boat:
 
     # Force calculations
     def resultingForce(self, trueWindX, trueWindY):
-        """Add up all reacting forces and return them as a tuple."""
+        """Add up all acting forces and return them as a tuple."""
         h = self.dataHolder
 
         # calculate apparent wind angle
@@ -135,6 +148,22 @@ class Boat:
         if self.dataHolder.leewayAngle < 0:
             return (-force * speedNormY, force * speedNormX)    # rotate by 90° counterclockwise
         return (force * speedNormY, -force * speedNormX)        # rotate by 90° clockwise
+
+
+    # Momentum calculations
+    def resultingMomentum(self):
+        """Sum all acting momenta."""
+        h = self.dataHolder
+        resMomentum = 0
+
+        h.rudderMomentum = self.rudderMomentum()
+        resMomentum += h.rudderMomentum
+
+        h.momentum = resMomentum
+        return resMomentum
+
+    def rudderMomentum(self):
+        return 0
 
 
     # Speed calculations
