@@ -26,6 +26,7 @@ class Frame():
 
 
     def collectSimulation(self, simulation):
+        """Collect and save information about the state of the simulation."""
         self.frameNr = simulation.frame
         self.time = simulation.getTime()
 

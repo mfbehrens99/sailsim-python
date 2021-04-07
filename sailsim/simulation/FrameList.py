@@ -20,10 +20,11 @@ class FrameList():
         self.frames.append(frame)
 
     def reset(self):
+        """Delete all previously saved frames."""
         self.frames = []
 
     def getCSV(self):
-        """Generate .csv file and write it to drive."""
+        """Generate .csv file and return it."""
         output = self.getCSVHeader() + "\n"
         for frame in self.frames:
             output += frame.getCSVLine() + "\n"
@@ -52,6 +53,7 @@ class FrameList():
         return windHeader
 
     def saveCSV(self, name="output.csv"):
+        """Generate .csv file and save it to drive."""
         if not name.endswith(".csv"):
             name += ".csv"
         file = open(name, "w")
