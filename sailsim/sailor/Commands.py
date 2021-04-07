@@ -14,6 +14,7 @@ class Waypoint:
     def checkWaypoint(self, sailor, posX, posY):
         """Check if the destination is already reached and set destination once."""
         if sqrt(pow(self.destX - posX, 2) + pow(self.destY - posY, 2)) <= self.radius:
+            self.programmed = False
             return True
         else:
             if not self.programmed:
