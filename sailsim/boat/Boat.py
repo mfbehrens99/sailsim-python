@@ -41,13 +41,11 @@ class Boat:
         self.dataHolder = BoatDataHolder()
         self.sailor = None
 
-
         # Static properties
         self.mass = 80
         self.sailArea = 7.45
         self.hullArea = 4 # arbitrary
         self.centerboardArea = 1
-
 
         # Coefficients methods
         self.coefficientAirDrag = coefficientAirDrag
@@ -86,7 +84,6 @@ class Boat:
         ) # Run sailor
 
         # Set boat properties
-        # TODO calculate mainSailAngle and import it here
         self.mainSailAngle = self.sailor.mainSailAngle
         self.direction = self.sailor.boatDirection
 

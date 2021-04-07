@@ -37,7 +37,7 @@ sailor.importBoat(b)
 
 # Create world and simulation
 w = World(b, wind, None)
-s = Simulation(w, 0.01, 1024)
+s = Simulation(w, 0.01, 1000)
 
 
 # Run simulation

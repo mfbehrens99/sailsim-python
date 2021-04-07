@@ -12,7 +12,7 @@ class FrameList():
 
     def grabFrame(self, simulation):
         """Append new frame with all information to list."""
-        (posX, posY) = (simulation.world.boat.posX, simulation.world.boat.posY) # TODO use method of boat class when implemented
+        (posX, posY) = simulation.world.boat.getPos()
         frame = Frame()
         frame.collectSimulation(simulation)
         frame.collectBoat(simulation.world.boat)
