@@ -77,6 +77,10 @@ class Sailor:
             # TODO improve leeway calculation
             self.boatDirection = straightCourse - (leewayAngle if abs(leewayAngle) < 0.5 else 0)
 
+        offset = angleKeepInterval(self.boatDirection - compass)
+        print(offset)
+        self.rudderAngle = offset
+
         # NOTE this is a very simple approximation of the real curve
         self.mainSailAngle = angleKeepInterval((windAngle - pi)) / 2
 
