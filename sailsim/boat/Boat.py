@@ -44,10 +44,11 @@ class Boat:
 
 
         # Static properties
-        self.mass = 80              # kg
-        self.momentumInertia = 5000 # kg/m^2
-        self.sailArea = 7.45        # m^2
         self.length = 4.2           # m
+        self.width = 1.63           # m
+        self.mass = 80              # kg
+        self.momentumInertia = 1/12 * self.mass * (pow(self.length, 2) + pow(self.width, 2))  # kg/m^2
+        self.sailArea = 7.45        # m^2
         self.hullArea = 4           # m^2
         self.centerboardArea = 1    # m^2
         self.rudderArea = .175      # m^2
@@ -102,6 +103,7 @@ class Boat:
         # TODO calculate mainSailAngle and import it here
         self.mainSailAngle = self.sailor.mainSailAngle
         self.direction = self.sailor.boatDirection
+        # self.rudderAngle = self.sailor.rudderAngle
 
 
     # Force calculations

@@ -45,7 +45,7 @@ def waterDragRudder(self, dirNormX, dirNormY, boatSpeedSq):
 def waterLiftRudder(self, dirNormX, dirNormY, boatSpeedSq):
     # TODO use c_w
     c_w = sin(self.rudderAngle * 2)
-    force = 0.5 * DENSITY_WATER * self.rudderArea * boatSpeedSq * c_w
+    force = self.waterLiftRudderScalar(boatSpeedSq)
     return (force * dirNormX, force * dirNormY)
 
 
