@@ -6,8 +6,6 @@ from PySide6.QtCore import Signal, QMutex, QMutexLocker, QPoint, QSize, Qt, QPoi
 from PySide6.QtGui import QColor, QPainter, QPen, QPainterPath, QCursor, QImage
 from PySide6.QtWidgets import QApplication, QWidget
 
-from sailsim.gui.drawBoat import DrawBoat
-
 
 DefaultCenterX = 0
 DefaultCenterY = 0
@@ -20,9 +18,9 @@ ScrollStep = 10
 
 def pointsToPath(points):
     path = QPainterPath()
-    path.moveTo(QPointF(points[0][0], points[0][1]))
+    path.moveTo(QPointF(points[0][0], -points[0][1]))
     for p in points[1:]:
-        path.lineTo(QPointF(p[0],p[1]))
+        path.lineTo(QPointF(p[0],-p[1]))
     return path
 
 
@@ -74,16 +72,12 @@ class MapViewWidget(QWidget):
         self.path = path
         self.update()
 
-    def viewFrame(self, frameNr):
-        (posX, posY) = (self.simulation.frameList.frames[frameNr].boatPosX, self.simulation.frameList.frames[frameNr].boatPosY)
-        direction = self.simulation.frameList.frames[frameNr].boatDirection
-        print(direction)
-        self.setBoat(posX, posY, direction)
+    def viewFrame(self, frame):
+        self.setBoat(frame.boatPosX, frame.boatPosY, frame.boatDirection)
 
     def setBoat(self, posX, posY, direction):
-        self.boatPos = QPointF(posX, posY)
+        self.boatPos = QPointF(posX, -posY)
         self.boatDir = direction / pi * 180
-
         self.update()
 
 

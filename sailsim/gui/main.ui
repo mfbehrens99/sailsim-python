@@ -165,8 +165,8 @@
   <connection>
    <sender>timeSlider</sender>
    <signal>valueChanged(int)</signal>
-   <receiver>mapView</receiver>
-   <slot>viewFrame(int)</slot>
+   <receiver>MainWindow</receiver>
+   <slot>updateFrame(int)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>354</x>
@@ -179,4 +179,7 @@
    </hints>
   </connection>
  </connections>
+ <slots>
+  <slot>updateFrame(int)</slot>
+ </slots>
 </ui>

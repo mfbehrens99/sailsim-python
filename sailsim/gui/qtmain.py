@@ -110,8 +110,7 @@ class Ui_MainWindow(object):
         self.menuHelp.addAction(self.actionOpen_project_on_Github)
 
         self.retranslateUi(MainWindow)
-        self.timeSlider.valueChanged.connect(self.mapView.viewFrame)
-        self.timeSlider.valueChanged.connect(self.frameNr.setNum)
+        self.timeSlider.valueChanged.connect(MainWindow.updateFrame)
 
         QMetaObject.connectSlotsByName(MainWindow)
     # setupUi
