@@ -26,6 +26,7 @@ class Frame():
 
 
     def collectSimulation(self, simulation):
+        """Collect and save information about the state of the simulation."""
         self.frameNr = simulation.frame
         self.time = simulation.getTime()
 
@@ -38,7 +39,7 @@ class Frame():
         self.boatDirection = boat.direction
 
         self.boatMainSailAngle = boat.mainSailAngle
-        # self.boatRudderAngle = boat.rudderAngle
+        self.boatRudderAngle = boat.rudderAngle
 
         h = boat.dataHolder
         (self.boatApparentWindX, self.boatApparentWindY) = (h.apparentWindX, h.apparentWindY)
@@ -74,6 +75,7 @@ class Frame():
         data = [
             self.frameNr, self.time,
             self.boatPosX, self.boatPosY, self.boatSpeedX, self.boatSpeedY, self.boatDirection,
+            self.boatMainSailAngle, self.boatRudderAngle,
             self.boatApparentWindX, self.boatApparentWindY, self.boatApparentWindAngle, self.boatLeewayAngle, self.boatAngleOfAttack,
             self.boatForceX, self.boatForceY,
             self.boatSailDragX, self.boatSailDragY, self.boatSailLiftX, self.boatSailLiftY,

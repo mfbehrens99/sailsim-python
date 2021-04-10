@@ -12,13 +12,16 @@ class FrameList():
 
     def grabFrame(self, simulation):
         """Append new frame with all information to list."""
-        (posX, posY) = (simulation.world.boat.posX, simulation.world.boat.posY) # TODO use method of boat class when implemented
+        (posX, posY) = simulation.world.boat.getPos()
         frame = Frame()
         frame.collectSimulation(simulation)
         frame.collectBoat(simulation.world.boat)
         frame.collectWind(simulation.world.wind, posX, posY, self.windSize, self.windDistance)
         self.frames.append(frame)
 
+    def reset(self):
+        """Delete all previously saved frames."""
+        self.frames = []
 
     def getCoordinateList(self):
         out = []
@@ -31,7 +34,7 @@ class FrameList():
         return (frameObject.boatPosX, frameObject.boatPosY, frameObject.boatDirection)
 
     def getCSV(self):
-        """Generate .csv file and write it to drive."""
+        """Generate .csv file and return it."""
         output = self.getCSVHeader() + "\n"
         for frame in self.frames:
             output += frame.getCSVLine() + "\n"
@@ -42,6 +45,7 @@ class FrameList():
         headers = [
             "frame", "time",
             "boatPosX", "boatPosY", "boatSpeedX", "boatSpeedY", "boatDirection",
+            "boatMainSailAngle", "boatRudderAngle",
             "boatApparentWindX", "boatApparentWindY", "boatApparentWindAngle", "boatLeewayAngle", "boatAngleOfAttack",
             "boatForceX", "boatForceY",
             "boatSailDragX", "boatSailDragY", "boatSailLiftX", "boatSailLiftY",
@@ -59,6 +63,7 @@ class FrameList():
         return windHeader
 
     def saveCSV(self, name="output.csv"):
+        """Generate .csv file and save it to drive."""
         if not name.endswith(".csv"):
             name += ".csv"
         file = open(name, "w")

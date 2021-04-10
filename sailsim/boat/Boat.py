@@ -11,7 +11,7 @@ from sailsim.boat.coefficientsapprox import coefficientAirDrag, coefficientAirLi
 class Boat:
     """Holds all information about the boat and calculates its speed, forces and torques."""
 
-    from .boatgetset import getPos, getSpeed, setDirection, setMainSailAngle, setMainSailAngleDeg, setConstants
+    from .boatgetset import getPos, getSpeed, setDirection, setDirectionDeg, setMainSailAngle, setMainSailAngleDeg, setConstants
 
     def __init__(self, posX=0, posY=0, direction=0, speedX=0, speedY=0):
         """
@@ -32,11 +32,14 @@ class Boat:
         self.speedY = speedY
         self.direction = directionKeepInterval(direction)
 
+        self.rudderAngle = 0
+        self.maxRudderAngle = 80 / 180 * pi
+
         self.mainSailAngle = 0
+        self.maxMainSailAngle = 80 / 180 * pi
 
         self.dataHolder = BoatDataHolder()
-        self.sailor = None # TODO implement sailor
-
+        self.sailor = None
 
         # Static properties
         self.mass = 80
@@ -44,12 +47,14 @@ class Boat:
         self.hullArea = 4 # arbitrary
         self.centerboardArea = 1
 
-
         # Coefficients methods
         self.coefficientAirDrag = coefficientAirDrag
         self.coefficientAirLift = coefficientAirLift
         self.coefficientWaterDrag = coefficientWaterDrag
         self.coefficientWaterLift = coefficientWaterLift
+
+        self.tackingAngleUpwind = 45 / 180 * pi
+        self.tackingAngleDownwind = 20 / 180 * pi
 
 
     # Simulation
@@ -68,7 +73,19 @@ class Boat:
 
     def runSailor(self):
         """Activate the sailing algorithm to decide what the boat should do."""
-        # TODO interact with sailor library
+        self.sailor.run(
+            self.posX,
+            self.posY,
+            self.dataHolder.boatSpeed,
+            cartToArg(self.speedX, self.speedY),
+            self.direction,
+            self.dataHolder.apparentWindSpeed,
+            self.dataHolder.apparentWindAngle
+        ) # Run sailor
+
+        # Set boat properties
+        self.mainSailAngle = self.sailor.mainSailAngle
+        self.direction = self.sailor.boatDirection
 
 
     # Force calculations
@@ -127,7 +144,7 @@ class Boat:
     def waterDrag(self, speedNormX, speedNormY, boatSpeedSq):
         """Calculate the drag force of the water that is decelerating the boat."""
         force = -0.5 * DENSITY_WATER * (self.hullArea + self.centerboardArea) * boatSpeedSq * self.coefficientWaterDrag(self.dataHolder.leewayAngle)
-        return (force * speedNormX, force * speedNormY) # TODO waterDrag
+        return (force * speedNormX, force * speedNormY)
 
     def waterLift(self, speedNormX, speedNormY, boatSpeedSq):
         """Calculate force that is caused by lift forces in the water."""

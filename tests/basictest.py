@@ -10,33 +10,43 @@ from sailsim.gui.mapView import pointsToPath
 from sailsim.simulation.Simulation import Simulation
 from sailsim.world.World import World
 from sailsim.boat.Boat import Boat
-from sailsim.wind.Wind import Wind
+from sailsim.sailor.Sailor import Sailor
+from sailsim.sailor.Commands import commandListExample
 
 # Import Winds
+from sailsim.wind.Wind import Wind
 from sailsim.wind.Windfield import Windfield
 from sailsim.wind.Fluctuationfield import Fluctuationfield
 from sailsim.wind.Squallfield import Squallfield
 
-OUTPUT_PATH = "/to/output/path/basictest.csv"
+from sailsim.gui.ConfigWind import ConfigWind
+from sailsim.gui.ConfigBoat import ConfigBoat
 
+OUTPUT_PATH = "..\\..\\MATLAB\\sailsim\\out.csv"
+
+# Define Wind
 wf = Windfield(0, 10)
-flctf = Fluctuationfield(2, 10, 10, 0, 0, 1200)
+flctf = Fluctuationfield(1)
 sqf = Squallfield(0, 0, 100, 1, 0) # TODO has to be enabled later
 wind = Wind([wf, flctf, sqf])
-print(wind)
+ConfigWind(wind).mainloop()
+
+# Create and configure boat and sailor
+sailor = Sailor(commandListExample)
 
 b = Boat(0, 0, 0)
-b.setDirection(160)
-b.setMainSailAngleDeg(45)
+b.setMainSailAngleDeg(0)
+ConfigBoat(b, wind).mainloop()
+b.sailor = sailor
+
+sailor.importBoat(b)
 
 # Create world and simulation
 w = World(b, wind, None)
-s = Simulation(w, 0.01, 1024)
+s = Simulation(w, 0.01, 1000)
 
-# Simulate 1 step
-s.step()
 
-# Finish simulation
+# Run simulation
 s.run()
 print(s)
 

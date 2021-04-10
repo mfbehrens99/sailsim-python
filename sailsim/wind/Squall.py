@@ -9,6 +9,7 @@ class Squall(Windfield):
 
     def __init__(self, x, y):
         super().__init__(x, y)
+        self.name = "Squall"
         self.maxsize = 1
         # TODO calc for maxsize
 
