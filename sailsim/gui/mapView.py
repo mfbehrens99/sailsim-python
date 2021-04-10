@@ -1,9 +1,10 @@
-"""PySide6 port of the corelib/threads/mandelbrot example from Qt v5.x, originating from PyQt"""
+"""This module contains the class declaration for the MapViewWidget."""
 
+from os import path
 from math import pi
 
-from PySide6.QtCore import Signal, QMutex, QMutexLocker, QPoint, QSize, Qt, QPointF, QRectF
-from PySide6.QtGui import QColor, QPainter, QPen, QPainterPath, QCursor, QImage
+from PySide6.QtCore import QPoint, Qt, QPointF, QRectF
+from PySide6.QtGui import QPainter, QPen, QPainterPath, QImage
 from PySide6.QtWidgets import QApplication, QWidget
 
 
@@ -15,17 +16,22 @@ ZoomInFactor = 1.25
 ZoomOutFactor = 1 / ZoomInFactor
 ScrollStep = 10
 
+BOAT_PATH = path.dirname(__file__) + "\\assets\\boat.png"
 
-def pointsToPath(points):
+
+def pointsToPath(points, jump=1):
+    """Convert a pointlist into a QPainterPath."""
     path = QPainterPath()
     path.moveTo(QPointF(points[0][0], -points[0][1]))
-    for p in points[1:]:
-        path.lineTo(QPointF(p[0],-p[1]))
+    for i in range(0, len(points), jump)[1:]:
+        point = points[i]
+        path.lineTo(QPointF(point[0], -point[1]))
     return path
 
 
-
 class MapViewWidget(QWidget):
+    """Map Widget that displays the boat and its path."""
+
     def __init__(self, parent=None):
         super(MapViewWidget, self).__init__(parent)
 
@@ -48,7 +54,6 @@ class MapViewWidget(QWidget):
         self.setCursor(Qt.CrossCursor)
         self.resize(550, 400)
 
-
     def paintEvent(self, event):
         painter = QPainter(self)
 
@@ -63,19 +68,21 @@ class MapViewWidget(QWidget):
 
         width = 1.2
         height = 4.2
-        target = QRectF(-width/2,-height/2, width, height)
-        img = QImage("C:/Users/mfbeh/Documents/GitHub/sailsim/sailsim/gui/boat.png")
+        target = QRectF(-width/2, -height/2, width, height)
+        img = QImage(BOAT_PATH)
         painter.drawImage(target, img);
 
-
     def setPath(self, path):
+        """Change the path and updates the painter."""
         self.path = path
         self.update()
 
     def viewFrame(self, frame):
+        """Set the boat to a position saved in a frame given."""
         self.setBoat(frame.boatPosX, frame.boatPosY, frame.boatDirection)
 
     def setBoat(self, posX, posY, direction):
+        """Set boat to a position given."""
         self.boatPos = QPointF(posX, -posY)
         self.boatDir = direction / pi * 180
         self.update()

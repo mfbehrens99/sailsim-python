@@ -4,7 +4,6 @@
 import sys
 from PySide6.QtWidgets import QApplication
 from sailsim.gui.SailsimGUI import SailsimGUI
-from sailsim.gui.mapView import pointsToPath
 
 # Import basic modules
 from sailsim.simulation.Simulation import Simulation
@@ -52,7 +51,6 @@ s.run()
 app = QApplication(sys.argv)
 
 window = SailsimGUI(s)
-window.ui.mapView.setPath(pointsToPath(s.frameList.getCoordinateList()))
 window.show()
 
 sys.exit(app.exec_())
