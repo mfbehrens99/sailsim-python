@@ -26,6 +26,7 @@ wind = Wind([wf, flctf, sqf])
 print(wind)
 
 b = Boat(0, 0, 0)
+b.setDirection(160)
 b.setMainSailAngleDeg(45)
 
 # Create world and simulation
@@ -43,6 +44,7 @@ app = QApplication(sys.argv)
 
 window = MainWindow()
 window.ui.mapView.setPath(pointsToPath(s.frameList.getCoordinateList()))
+window.ui.mapView.simulation = s
 window.show()
 
 sys.exit(app.exec_())

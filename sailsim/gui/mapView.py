@@ -1,13 +1,17 @@
 """PySide6 port of the corelib/threads/mandelbrot example from Qt v5.x, originating from PyQt"""
 
-from PySide6.QtCore import Signal, QMutex, QMutexLocker, QPoint, QSize, Qt, QPointF
-from PySide6.QtGui import QColor, QPainter, QPixmap, QPainterPath, QCursor
+from math import pi
+
+from PySide6.QtCore import Signal, QMutex, QMutexLocker, QPoint, QSize, Qt, QPointF, QRectF
+from PySide6.QtGui import QColor, QPainter, QPen, QPainterPath, QCursor, QImage
 from PySide6.QtWidgets import QApplication, QWidget
+
+from sailsim.gui.drawBoat import DrawBoat
 
 
 DefaultCenterX = 0
 DefaultCenterY = 0
-DefaultScale = .001
+DefaultScale = 1
 
 ZoomInFactor = 1.25
 ZoomOutFactor = 1 / ZoomInFactor
@@ -16,9 +20,9 @@ ScrollStep = 10
 
 def pointsToPath(points):
     path = QPainterPath()
-    path.moveTo(QPointF(points[0][0]*1000, points[0][1]*1000))
+    path.moveTo(QPointF(points[0][0], points[0][1]))
     for p in points[1:]:
-        path.lineTo(QPointF(p[0]*1000,p[1]*1000))
+        path.lineTo(QPointF(p[0],p[1]))
     return path
 
 
@@ -37,6 +41,11 @@ class MapViewWidget(QWidget):
 
         self.path = QPainterPath()
 
+        self.boatPos = QPointF(0, 0)
+        self.boatDir = 0
+
+        self.simulation = None
+
         self.setWindowTitle("MapViewWidget")
         self.setCursor(Qt.CrossCursor)
         self.resize(550, 400)
@@ -48,11 +57,33 @@ class MapViewWidget(QWidget):
         painter.translate(self.offset)
         painter.scale(self.scale, self.scale)
 
+        painter.setPen(QPen(Qt.black, 4/self.scale, Qt.SolidLine, Qt.RoundCap, Qt. RoundJoin))
         painter.drawPath(self.path)
+
+        painter.translate(self.boatPos)
+        painter.rotate(self.boatDir)
+
+        width = 1.2
+        height = 4.2
+        target = QRectF(-width/2,-height/2, width, height)
+        img = QImage("C:/Users/mfbeh/Documents/GitHub/sailsim/sailsim/gui/boat.png")
+        painter.drawImage(target, img);
 
 
     def setPath(self, path):
         self.path = path
+        self.update()
+
+    def viewFrame(self, frameNr):
+        (posX, posY) = (self.simulation.frameList.frames[frameNr].boatPosX, self.simulation.frameList.frames[frameNr].boatPosY)
+        direction = self.simulation.frameList.frames[frameNr].boatDirection
+        print(direction)
+        self.setBoat(posX, posY, direction)
+
+    def setBoat(self, posX, posY, direction):
+        self.boatPos = QPointF(posX, posY)
+        self.boatDir = direction / pi * 180
+
         self.update()
 
 

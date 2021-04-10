@@ -78,6 +78,7 @@ class Ui_MainWindow(object):
         self.timeSlider = QSlider(self.widget)
         self.timeSlider.setObjectName(u"timeSlider")
         self.timeSlider.setCursor(QCursor(Qt.OpenHandCursor))
+        self.timeSlider.setMaximum(1024)
         self.timeSlider.setOrientation(Qt.Horizontal)
 
         self.controlBar.addWidget(self.timeSlider)
@@ -109,6 +110,8 @@ class Ui_MainWindow(object):
         self.menuHelp.addAction(self.actionOpen_project_on_Github)
 
         self.retranslateUi(MainWindow)
+        self.timeSlider.valueChanged.connect(self.mapView.viewFrame)
+        self.timeSlider.valueChanged.connect(self.frameNr.setNum)
 
         QMetaObject.connectSlotsByName(MainWindow)
     # setupUi

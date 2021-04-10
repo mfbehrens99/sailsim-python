@@ -22,7 +22,7 @@
    </property>
    <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0">
     <item>
-     <layout class="QHBoxLayout" name="main">
+     <layout class="QHBoxLayout" name="main" stretch="2,1">
       <property name="spacing">
        <number>0</number>
       </property>
@@ -75,6 +75,9 @@
         <property name="cursor">
          <cursorShape>OpenHandCursor</cursorShape>
         </property>
+        <property name="maximum">
+         <number>1024</number>
+        </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
@@ -90,7 +93,7 @@
      <x>0</x>
      <y>0</y>
      <width>963</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -143,6 +146,9 @@
    <extends>QWidget</extends>
    <header>sailsim.gui.mapView</header>
    <container>1</container>
+   <slots>
+    <slot>viewFrame(int)</slot>
+   </slots>
   </customwidget>
   <customwidget>
    <class>BoatInspectorWidget</class>
@@ -155,5 +161,22 @@
   <tabstop>timeSlider</tabstop>
  </tabstops>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>timeSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>mapView</receiver>
+   <slot>viewFrame(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>354</x>
+     <y>571</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>296</x>
+     <y>450</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
