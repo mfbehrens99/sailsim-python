@@ -29,6 +29,15 @@ def pointsToPath(points, jump=1):
     return path
 
 
+def boatPainterPath():
+    boat = QPainterPath()
+    boat.moveTo(0, -2)
+    boat.cubicTo(QPointF(1, -.5), QPointF(1, .5), QPointF(.8, 2.2))
+    boat.lineTo(-.8, 2.2)
+    boat.cubicTo(QPointF(-1, .5), QPointF(-1, -.5), QPointF(0, -2))
+    return boat
+
+
 class MapViewWidget(QWidget):
     """Map Widget that displays the boat and its path."""
 
@@ -71,12 +80,7 @@ class MapViewWidget(QWidget):
 
         painter.setPen(Qt.NoPen)
         painter.setBrush(Qt.black)
-        boat = QPainterPath()
-        boat.moveTo(0, -2)
-        boat.cubicTo(QPointF(1, -.5), QPointF(1, .5), QPointF(.8, 2.2))
-        boat.lineTo(-.8, 2.2)
-        boat.cubicTo(QPointF(-1, .5), QPointF(-1, -.5), QPointF(0, -2))
-        painter.drawPath(boat)
+        painter.drawPath(boatPainterPath())
         painter.setPen(QPen(Qt.green, .1, Qt.SolidLine, Qt.RoundCap))
         painter.drawLine(QPointF(0, 0), QPointF(sin(self.boatMainSailAngle), cos(self.boatMainSailAngle)) * 2)
         painter.setPen(QPen(Qt.blue, .1, Qt.SolidLine, Qt.RoundCap))
