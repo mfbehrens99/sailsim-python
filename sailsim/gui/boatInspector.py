@@ -3,54 +3,89 @@
 from os import path
 from math import pi
 
-from PySide6.QtCore import QPoint, Qt, QRectF, QPointF
-from PySide6.QtGui import QColor, QPainter, QPixmap, QBrush, QImage
+from PySide6.QtCore import QPoint, QPointF, Qt
+from PySide6.QtGui import QBrush, QPainter, QPainterPath, QPen
 from PySide6.QtWidgets import QApplication, QWidget
+
+from sailsim.gui.mapView import boatPainterPath
 
 BOAT_PATH = path.dirname(__file__) + "\\assets\\boat.png"
 
 
 class BoatInspectorWidget(QWidget):
     """Display the state of the boat."""
+
+    scaleBoat = 1 / 4
+    scaleSpeed = 32
+    scaleForce = 1 / 2048
+
+    boatSpeed = QPointF(0, 0)
+    boatForce = QPointF(0, 0)
+
+    boatForceSailDrag = QPointF(0, 0)
+    boatForceSailLift = QPointF(0, 0)
+    boatForceWaterDrag = QPointF(0, 0)
+    boatForceWaterLift = QPointF(0, 0)
+
     def __init__(self, parent=None):
         super(BoatInspectorWidget, self).__init__(parent)
-
-        self.pixmap = QPixmap()
-        self.pixmapOffset = QPoint()
-        self.lastDragPos = QPoint()
 
         self.offset = QPoint(0, 0)
         self.radius = 0
 
         self.boatDirection = 0
-        self.boatSpeed = QPointF(0, 0)
-
-
-        self.setWindowTitle("BoatInspectorWidget")
-        # self.setCursor(Qt.CrossCursor)
 
     def paintEvent(self, event):
+        r = self.radius
+        scaleBoat, scaleSpeed, scaleForce = self.scaleBoat * r, self.scaleSpeed * r, self.scaleForce * r
+
         painter = QPainter(self)
+        painter.setRenderHint(QPainter.Antialiasing, True)
 
         painter.translate(self.offset)
         painter.rotate(self.boatDirection)
 
-        size = self.radius * 0.5
-        width = 1.2 * size
-        height = 4.2 * size
-        target = QRectF(-width/2, -height/2, width, height)
-        img = QImage(BOAT_PATH)
-        painter.drawImage(target, img)
-
-        col = QColor(0, 0, 0)
-        painter.setPen(col)
-
-        painter.setBrush(QBrush(QColor(200, 0, 0), Qt.NoBrush))
+        # (temporary) circle around boat
+        painter.setPen(Qt.lightGray)
         painter.drawEllipse(QPoint(0, 0), self.radius, self.radius)
+
+        # boatWidth, boatHeight = 1.2 * scaleBoat, 4.2 * scaleBoat
+        # target = QRectF(-boatWidth/2, -boatHeight/2, boatWidth, boatHeight)
+        # img = QImage(BOAT_PATH)
+        # painter.drawImage(target, img)
+        painter.scale(r * .25, r * .25)
+        painter.setPen(Qt.NoPen)
+        painter.setBrush(Qt.gray)
+        painter.drawPath(boatPainterPath())
+        painter.scale(4/r, 4/r)
+
+        painter.setPen(Qt.green)
+        painter.drawLine(QPoint(0, 0), QPoint(0, -scaleBoat * 4))
+
+
+        # Draw Vectors
+        painter.rotate(-self.boatDirection) # Rotate back since Vectors are absolute directions
+        painter.setPen(Qt.blue)
+        painter.drawLine(QPoint(0, 0), self.boatSpeed * scaleSpeed)
+
+        painter.setPen(Qt.darkRed)
+        painter.drawLine(QPoint(0, 0), self.boatForce * scaleForce)
+        painter.setPen(Qt.red)
+        painter.drawLine(QPoint(0, 0), self.boatForceSailDrag * scaleForce)
+        painter.drawLine(QPoint(0, 0), self.boatForceSailLift * scaleForce)
+        painter.drawLine(QPoint(0, 0), self.boatForceWaterDrag * scaleForce)
+        painter.drawLine(QPoint(0, 0), self.boatForceWaterLift * scaleForce)
 
     def viewFrame(self, frame):
         """Set the boat to a position saved in a frame given."""
         self.boatDirection = frame.boatDirection / pi * 180
+        self.boatSpeed = QPointF(frame.boatSpeedX, -frame.boatSpeedY)
+
+        self.boatForce = QPointF(frame.boatForceX, -frame.boatForceY)
+        self.boatForceSailDrag = QPointF(frame.boatSailDragX, -frame.boatSailDragY)
+        self.boatForceSailLift = QPointF(frame.boatSailLiftX, -frame.boatSailLiftY)
+        self.boatForceWaterDrag = QPointF(frame.boatWaterDragX, -frame.boatWaterDragY)
+        self.boatForceWaterLift = QPointF(frame.boatWaterLiftX, -frame.boatWaterLiftY)
         self.update()
 
     def resizeEvent(self, event):
