@@ -1,10 +1,10 @@
 """This module contains the class declaration for the MapViewWidget."""
 
 from os import path
-from math import pi
+from math import pi, sin, cos
 
-from PySide6.QtCore import QPoint, Qt, QPointF, QRectF
-from PySide6.QtGui import QPainter, QPen, QPainterPath, QImage
+from PySide6.QtCore import QPoint, QPointF, Qt
+from PySide6.QtGui import QBrush, QColor, QPainter, QPainterPath, QPen
 from PySide6.QtWidgets import QApplication, QWidget
 
 
@@ -47,6 +47,8 @@ class MapViewWidget(QWidget):
 
         self.boatPos = QPointF(0, 0)
         self.boatDir = 0
+        self.boatMainSailAngle = 0
+        self.boatRudderAngle = 0
 
         self.simulation = None
 
@@ -56,6 +58,7 @@ class MapViewWidget(QWidget):
 
     def paintEvent(self, event):
         painter = QPainter(self)
+        painter.setBackground(QBrush(QColor(100, 100, 255), Qt.Dense1Pattern))
 
         painter.translate(self.offset)
         painter.scale(self.scale, self.scale)
@@ -66,11 +69,18 @@ class MapViewWidget(QWidget):
         painter.translate(self.boatPos)
         painter.rotate(self.boatDir)
 
-        width = 1.2
-        height = 4.2
-        target = QRectF(-width/2, -height/2, width, height)
-        img = QImage(BOAT_PATH)
-        painter.drawImage(target, img);
+        painter.setPen(Qt.NoPen)
+        painter.setBrush(Qt.black)
+        boat = QPainterPath()
+        boat.moveTo(0, -2)
+        boat.cubicTo(QPointF(1, -.5), QPointF(1, .5), QPointF(.8, 2.2))
+        boat.lineTo(-.8, 2.2)
+        boat.cubicTo(QPointF(-1, .5), QPointF(-1, -.5), QPointF(0, -2))
+        painter.drawPath(boat)
+        painter.setPen(QPen(Qt.green, .1, Qt.SolidLine, Qt.RoundCap))
+        painter.drawLine(QPointF(0, 0), QPointF(sin(self.boatMainSailAngle), cos(self.boatMainSailAngle)) * 2)
+        painter.setPen(QPen(Qt.blue, .1, Qt.SolidLine, Qt.RoundCap))
+        painter.drawLine(QPointF(0, 2.2), QPointF(sin(self.boatRudderAngle), cos(self.boatRudderAngle)) * .5 + QPointF(0, 2.2))
 
     def setPath(self, path):
         """Change the path and updates the painter."""
@@ -79,12 +89,14 @@ class MapViewWidget(QWidget):
 
     def viewFrame(self, frame):
         """Set the boat to a position saved in a frame given."""
-        self.setBoat(frame.boatPosX, frame.boatPosY, frame.boatDirection)
+        self.setBoat(frame.boatPosX, frame.boatPosY, frame.boatDirection, frame.boatMainSailAngle, frame.boatRudderAngle)
 
-    def setBoat(self, posX, posY, direction):
+    def setBoat(self, posX, posY, direction, mainSailAngle, rudderAngle):
         """Set boat to a position given."""
         self.boatPos = QPointF(posX, -posY)
         self.boatDir = direction / pi * 180
+        self.boatMainSailAngle = -mainSailAngle
+        self.boatRudderAngle = rudderAngle
         self.update()
 
 
