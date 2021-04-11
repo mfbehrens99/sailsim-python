@@ -33,7 +33,7 @@ class SailsimGUI(QMainWindow):
             maxFrame = str(len(self.simulation))
             self.ui.frameNr.setText(str(frameNr).zfill(len(maxFrame)) + "/" + maxFrame)
             self.ui.mapView.viewFrame(frame)
-            # self.ui.boatInspector.viewFrame(frame)
+            self.ui.boatInspector.viewFrame(frame)
 
     def updatePath(self, pathStep):
         """Update the path displayed on the MapViewWidget with the current data from the simulation."""

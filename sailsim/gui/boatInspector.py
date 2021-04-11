@@ -1,11 +1,17 @@
-"""PySide6 port of the corelib/threads/mandelbrot example from Qt v5.x, originating from PyQt"""
+"""This module contains the class declaration of BoatInspectorWidget."""
 
-from PySide6.QtCore import Signal, QPoint, Qt
-from PySide6.QtGui import QColor, QPainter, QPixmap, QBrush, QTransform, QImage
+from os import path
+from math import pi
+
+from PySide6.QtCore import QPoint, Qt, QRectF, QPointF
+from PySide6.QtGui import QColor, QPainter, QPixmap, QBrush, QImage
 from PySide6.QtWidgets import QApplication, QWidget
+
+BOAT_PATH = path.dirname(__file__) + "\\assets\\boat.png"
 
 
 class BoatInspectorWidget(QWidget):
+    """Display the state of the boat."""
     def __init__(self, parent=None):
         super(BoatInspectorWidget, self).__init__(parent)
 
@@ -13,9 +19,11 @@ class BoatInspectorWidget(QWidget):
         self.pixmapOffset = QPoint()
         self.lastDragPos = QPoint()
 
-        self.centerX = 0
-        self.centerY = 0
+        self.offset = QPoint(0, 0)
         self.radius = 0
+
+        self.boatDirection = 0
+        self.boatSpeed = QPointF(0, 0)
 
 
         self.setWindowTitle("BoatInspectorWidget")
@@ -24,24 +32,29 @@ class BoatInspectorWidget(QWidget):
     def paintEvent(self, event):
         painter = QPainter(self)
 
-        self.pixmap = QPixmap()
-        painter.drawPixmap(self.pixmapOffset, self.pixmap)
+        painter.translate(self.offset)
+        painter.rotate(self.boatDirection)
 
-        # trans = QTransform().rotate(60)
-        # painter.drawPixmap(0, 0, boat.transformed(trans))
-        # painter.drawImage(QPoint(0, 0))
+        size = self.radius * 0.5
+        width = 1.2 * size
+        height = 4.2 * size
+        target = QRectF(-width/2, -height/2, width, height)
+        img = QImage(BOAT_PATH)
+        painter.drawImage(target, img)
 
         col = QColor(0, 0, 0)
         painter.setPen(col)
 
         painter.setBrush(QBrush(QColor(200, 0, 0), Qt.NoBrush))
-        painter.drawEllipse(QPoint(self.centerX, self.centerY), self.radius, self.radius)
+        painter.drawEllipse(QPoint(0, 0), self.radius, self.radius)
 
-
+    def viewFrame(self, frame):
+        """Set the boat to a position saved in a frame given."""
+        self.boatDirection = frame.boatDirection / pi * 180
+        self.update()
 
     def resizeEvent(self, event):
-        self.centerX = event.size().width() // 2
-        self.centerY = event.size().height() // 2
+        self.offset = QPoint(event.size().width() // 2, event.size().height() // 2)
         self.radius = min(event.size().width(), event.size().height()) // 2
         self.update()
 
