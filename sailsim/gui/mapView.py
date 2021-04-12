@@ -4,7 +4,7 @@ from os import path
 from math import pi, sin, cos
 
 from PySide6.QtCore import QPoint, QPointF, Qt
-from PySide6.QtGui import QBrush, QColor, QPainter, QPainterPath, QPen
+from PySide6.QtGui import QBrush, QColor, QCursor, QPainter, QPainterPath, QPen
 from PySide6.QtWidgets import QApplication, QWidget
 
 
@@ -126,7 +126,7 @@ class MapViewWidget(QWidget):
 
     def wheelEvent(self, event):
         numDegrees = event.angleDelta().y() / 8
-        numSteps = numDegrees / 15.0
+        numSteps = numDegrees / 32
         self.zoom(pow(ZoomInFactor, numSteps))
 
     def mousePressEvent(self, event):
@@ -139,12 +139,10 @@ class MapViewWidget(QWidget):
             self.lastDragPos = QPoint(event.pos())
             self.update()
 
-
     def zoom(self, zoomFactor):
+        """Zoom the mapView and keep mouse in the same spot."""
         self.scale *= zoomFactor
-        # mouse = (self.mapFromGlobal(QCursor.pos()) - self.offset) / self.scale
-        # self.offset -= QPoint(self.width // 2 * zoomFactor, self.height // 2 * zoomFactor)
-        # print(self.offset.x(), self.offset.y())
+        self.offset += (self.mapFromGlobal(QCursor.pos()) - self.offset) * (1 - zoomFactor)
         self.update()
 
     def scroll(self, deltaX, deltaY):
