@@ -67,7 +67,7 @@ class MapViewWidget(QWidget):
 
     def paintEvent(self, event):
         painter = QPainter(self)
-        painter.setBackground(QBrush(QColor(100, 100, 255), Qt.Dense1Pattern))
+        painter.setRenderHint(QPainter.Antialiasing, True)
 
         painter.translate(self.offset)
         painter.scale(self.scale, self.scale)
@@ -105,8 +105,9 @@ class MapViewWidget(QWidget):
 
 
     def resizeEvent(self, event):
-        self.width = event.size().width()
-        self.height = event.size().height()
+        width, height = event.size().width(), event.size().height()
+        self.offset -= QPoint((self.width - width) / 2, (self.height - height) / 2)
+        self.width, self.height = width, height
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_Plus:
