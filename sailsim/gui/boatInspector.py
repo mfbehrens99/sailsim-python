@@ -16,7 +16,7 @@ class BoatInspectorWidget(QWidget):
     """Display the state of the boat."""
 
     scaleBoat = 1 / 4
-    scaleSpeed = 32
+    scaleSpeed = 8
     scaleForce = 1 / 2048
 
     boatSpeed = QPointF(0, 0)
@@ -49,22 +49,18 @@ class BoatInspectorWidget(QWidget):
         painter.setPen(Qt.lightGray)
         painter.drawEllipse(QPoint(0, 0), self.radius, self.radius)
 
-        # boatWidth, boatHeight = 1.2 * scaleBoat, 4.2 * scaleBoat
-        # target = QRectF(-boatWidth/2, -boatHeight/2, boatWidth, boatHeight)
-        # img = QImage(BOAT_PATH)
-        # painter.drawImage(target, img)
-        painter.scale(r * .25, r * .25)
+        painter.scale(r / 4, r / 4)
         painter.setPen(Qt.NoPen)
         painter.setBrush(Qt.gray)
         painter.drawPath(boatPainterPath())
-        painter.scale(4/r, 4/r)
+        painter.scale(4 / r, 4 / r)
 
         painter.setPen(Qt.green)
         painter.drawLine(QPoint(0, 0), QPoint(0, -scaleBoat * 4))
 
-
         # Draw Vectors
-        painter.rotate(-self.boatDirection) # Rotate back since Vectors are absolute directions
+        painter.resetTransform()
+        painter.translate(self.offset)
         painter.setPen(Qt.blue)
         painter.drawLine(QPoint(0, 0), self.boatSpeed * scaleSpeed)
 

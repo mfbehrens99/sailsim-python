@@ -7,11 +7,7 @@ from PySide6.QtCore import QPoint, QPointF, Qt
 from PySide6.QtGui import QBrush, QColor, QCursor, QPainter, QPainterPath, QPen
 from PySide6.QtWidgets import QApplication, QWidget
 
-
-DefaultCenterX = 0
-DefaultCenterY = 0
-DefaultScale = 1
-
+# Map constants
 ZoomInFactor = 1.25
 ZoomOutFactor = 1 / ZoomInFactor
 ScrollStep = 10
@@ -30,6 +26,7 @@ def pointsToPath(points, jump=1):
 
 
 def boatPainterPath():
+    """Return the QPainterPath for drawing a boat"""
     boat = QPainterPath()
     boat.moveTo(0, -2)
     boat.cubicTo(QPointF(1, -.5), QPointF(1, .5), QPointF(.8, 2.2))
@@ -49,7 +46,7 @@ class MapViewWidget(QWidget):
 
         self.width = 0
         self.height = 0
-        self.scale = 1
+        self.scale = 4
         self.lastDragPosition = QPoint()
 
         self.path = QPainterPath()
@@ -72,7 +69,7 @@ class MapViewWidget(QWidget):
         painter.translate(self.offset)
         painter.scale(self.scale, self.scale)
 
-        painter.setPen(QPen(Qt.black, 4/self.scale, Qt.SolidLine, Qt.RoundCap, Qt. RoundJoin))
+        painter.setPen(QPen(Qt.darkGray, 4 / self.scale, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
         painter.drawPath(self.path)
 
         painter.translate(self.boatPos)
@@ -81,10 +78,10 @@ class MapViewWidget(QWidget):
         painter.setPen(Qt.NoPen)
         painter.setBrush(Qt.black)
         painter.drawPath(boatPainterPath())
-        painter.setPen(QPen(Qt.green, .1, Qt.SolidLine, Qt.RoundCap))
+        painter.setPen(QPen(Qt.green, 0.1, Qt.SolidLine, Qt.RoundCap))
         painter.drawLine(QPointF(0, 0), QPointF(sin(self.boatMainSailAngle), cos(self.boatMainSailAngle)) * 2)
-        painter.setPen(QPen(Qt.blue, .1, Qt.SolidLine, Qt.RoundCap))
-        painter.drawLine(QPointF(0, 2.2), QPointF(sin(self.boatRudderAngle), cos(self.boatRudderAngle)) * .5 + QPointF(0, 2.2))
+        painter.setPen(QPen(Qt.blue, 0.1, Qt.SolidLine, Qt.RoundCap))
+        painter.drawLine(QPointF(0, 2.2), QPointF(sin(self.boatRudderAngle), cos(self.boatRudderAngle)) * 0.5 + QPointF(0, 2.2))
 
     def setPath(self, path):
         """Change the path and updates the painter."""
@@ -103,8 +100,8 @@ class MapViewWidget(QWidget):
         self.boatRudderAngle = rudderAngle
         self.update()
 
-
     def resizeEvent(self, event):
+        """Keep center of the map in the center."""
         width, height = event.size().width(), event.size().height()
         self.offset -= QPoint((self.width - width) / 2, (self.height - height) / 2)
         self.width, self.height = width, height
