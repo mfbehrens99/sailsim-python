@@ -1,15 +1,12 @@
 """This module contains the class declaration of BoatInspectorWidget."""
 
-from os import path
 from math import pi
 
 from PySide6.QtCore import QPoint, QPointF, Qt
-from PySide6.QtGui import QBrush, QPainter, QPainterPath, QPen
+from PySide6.QtGui import QPainter
 from PySide6.QtWidgets import QApplication, QWidget
 
 from sailsim.gui.mapView import boatPainterPath
-
-BOAT_PATH = path.dirname(__file__) + "\\assets\\boat.png"
 
 
 class BoatInspectorWidget(QWidget):
@@ -85,6 +82,7 @@ class BoatInspectorWidget(QWidget):
         self.update()
 
     def resizeEvent(self, event):
+        """Keep size of the boatInspector at maximum size."""
         self.offset = QPoint(event.size().width() // 2, event.size().height() // 2)
         self.radius = min(event.size().width(), event.size().height()) // 2
         self.update()

@@ -4,7 +4,7 @@ from os import path
 from math import pi, sin, cos
 
 from PySide6.QtCore import QPoint, QPointF, Qt
-from PySide6.QtGui import QBrush, QColor, QCursor, QPainter, QPainterPath, QPen
+from PySide6.QtGui import QCursor, QPainter, QPainterPath, QPen
 from PySide6.QtWidgets import QApplication, QWidget
 
 # Map constants
@@ -26,7 +26,7 @@ def pointsToPath(points, jump=1):
 
 
 def boatPainterPath():
-    """Return the QPainterPath for drawing a boat"""
+    """Return the QPainterPath for drawing a boat."""
     boat = QPainterPath()
     boat.moveTo(0, -2)
     boat.cubicTo(QPointF(1, -.5), QPointF(1, .5), QPointF(.8, 2.2))
@@ -107,6 +107,8 @@ class MapViewWidget(QWidget):
         self.width, self.height = width, height
 
     def keyPressEvent(self, event):
+        """Move mapView according to the button pressed."""
+        # TODO is this working?
         if event.key() == Qt.Key_Plus:
             self.zoom(ZoomInFactor)
         elif event.key() == Qt.Key_Minus:
@@ -123,6 +125,7 @@ class MapViewWidget(QWidget):
             super(MapViewWidget, self).keyPressEvent(event)
 
     def wheelEvent(self, event):
+        """Zoom in and out when mouse wheel is moved."""
         numDegrees = event.angleDelta().y() / 8
         numSteps = numDegrees / 32
         self.zoom(pow(ZoomInFactor, numSteps))
