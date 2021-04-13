@@ -6,6 +6,8 @@ from PySide6.QtCore import QPoint, QPointF, Qt
 from PySide6.QtGui import QCursor, QPainter, QPainterPath, QPen
 from PySide6.QtWidgets import QApplication, QWidget
 
+from sailsim.sailor.Commands import Waypoint
+
 # Map constants
 ZoomInFactor = 1.25
 ZoomOutFactor = 1 / ZoomInFactor
@@ -42,6 +44,8 @@ class MapViewWidget(QWidget):
     scale = 4
     lastDragPos = QPoint()
 
+    waypointsLink = QPainterPath()
+    waypoints = QPainterPath()
     path = QPainterPath()
 
     boatPos = QPointF(0, 0)
@@ -63,6 +67,11 @@ class MapViewWidget(QWidget):
         painter.translate(self.offset)
         painter.scale(self.scale, self.scale)
 
+        painter.setPen(QPen(Qt.gray, .1, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
+        painter.drawPath(self.waypointsLink)
+        painter.setPen(QPen(Qt.blue, .1, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
+        painter.drawPath(self.waypoints)
+
         painter.setPen(QPen(Qt.darkGray, 4 / self.scale, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
         painter.drawPath(self.path)
 
@@ -80,6 +89,18 @@ class MapViewWidget(QWidget):
     def setPath(self, path):
         """Change the path and updates the painter."""
         self.path = path
+        self.update()
+
+    def setWaypoints(self, commands):
+        wpPath = QPainterPath()
+        # TODO find out boat starting coordinates
+        wpLinkList = [[0, 0]]
+        for command in commands:
+            if isinstance(command, Waypoint):
+                wpPath.addEllipse(QPoint(command.destX, -command.destY), command.radius, command.radius)
+                wpLinkList.append([command.destX, command.destY])
+        self.waypointsLink = pointsToPath(wpLinkList)
+        self.waypoints = wpPath
         self.update()
 
     def viewFrame(self, frame):
