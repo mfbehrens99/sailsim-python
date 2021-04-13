@@ -48,13 +48,12 @@ s = Simulation(w, 0.01, 1000)
 try:
     s.run()
 except OverflowError:
+    s.lastFrame = s.frame - 1
     print("Overflow after Frame", s.frame)
 
-app = QApplication(sys.argv)
+s.frameList.saveCSV(OUTPUT_PATH)
 
+app = QApplication(sys.argv)
 window = SailsimGUI(s)
 window.show()
-
 sys.exit(app.exec_())
-
-s.frameList.saveCSV(OUTPUT_PATH)
