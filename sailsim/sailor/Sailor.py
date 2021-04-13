@@ -13,6 +13,7 @@ class Sailor:
 
     destX = 0
     destY = 0
+    commandListIndex = 0
 
     rudderAngle = None
     boatDirection = None
@@ -82,7 +83,7 @@ class Sailor:
         # TODO make prettier
         while len(self.commandList) > 0:
             success = None
-            command = self.commandList[0]
+            command = self.commandList[self.commandListIndex]
             if isinstance(command, Waypoint):
                 success = command.checkWaypoint(self, posX, posY)
             # elif isinstance(command, Command):
@@ -90,7 +91,7 @@ class Sailor:
 
             # If command was run successfully run next command, if not continue sailing
             if success:
-                del self.commandList[0]
+                self.commandListIndex += 1
             else:
                 break
 
