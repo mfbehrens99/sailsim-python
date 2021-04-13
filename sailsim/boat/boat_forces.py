@@ -35,21 +35,21 @@ def waterLift(self, speedNormX, speedNormY, boatSpeedSq):
 
 
 # Rudder forces
-def waterDragRudder(self, dirNormX, dirNormY, boatSpeedSq):
-    # TODO use c_w
-    c_w = sin(self.rudderAngle)
-    force = 0.5 * DENSITY_WATER * self.rudderArea * boatSpeedSq * c_w
-    return (force * dirNormX, force * dirNormY)
+def waterDragRudder(self, speedNormX, speedNormY, boatSpeedSq):
+    force = self.waterDragRudderScalar(boatSpeedSq)
+    return (force * speedNormX, force * speedNormY)
 
 
-def waterLiftRudder(self, dirNormX, dirNormY, boatSpeedSq):
-    # TODO use c_w
-    c_w = sin(self.rudderAngle * 2)
+def waterLiftRudder(self, speedNormX, speedNormY, boatSpeedSq):
     force = self.waterLiftRudderScalar(boatSpeedSq)
-    return (force * dirNormX, force * dirNormY)
+    if self.dataHolder.leewayAngle + self.rudderAngle < 0:
+        return (-force * speedNormY, force * speedNormX)    # rotate by 90° counterclockwise
+    return (force * speedNormY, -force * speedNormX)        # rotate by 90° clockwise
+
+
+def waterDragRudderScalar(self, boatSpeedSq):
+    return -0.5 * DENSITY_WATER * self.rudderArea * boatSpeedSq * self.coefficientWaterDrag(self.dataHolder.leewayAngle + self.rudderAngle)
 
 
 def waterLiftRudderScalar(self, boatSpeedSq):
-    # TODO use c_w
-    c_w = sin(self.rudderAngle * 2)
-    return 0.5 * DENSITY_WATER * self.rudderArea * boatSpeedSq * c_w
+    return -0.5 * DENSITY_WATER * self.rudderArea * boatSpeedSq * self.coefficientWaterLift(self.dataHolder.leewayAngle + self.rudderAngle)
