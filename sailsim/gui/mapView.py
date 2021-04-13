@@ -1,6 +1,5 @@
 """This module contains the class declaration for the MapViewWidget."""
 
-from os import path
 from math import pi, sin, cos
 
 from PySide6.QtCore import QPoint, QPointF, Qt
@@ -11,8 +10,6 @@ from PySide6.QtWidgets import QApplication, QWidget
 ZoomInFactor = 1.25
 ZoomOutFactor = 1 / ZoomInFactor
 ScrollStep = 10
-
-BOAT_PATH = path.dirname(__file__) + "\\assets\\boat.png"
 
 
 def pointsToPath(points, jump=1):
@@ -38,25 +35,22 @@ def boatPainterPath():
 class MapViewWidget(QWidget):
     """Map Widget that displays the boat and its path."""
 
+    windowWidth = 0
+    windowHeight = 0
+
+    offset = QPoint()
+    scale = 4
+    lastDragPos = QPoint()
+
+    path = QPainterPath()
+
+    boatPos = QPointF(0, 0)
+    boatDir = 0
+    boatMainSailAngle = 0
+    boatRudderAngle = 0
+
     def __init__(self, parent=None):
         super(MapViewWidget, self).__init__(parent)
-
-        self.offset = QPoint()
-        self.lastDragPos = QPoint()
-
-        self.width = 0
-        self.height = 0
-        self.scale = 4
-        self.lastDragPosition = QPoint()
-
-        self.path = QPainterPath()
-
-        self.boatPos = QPointF(0, 0)
-        self.boatDir = 0
-        self.boatMainSailAngle = 0
-        self.boatRudderAngle = 0
-
-        self.simulation = None
 
         self.setWindowTitle("MapViewWidget")
         self.setCursor(Qt.CrossCursor)
@@ -103,8 +97,8 @@ class MapViewWidget(QWidget):
     def resizeEvent(self, event):
         """Keep center of the map in the center."""
         width, height = event.size().width(), event.size().height()
-        self.offset -= QPoint((self.width - width) / 2, (self.height - height) / 2)
-        self.width, self.height = width, height
+        self.offset -= QPoint((self.windowWidth - width) / 2, (self.windowHeight - height) / 2)
+        self.windowWidth, self.windowHeight = width, height
 
     def keyPressEvent(self, event):
         """Move mapView according to the button pressed."""
@@ -147,6 +141,7 @@ class MapViewWidget(QWidget):
         self.update()
 
     def scroll(self, deltaX, deltaY):
+        """Translate mapView."""
         self.offset += QPoint(deltaX, deltaY)
         self.update()
 

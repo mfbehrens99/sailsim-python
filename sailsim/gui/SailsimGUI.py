@@ -48,15 +48,15 @@ class SailsimGUI(QMainWindow):
         self.ui.mapView.setPath(path)
 
     def incFrame(self):
-        """Move to the next frame if it exists."""
+        """Move to the next frame if it is in the range of the slider."""
         self.ui.timeSlider.setValue(self.ui.timeSlider.value() + 1)
 
     def decFrame(self):
-        """Move to the previous """
+        """Move to the previous frame if it is in the range of the slider."""
         self.ui.timeSlider.setValue(self.ui.timeSlider.value() - 1)
 
     def pressedPlay(self, active):
-        """"""
+        """Start or stop animation depending on active."""
         if active:
             if self.simulation.lastFrame > self.frame:
                 self.timer.start()
@@ -66,24 +66,13 @@ class SailsimGUI(QMainWindow):
             self.playStop()
 
     def playStop(self):
+        """Stop the animation and uncheck the play button."""
         self.timer.stop()
         self.ui.buttonPlay.setChecked(False)
 
     def playStep(self):
+        """Increase the frame if it is still available. Otherwise stop the animation."""
         if self.simulation.lastFrame > self.frame:
             self.incFrame()
         else:
             self.playStop()
-
-
-def main():
-    app = QApplication(sys.argv)
-
-    window = SailsimGUI()
-    window.show()
-
-    sys.exit(app.exec_())
-
-
-if __name__ == "__main__":
-    main()

@@ -46,11 +46,11 @@ class BoatInspectorWidget(QWidget):
         painter.setPen(Qt.lightGray)
         painter.drawEllipse(QPoint(0, 0), self.radius, self.radius)
 
-        painter.scale(r / 4, r / 4)
+        painter.scale(scaleBoat, scaleBoat)
         painter.setPen(Qt.NoPen)
         painter.setBrush(Qt.gray)
         painter.drawPath(boatPainterPath())
-        painter.scale(4 / r, 4 / r)
+        painter.scale(1 / scaleBoat, 1 / scaleBoat)
 
         painter.setPen(Qt.green)
         painter.drawLine(QPoint(0, 0), QPoint(0, -scaleBoat * 4))

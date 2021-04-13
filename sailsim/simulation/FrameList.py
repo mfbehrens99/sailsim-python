@@ -29,10 +29,6 @@ class FrameList():
             out.append((f.boatPosX, f.boatPosY))
         return out
 
-    def getBoat(self, frame):
-        frameObject = self.frames[frame]
-        return (frameObject.boatPosX, frameObject.boatPosY, frameObject.boatDirection)
-
     def getCSV(self):
         """Generate .csv file and return it."""
         output = self.getCSVHeader() + "\n"
