@@ -1,6 +1,8 @@
 """This module holdes some force calculation for the Boat class."""
 
 from math import sin
+
+from sailsim.utils.anglecalculations import angleKeepInterval
 from sailsim.utils.constants import DENSITY_AIR, DENSITY_WATER
 
 
@@ -42,14 +44,15 @@ def waterDragRudder(self, speedNormX, speedNormY, boatSpeedSq):
 
 def waterLiftRudder(self, speedNormX, speedNormY, boatSpeedSq):
     force = self.waterLiftRudderScalar(boatSpeedSq)
-    if self.dataHolder.leewayAngle + self.rudderAngle < 0:
-        return (-force * speedNormY, force * speedNormX)    # rotate by 90° counterclockwise
-    return (force * speedNormY, -force * speedNormX)        # rotate by 90° clockwise
-
-
-def waterDragRudderScalar(self, boatSpeedSq):
-    return -0.5 * DENSITY_WATER * self.rudderArea * boatSpeedSq * self.coefficientWaterDrag(self.dataHolder.leewayAngle + self.rudderAngle)
+    return (force * speedNormY, -force * speedNormX)
 
 
 def waterLiftRudderScalar(self, boatSpeedSq):
-    return -0.5 * DENSITY_WATER * self.rudderArea * boatSpeedSq * self.coefficientWaterLift(self.dataHolder.leewayAngle + self.rudderAngle)
+    force = -0.5 * DENSITY_WATER * self.rudderArea * boatSpeedSq * self.coefficientWaterLift(angleKeepInterval(self.dataHolder.leewayAngle + self.rudderAngle))
+    if angleKeepInterval(self.dataHolder.leewayAngle + self.rudderAngle) < 0:
+        return force
+    return -force
+
+
+def waterDragRudderScalar(self, boatSpeedSq):
+    return -0.5 * DENSITY_WATER * self.rudderArea * boatSpeedSq * self.coefficientWaterDrag(angleKeepInterval(self.dataHolder.leewayAngle + self.rudderAngle))
