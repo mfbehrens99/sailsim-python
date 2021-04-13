@@ -4,20 +4,21 @@ import setuptools
 
 setuptools.setup(
     name='sailsim',
-    version='0.1',
-    description='A program to simulate sailboats',
+    version='0.0.1',
+    description='A program to simulate sailboats and test sailing algorithms.',
     author='Tillman Keller & Michael Behrens',
     author_email='mfbehrens99@gmail.com',
     packages=setuptools.find_packages(),
-    url='github.com/mfbehrens99/sailsim',
+    url='https://github.com/mfbehrens99/sailsim',
     long_description=open('README.md').read(),
+    long_description_content_type='text/markdown',
     python_requires='>=3',
-    install_requires=['opensimplex'],
+    install_requires=['opensimplex', "PySide6"],
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 3 - Alpha',
         'Intended Audience :: Education',
         'Intended Audience :: Science/Research',
-        'Topic :: Scientific/Engineering :: Physics',
+        'Topic :: Scientific/Engineering',
     ],
     # entry_points={
     #     'console_scripts': [

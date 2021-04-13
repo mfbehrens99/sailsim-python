@@ -1,4 +1,5 @@
 class BoatDataHolder():
+    """Save temporary data for the Boat class."""
     def __init__(self):
         self.boatSpeed = None
         self.apparentWindSpeed = None

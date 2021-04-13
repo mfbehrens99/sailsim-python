@@ -1,5 +1,10 @@
 """This is a basic simulation program. It is intended to serve as a basis for testing with a know output."""
 
+# Import gui
+import sys
+from PySide6.QtWidgets import QApplication
+from sailsim.gui.SailsimGUI import SailsimGUI
+
 # Import basic modules
 from sailsim.simulation.Simulation import Simulation
 from sailsim.world.World import World
@@ -37,12 +42,19 @@ sailor.importBoat(b)
 
 # Create world and simulation
 w = World(b, wind, None)
-s = Simulation(w, 0.01, 1024)
-
+s = Simulation(w, 0.01, 1000)
 
 # Run simulation
 try:
     s.run()
 except OverflowError:
     print("Overflow after Frame", s.frame)
+
+app = QApplication(sys.argv)
+
+window = SailsimGUI(s)
+window.show()
+
+sys.exit(app.exec_())
+
 s.frameList.saveCSV(OUTPUT_PATH)

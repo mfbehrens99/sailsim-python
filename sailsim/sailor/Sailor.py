@@ -41,9 +41,6 @@ class Sailor:
 
         self.tackingAngleBufferSize = 10 / 180 * pi
 
-        self.straightCourse = 0
-        self.trueWindDir = 0
-
     def run(self, posX, posY, gpsSpeed, gpsDir, compass, windSpeed, windAngle):
         """Execute Sailor calculations and save resultes in object properties."""
         self.checkCommand(posX, posY)

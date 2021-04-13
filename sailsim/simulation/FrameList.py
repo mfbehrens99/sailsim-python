@@ -12,7 +12,7 @@ class FrameList():
 
     def grabFrame(self, simulation):
         """Append new frame with all information to list."""
-        (posX, posY) = (simulation.world.boat.posX, simulation.world.boat.posY) # TODO use method of boat class when implemented
+        (posX, posY) = simulation.world.boat.getPos()
         frame = Frame()
         frame.collectSimulation(simulation)
         frame.collectBoat(simulation.world.boat)
@@ -20,10 +20,17 @@ class FrameList():
         self.frames.append(frame)
 
     def reset(self):
+        """Delete all previously saved frames."""
         self.frames = []
 
+    def getCoordinateList(self):
+        out = []
+        for f in self.frames:
+            out.append((f.boatPosX, f.boatPosY))
+        return out
+
     def getCSV(self):
-        """Generate .csv file and write it to drive."""
+        """Generate .csv file and return it."""
         output = self.getCSVHeader() + "\n"
         for frame in self.frames:
             output += frame.getCSVLine() + "\n"
@@ -53,6 +60,7 @@ class FrameList():
         return windHeader
 
     def saveCSV(self, name="output.csv"):
+        """Generate .csv file and save it to drive."""
         if not name.endswith(".csv"):
             name += ".csv"
         file = open(name, "w")
