@@ -1,19 +1,25 @@
 # _sailsim_ - A sail boat simulator
-This is a simulation program that is meant to test sailing algorithms.
+This sailboat simulation program is meant to test sailing algorithms. Provide the simulation a sailboat, some wind and a sailing algorithm and the boat will sail in this virtual world.
 
-This project is developed by Tillman Keller & Michael Behrens. We are just starting up.
+This project is developed by Tillman Keller & Michael Behrens.
 
 ## Installation
-This package is not yet downloadable with `pip`. You can still use pip to install it by using the following command:
+This package can be downloaded from [PyPi](https://pypi.org/project/sailsim/) using `pip` by using the following command:
 
-`pip install .`
+`pip install sailsim`
 
-To install the package for development add the `-e` option:
+To install the package for development download the repository from [GitHub]. Navigate to the folder and add the `-e` option to the pip install command:
 
 `pip install -e .`
+
+## Usage
+In `tests/basictest.py` is an example use of the module. For now the GUI is not reachable that easily, but updates will come!
 
 ## Documentation
 The class diagram can be fond in the `docs` folder. The folder contains a class diagram that displays the structure of the project. Additionally, a sequence diagram explains how the simulation of in step is working.
 
 ## Contributing
-The program is still in its pre-alpha state, so contributions are not that easy yet. When the software reaches its alpha state we welcome all suggestions and bugs.
+We are happy for any support from other people. Especially if you are into QT GUI development or design we truly need your help!
+
+
+[GitHub]: https://github.com/mfbehrens99/sailsim
