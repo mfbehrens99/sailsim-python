@@ -76,7 +76,14 @@ class Sailor:
 
         offset = angleKeepInterval(self.boatDirection - compass)
         # print(offset)
-        self.rudderAngle = offset * 0.1
+        self.rudderAngle = offset * 0.3 / gpsSpeed if gpsSpeed != 0 else 0.00000001
+
+        # Prevent sailor from oversteering
+        if abs(self.rudderAngle) > self.maxRudderAngle:
+            if self.maxRudderAngle > 0:
+                self.maxRudderAngle = self.maxRudderAngle
+            else:
+                self.maxRudderAngle = -self.maxRudderAngle
 
         # NOTE this is a very simple approximation of the real curve
         self.mainSailAngle = angleKeepInterval((windAngle - pi)) / 2
