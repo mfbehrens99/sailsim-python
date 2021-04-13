@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'main.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.0.2
+## Created by: Qt User Interface Compiler version 6.0.3
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -55,20 +55,22 @@ class Ui_MainWindow(object):
         self.controlBar = QHBoxLayout()
         self.controlBar.setSpacing(0)
         self.controlBar.setObjectName(u"controlBar")
-        self.toolButton = QToolButton(self.widget)
-        self.toolButton.setObjectName(u"toolButton")
+        self.buttonDecFrame = QToolButton(self.widget)
+        self.buttonDecFrame.setObjectName(u"buttonDecFrame")
 
-        self.controlBar.addWidget(self.toolButton)
+        self.controlBar.addWidget(self.buttonDecFrame)
 
-        self.toolButton_2 = QToolButton(self.widget)
-        self.toolButton_2.setObjectName(u"toolButton_2")
+        self.buttonPlay = QToolButton(self.widget)
+        self.buttonPlay.setObjectName(u"buttonPlay")
+        self.buttonPlay.setCheckable(True)
+        self.buttonPlay.setChecked(False)
 
-        self.controlBar.addWidget(self.toolButton_2)
+        self.controlBar.addWidget(self.buttonPlay)
 
-        self.toolButton_3 = QToolButton(self.widget)
-        self.toolButton_3.setObjectName(u"toolButton_3")
+        self.buttonIncFrame = QToolButton(self.widget)
+        self.buttonIncFrame.setObjectName(u"buttonIncFrame")
 
-        self.controlBar.addWidget(self.toolButton_3)
+        self.controlBar.addWidget(self.buttonIncFrame)
 
         self.frameNr = QLabel(self.widget)
         self.frameNr.setObjectName(u"frameNr")
@@ -111,6 +113,9 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         self.timeSlider.valueChanged.connect(MainWindow.updateFrame)
+        self.buttonIncFrame.clicked.connect(MainWindow.incFrame)
+        self.buttonDecFrame.clicked.connect(MainWindow.decFrame)
+        self.buttonPlay.clicked.connect(MainWindow.pressedPlay)
 
         QMetaObject.connectSlotsByName(MainWindow)
     # setupUi
@@ -120,9 +125,9 @@ class Ui_MainWindow(object):
         self.actionNew.setText(QCoreApplication.translate("MainWindow", u"New", None))
         self.actionOpen.setText(QCoreApplication.translate("MainWindow", u"Open", None))
         self.actionOpen_project_on_Github.setText(QCoreApplication.translate("MainWindow", u"Open on Github", None))
-        self.toolButton.setText(QCoreApplication.translate("MainWindow", u"|<", None))
-        self.toolButton_2.setText(QCoreApplication.translate("MainWindow", u">", None))
-        self.toolButton_3.setText(QCoreApplication.translate("MainWindow", u">|", None))
+        self.buttonDecFrame.setText(QCoreApplication.translate("MainWindow", u"|<", None))
+        self.buttonPlay.setText(QCoreApplication.translate("MainWindow", u">", None))
+        self.buttonIncFrame.setText(QCoreApplication.translate("MainWindow", u">|", None))
         self.frameNr.setText(QCoreApplication.translate("MainWindow", u"0000/1023", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
         self.menuEdit.setTitle(QCoreApplication.translate("MainWindow", u"Edit", None))

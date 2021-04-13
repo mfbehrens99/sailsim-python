@@ -2,6 +2,7 @@
 
 import sys
 
+from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QApplication, QMainWindow
 from sailsim.gui.qtmain import Ui_MainWindow
 
@@ -15,18 +16,24 @@ class SailsimGUI(QMainWindow):
         super().__init__()
 
         self.simulation = simulation
+        self.frame = 0
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        self.ui.timeSlider.setMaximum(len(simulation))
 
-        self.updateFrame(0)
-        self.updatePath(10)
+        self.timer = QTimer(self)
+        self.timer.setInterval(simulation.timestep * 1000)
+        self.timer.timeout.connect(self.playStep)
+
+        self.ui.timeSlider.setMaximum(len(simulation))
+        self.ui.timeSlider.setValue(self.frame)
+        self.updatePath(5)
 
     def updateFrame(self, frameNr):
         """Update display when the frame changed."""
         frames = self.simulation.frameList.frames
         if frameNr < len(frames):
+            self.frame = frameNr
             frame = frames[frameNr]
 
             # Update widgets
@@ -39,6 +46,34 @@ class SailsimGUI(QMainWindow):
         """Update the path displayed on the MapViewWidget with the current data from the simulation."""
         path = pointsToPath(self.simulation.frameList.getCoordinateList(), pathStep)
         self.ui.mapView.setPath(path)
+
+    def incFrame(self):
+        """Move to the next frame if it exists."""
+        self.ui.timeSlider.setValue(self.ui.timeSlider.value() + 1)
+
+    def decFrame(self):
+        """Move to the previous """
+        self.ui.timeSlider.setValue(self.ui.timeSlider.value() - 1)
+
+    def pressedPlay(self, active):
+        """"""
+        if active:
+            if self.simulation.lastFrame > self.frame:
+                self.timer.start()
+            else:
+                self.playStop()
+        else:
+            self.playStop()
+
+    def playStop(self):
+        self.timer.stop()
+        self.ui.buttonPlay.setChecked(False)
+
+    def playStep(self):
+        if self.simulation.lastFrame > self.frame:
+            self.incFrame()
+        else:
+            self.playStop()
 
 
 def main():

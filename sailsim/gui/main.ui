@@ -43,21 +43,27 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QToolButton" name="toolButton">
+       <widget class="QToolButton" name="buttonDecFrame">
         <property name="text">
          <string>|&lt;</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QToolButton" name="toolButton_2">
+       <widget class="QToolButton" name="buttonPlay">
         <property name="text">
          <string>&gt;</string>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="checked">
+         <bool>false</bool>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QToolButton" name="toolButton_3">
+       <widget class="QToolButton" name="buttonIncFrame">
         <property name="text">
          <string>&gt;|</string>
         </property>
@@ -178,8 +184,59 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>buttonIncFrame</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>incFrame()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>82</x>
+     <y>575</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>138</x>
+     <y>475</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonDecFrame</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>decFrame()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>33</x>
+     <y>570</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>42</x>
+     <y>408</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonPlay</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>pressedPlay(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>50</x>
+     <y>574</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>73</x>
+     <y>445</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>updateFrame(int)</slot>
+  <slot>incFrame()</slot>
+  <slot>decFrame()</slot>
+  <slot>pressedPlay(bool)</slot>
  </slots>
 </ui>
