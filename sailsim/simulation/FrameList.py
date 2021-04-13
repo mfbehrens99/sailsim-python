@@ -23,6 +23,12 @@ class FrameList():
         """Delete all previously saved frames."""
         self.frames = []
 
+    def getCoordinateList(self):
+        out = []
+        for f in self.frames:
+            out.append((f.boatPosX, f.boatPosY))
+        return out
+
     def getCSV(self):
         """Generate .csv file and return it."""
         output = self.getCSVHeader() + "\n"
