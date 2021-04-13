@@ -78,7 +78,7 @@ class Boat:
         # FIXME move this into applyForce()? Rename applyForce() function?
         # △ω = α * t; M = I * α
         # △ω = M / I * t
-        self.angSpeed += momentum / self.momentumInertia
+        self.angSpeed += momentum / self.momentumInertia * interval
 
     def moveInterval(self, interval):
         """Change position according to sailsDirection and speed."""
@@ -102,8 +102,8 @@ class Boat:
         # Set boat properties
         # TODO calculate mainSailAngle and import it here
         self.mainSailAngle = self.sailor.mainSailAngle
-        self.direction = self.sailor.boatDirection
-        # self.rudderAngle = self.sailor.rudderAngle
+        # self.direction = self.sailor.boatDirection
+        self.rudderAngle = self.sailor.rudderAngle
 
 
     # Force calculations
@@ -159,7 +159,7 @@ class Boat:
         (h.forceX, h.forceY) = (forceX, forceY)
         return (forceX, forceY)
 
-    from .boat_forces import sailDrag, sailLift, waterDrag, waterLift, waterDragRudder, waterLiftRudder, waterLiftRudderScalar
+    from .boat_forces import sailDrag, sailLift, waterDrag, waterLift, waterDragRudder, waterLiftRudder, waterDragRudderScalar, waterLiftRudderScalar
 
 
     # Momentum calculations

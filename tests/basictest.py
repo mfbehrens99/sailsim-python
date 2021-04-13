@@ -41,5 +41,8 @@ s = Simulation(w, 0.01, 1024)
 
 
 # Run simulation
-s.run()
+try:
+    s.run()
+except OverflowError:
+    print("Overflow after Frame", s.frame)
 s.frameList.saveCSV(OUTPUT_PATH)
