@@ -1,7 +1,5 @@
 """Test module sailsim.gui.SailsimGUI."""
 
-import sys
-from PySide6.QtWidgets import QApplication
 from sailsim.gui.SailsimGUI import SailsimGUI
 
 from sailsim.simulation.Simulation import Simulation
