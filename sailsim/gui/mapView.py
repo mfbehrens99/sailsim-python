@@ -92,16 +92,18 @@ class MapViewWidget(QWidget):
         self.update()
 
     def setWaypoints(self, commands):
-        wpPath = QPainterPath()
-        # TODO find out boat starting coordinates
-        wpLinkList = [[0, 0]]
-        for command in commands:
-            if isinstance(command, Waypoint):
-                wpPath.addEllipse(QPoint(command.destX, -command.destY), command.radius, command.radius)
-                wpLinkList.append([command.destX, command.destY])
-        self.waypointsLink = pointsToPath(wpLinkList)
-        self.waypoints = wpPath
-        self.update()
+        """Display the waypoints in a commandList on mapView."""
+        if len(commands) > 0:
+            wpPath = QPainterPath()
+            # TODO find out boat starting coordinates
+            wpLinkList = [[0, 0]]
+            for command in commands:
+                if isinstance(command, Waypoint):
+                    wpPath.addEllipse(QPoint(command.destX, -command.destY), command.radius, command.radius)
+                    wpLinkList.append([command.destX, command.destY])
+            self.waypointsLink = pointsToPath(wpLinkList)
+            self.waypoints = wpPath
+            self.update()
 
     def viewFrame(self, frame):
         """Set the boat to a position saved in a frame given."""

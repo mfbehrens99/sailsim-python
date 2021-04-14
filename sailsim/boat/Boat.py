@@ -73,19 +73,20 @@ class Boat:
 
     def runSailor(self):
         """Activate the sailing algorithm to decide what the boat should do."""
-        self.sailor.run(
-            self.posX,
-            self.posY,
-            self.dataHolder.boatSpeed,
-            cartToArg(self.speedX, self.speedY),
-            self.direction,
-            self.dataHolder.apparentWindSpeed,
-            self.dataHolder.apparentWindAngle
-        ) # Run sailor
+        if self.sailor is not None:
+            self.sailor.run(
+                self.posX,
+                self.posY,
+                self.dataHolder.boatSpeed,
+                cartToArg(self.speedX, self.speedY),
+                self.direction,
+                self.dataHolder.apparentWindSpeed,
+                self.dataHolder.apparentWindAngle
+            ) # Run sailor
 
-        # Set boat properties
-        self.mainSailAngle = self.sailor.mainSailAngle
-        self.direction = self.sailor.boatDirection
+            # Set boat properties
+            self.mainSailAngle = self.sailor.mainSailAngle
+            self.direction = self.sailor.boatDirection
 
 
     # Force calculations
