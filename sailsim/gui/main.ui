@@ -151,21 +151,32 @@
      <string>View</string>
     </property>
     <addaction name="actionShowWaypoints"/>
+    <addaction name="actionShowWaypointLink"/>
     <addaction name="actionShowMainSailMapView"/>
     <addaction name="actionShowRudderMapView"/>
     <addaction name="separator"/>
+    <addaction name="actionShowBoat"/>
+    <addaction name="actionShowBoatDirection"/>
+    <addaction name="actionShowSpeed"/>
     <addaction name="actionShowMainSailBoatInspector"/>
     <addaction name="actionShowRudderBoatInspector"/>
+    <addaction name="actionShowForces"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
      <string>Help</string>
     </property>
-    <addaction name="actionOpen_project_on_Github"/>
+    <addaction name="actionOpenGithub"/>
+   </widget>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>Tools</string>
+    </property>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuView"/>
+   <addaction name="menuTools"/>
    <addaction name="menuHelp"/>
   </widget>
   <action name="actionNew">
@@ -184,9 +195,12 @@
     <string>Ctrl+O</string>
    </property>
   </action>
-  <action name="actionOpen_project_on_Github">
+  <action name="actionOpenGithub">
    <property name="text">
-    <string>Open on Github</string>
+    <string>Open Github</string>
+   </property>
+   <property name="toolTip">
+    <string>Open the sailsim repository on Github</string>
    </property>
   </action>
   <action name="actionShowWaypoints">
@@ -230,6 +244,46 @@
    </property>
    <property name="toolTip">
     <string>Show Rudder in Boat Inspector</string>
+   </property>
+  </action>
+  <action name="actionShowWaypointLink">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Waypoint link</string>
+   </property>
+  </action>
+  <action name="actionShowBoat">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Boat</string>
+   </property>
+  </action>
+  <action name="actionShowBoatDirection">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Direction</string>
+   </property>
+  </action>
+  <action name="actionShowSpeed">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Speed</string>
+   </property>
+  </action>
+  <action name="actionShowForces">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Forces</string>
    </property>
   </action>
  </widget>
@@ -356,6 +410,166 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionShowMainSailMapView</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>actionViewShowMainSailMapView(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>481</x>
+     <y>297</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionShowRudderMapView</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>actionViewShowRudderMapView(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>481</x>
+     <y>297</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionShowWaypointLink</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>actionViewShowWaypointLink(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>481</x>
+     <y>297</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionShowWaypoints</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>actionViewShowWaypoints(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>481</x>
+     <y>297</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionShowMainSailBoatInspector</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>actionViewShowMainSailBoatInspector(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>481</x>
+     <y>297</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionShowRudderBoatInspector</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>actionViewShowRudderBoatInspector(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>481</x>
+     <y>297</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionShowSpeed</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>actionViewShowSpeed(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>481</x>
+     <y>297</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionShowForces</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>actionViewShowForces(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>481</x>
+     <y>297</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionShowBoatDirection</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>actionViewShowBoatDirection(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>481</x>
+     <y>297</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionShowBoat</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>actionViewShowBoat(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>481</x>
+     <y>297</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>updateFrame(int)</slot>
@@ -364,5 +578,15 @@
   <slot>pressedPlay(bool)</slot>
   <slot>startFrame()</slot>
   <slot>endFrame()</slot>
+  <slot>actionViewShowMainSailMapView(bool)</slot>
+  <slot>actionViewShowRudderMapView(bool)</slot>
+  <slot>actionViewShowWaypointLink(bool)</slot>
+  <slot>actionViewShowWaypoints(bool)</slot>
+  <slot>actionViewShowRudderBoatInspector(bool)</slot>
+  <slot>actionViewShowMainSailBoatInspector(bool)</slot>
+  <slot>actionViewShowBoat(bool)</slot>
+  <slot>actionViewShowBoatDirection(bool)</slot>
+  <slot>actionViewShowSpeed(bool)</slot>
+  <slot>actionViewShowForces(bool)</slot>
  </slots>
 </ui>

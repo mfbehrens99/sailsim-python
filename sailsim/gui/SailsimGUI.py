@@ -16,9 +16,11 @@ class SailsimGUI(QMainWindow):
         self.simulation = simulation
         self.frame = 0
 
+        # Load UI from QT generated file
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
+        # Set up timer for play button
         self.timer = QTimer(self)
         self.timer.setInterval(simulation.timestep * 1000)
         self.timer.timeout.connect(self.playStep)
@@ -29,6 +31,7 @@ class SailsimGUI(QMainWindow):
             self.ui.mapView.setWaypoints(self.simulation.world.boat.sailor.commandList)
         self.updatePath(5)
         self.updateFrame(0)
+        self.updateViewStates()
 
     def updateFrame(self, frameNr):
         """Update display when the frame changed."""
@@ -86,3 +89,19 @@ class SailsimGUI(QMainWindow):
             self.incFrame()
         else:
             self.playStop()
+
+    def updateViewStates(self):
+        self.ui.actionShowWaypointLink.setChecked(self.ui.mapView.displayWaypointLink)
+        self.ui.actionShowWaypoints.setChecked(self.ui.mapView.displayWaypoints)
+        self.ui.actionShowMainSailMapView.setChecked(self.ui.mapView.displayMainSail)
+        self.ui.actionShowRudderMapView.setChecked(self.ui.mapView.displayRudder)
+
+        self.ui.actionShowBoat.setChecked(self.ui.boatInspector.displayBoat)
+        self.ui.actionShowBoatDirection.setChecked(self.ui.boatInspector.displayBoatDirection)
+        self.ui.actionShowSpeed.setChecked(self.ui.boatInspector.displaySpeed)
+        self.ui.actionShowRudderBoatInspector.setChecked(self.ui.boatInspector.displayRudder)
+        self.ui.actionShowMainSailBoatInspector.setChecked(self.ui.boatInspector.displayMainSail)
+        self.ui.actionShowForces.setChecked(self.ui.boatInspector.displayForces)
+
+    from .actionslots import actionViewShowWaypointLink, actionViewShowWaypoints, actionViewShowMainSailMapView, actionViewShowRudderMapView
+    from .actionslots import actionViewShowBoat, actionViewShowBoatDirection, actionViewShowSpeed, actionViewShowMainSailBoatInspector, actionViewShowRudderBoatInspector, actionViewShowForces
