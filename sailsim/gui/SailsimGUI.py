@@ -28,6 +28,7 @@ class SailsimGUI(QMainWindow):
         if self.simulation.world.boat.sailor is not None:
             self.ui.mapView.setWaypoints(self.simulation.world.boat.sailor.commandList)
         self.updatePath(5)
+        self.updateFrame(0)
 
     def updateFrame(self, frameNr):
         """Update display when the frame changed."""
@@ -55,6 +56,14 @@ class SailsimGUI(QMainWindow):
     def decFrame(self):
         """Move to the previous frame if it is in the range of the slider."""
         self.ui.timeSlider.setValue(self.ui.timeSlider.value() - 1)
+
+    def startFrame(self):
+        """Move slider to the frist Frame."""
+        self.ui.timeSlider.setValue(self.ui.timeSlider.minimum())
+
+    def endFrame(self):
+        """Move slider to the last Frame."""
+        self.ui.timeSlider.setValue(self.ui.timeSlider.maximum())
 
     def pressedPlay(self, active):
         """Start or stop animation depending on active."""

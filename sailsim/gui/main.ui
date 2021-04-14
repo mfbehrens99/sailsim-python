@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>SailsimGUI</string>
   </property>
   <property name="styleSheet">
    <string notr="true"/>
@@ -43,16 +43,32 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QToolButton" name="buttonDecFrame">
+       <widget class="QToolButton" name="buttonStartFrame">
         <property name="text">
          <string>|&lt;</string>
         </property>
        </widget>
       </item>
       <item>
+       <widget class="QToolButton" name="buttonDecFrame">
+        <property name="text">
+         <string>&lt;</string>
+        </property>
+        <property name="autoRepeat">
+         <bool>true</bool>
+        </property>
+        <property name="autoRepeatDelay">
+         <number>200</number>
+        </property>
+        <property name="autoRepeatInterval">
+         <number>50</number>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QToolButton" name="buttonPlay">
         <property name="text">
-         <string>&gt;</string>
+         <string>|&gt;</string>
         </property>
         <property name="checkable">
          <bool>true</bool>
@@ -64,6 +80,22 @@
       </item>
       <item>
        <widget class="QToolButton" name="buttonIncFrame">
+        <property name="text">
+         <string>&gt;</string>
+        </property>
+        <property name="autoRepeat">
+         <bool>true</bool>
+        </property>
+        <property name="autoRepeatDelay">
+         <number>200</number>
+        </property>
+        <property name="autoRepeatInterval">
+         <number>50</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="buttonEndFrame">
         <property name="text">
          <string>&gt;|</string>
         </property>
@@ -118,6 +150,12 @@
     <property name="title">
      <string>View</string>
     </property>
+    <addaction name="actionShowWaypoints"/>
+    <addaction name="actionShowMainSailMapView"/>
+    <addaction name="actionShowRudderMapView"/>
+    <addaction name="separator"/>
+    <addaction name="actionShowMainSailBoatInspector"/>
+    <addaction name="actionShowRudderBoatInspector"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -134,15 +172,64 @@
    <property name="text">
     <string>New</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
   </action>
   <action name="actionOpen">
    <property name="text">
     <string>Open</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
   </action>
   <action name="actionOpen_project_on_Github">
    <property name="text">
     <string>Open on Github</string>
+   </property>
+  </action>
+  <action name="actionShowWaypoints">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Waypoints</string>
+   </property>
+  </action>
+  <action name="actionShowMainSailMapView">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Main sail</string>
+   </property>
+  </action>
+  <action name="actionShowMainSailBoatInspector">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Main sail</string>
+   </property>
+  </action>
+  <action name="actionShowRudderMapView">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Rudder</string>
+   </property>
+  </action>
+  <action name="actionShowRudderBoatInspector">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Rudder</string>
+   </property>
+   <property name="toolTip">
+    <string>Show Rudder in Boat Inspector</string>
    </property>
   </action>
  </widget>
@@ -164,6 +251,11 @@
   </customwidget>
  </customwidgets>
  <tabstops>
+  <tabstop>buttonStartFrame</tabstop>
+  <tabstop>buttonDecFrame</tabstop>
+  <tabstop>buttonPlay</tabstop>
+  <tabstop>buttonIncFrame</tabstop>
+  <tabstop>buttonEndFrame</tabstop>
   <tabstop>timeSlider</tabstop>
  </tabstops>
  <resources/>
@@ -191,8 +283,8 @@
    <slot>incFrame()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>82</x>
-     <y>575</y>
+     <x>119</x>
+     <y>583</y>
     </hint>
     <hint type="destinationlabel">
      <x>138</x>
@@ -207,8 +299,8 @@
    <slot>decFrame()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>33</x>
-     <y>570</y>
+     <x>65</x>
+     <y>583</y>
     </hint>
     <hint type="destinationlabel">
      <x>42</x>
@@ -223,12 +315,44 @@
    <slot>pressedPlay(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>50</x>
-     <y>574</y>
+     <x>95</x>
+     <y>583</y>
     </hint>
     <hint type="destinationlabel">
      <x>73</x>
      <y>445</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonStartFrame</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>startFrame()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>29</x>
+     <y>571</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>30</x>
+     <y>490</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonEndFrame</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>endFrame()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>139</x>
+     <y>572</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>149</x>
+     <y>524</y>
     </hint>
    </hints>
   </connection>
@@ -238,5 +362,7 @@
   <slot>incFrame()</slot>
   <slot>decFrame()</slot>
   <slot>pressedPlay(bool)</slot>
+  <slot>startFrame()</slot>
+  <slot>endFrame()</slot>
  </slots>
 </ui>
