@@ -1,4 +1,6 @@
 # _sailsim_ - A sail boat simulator
+[![Python package](https://github.com/mfbehrens99/sailsim/actions/workflows/python-package.yml/badge.svg)](https://github.com/mfbehrens99/sailsim/actions/workflows/python-package.yml)
+
 This sailboat simulation program is meant to test sailing algorithms. Provide the simulation a sailboat, some wind and a sailing algorithm and the boat will sail in this virtual world.
 
 This project is developed by Tillman Keller & Michael Behrens.
