@@ -82,9 +82,9 @@ class Sailor:
         # Prevent sailor from oversteering
         if abs(self.rudderAngle) > self.maxRudderAngle:
             if self.maxRudderAngle > 0:
-                self.maxRudderAngle = self.maxRudderAngle
+                self.rudderAngle = self.maxRudderAngle
             else:
-                self.maxRudderAngle = -self.maxRudderAngle
+                self.rudderAngle = -self.maxRudderAngle
 
         # NOTE this is a very simple approximation of the real curve
         self.mainSailAngle = angleKeepInterval((windAngle - pi)) / 2
@@ -92,7 +92,7 @@ class Sailor:
     def checkCommand(self, posX, posY):
         """Execute commands from commandList."""
         # TODO make prettier
-        while len(self.commandList) > 0:
+        while len(self.commandList) > self.commandListIndex:
             success = None
             command = self.commandList[self.commandListIndex]
             if isinstance(command, Waypoint):
