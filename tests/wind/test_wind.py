@@ -1,10 +1,10 @@
+"""Test module sailsim.wind.Wind.Wind."""
+
 from pytest import approx
 from math import pi, sqrt
 
 from sailsim.wind.Wind import Wind
 from sailsim.wind.Windfield import Windfield
-
-ALMOST_GET_WIND = 6
 
 
 class TestWind():
