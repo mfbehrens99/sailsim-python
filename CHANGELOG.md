@@ -22,6 +22,16 @@ Template
 
 --->
 
+## [Unreleased]
+
+### Added
+
+- [[GUI]] Display Sailor Wayspoints on [mapView]
+
+### Changed
+
+- [[Sailor]] Use index instead deleting [Commands] after executing them
+
 ## [0.0.1] - 2021-04-13
 
 ### Added
@@ -45,6 +55,9 @@ Template
 [World]: https://github.com/mfbehrens99/sailsim/blob/main/sailsim/world/World.py
 [Boat]:https://github.com/mfbehrens99/sailsim/blob/main/sailsim/boat/Boat.py
 [Sailor]: https://github.com/mfbehrens99/sailsim/blob/main/sailsim/sailor/Sailor.py
+[Commands]: https://github.com/mfbehrens99/sailsim/blob/main/sailsim/sailor/Commands.py
 [Wind]: https://github.com/mfbehrens99/sailsim/blob/main/sailsim/wind/Wind.py
 [GUI]: https://github.com/mfbehrens99/sailsim/tree/main/sailsim/gui
+[mapView]: https://github.com/mfbehrens99/sailsim/blob/main/sailsim/gui/mapView.py
+[boatInspector]: https://github.com/mfbehrens99/sailsim/blob/main/sailsim/gui/boatInspector.py
 [utils]: https://github.com/mfbehrens99/sailsim/tree/main/sailsim/utils
