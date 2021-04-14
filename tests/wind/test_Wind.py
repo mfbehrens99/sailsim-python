@@ -1,4 +1,4 @@
-"""Test module sailsim.wind.Wind.Wind."""
+"""Test module sailsim.wind.Wind."""
 
 from pytest import approx
 from math import pi, sqrt
