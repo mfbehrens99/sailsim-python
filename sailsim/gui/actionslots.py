@@ -26,7 +26,7 @@ def actionViewShowRudderMapView(self, state):
 def actionViewShowBoat(self, state):
     self.ui.boatInspector.displayBoat = state
     self.ui.boatInspector.update()
-    
+
     # Disable mainSail and rudder when boat is disabled
     self.ui.actionShowRudderBoatInspector.setEnabled(state)
     self.ui.actionShowMainSailBoatInspector.setEnabled(state)

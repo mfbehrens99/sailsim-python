@@ -26,10 +26,14 @@ Template
 
 ### Added
 
-- [[GUI]] Display Sailor Wayspoints on [mapView]
+- [[Boat]] Add setter methods for rudderAngle
+- [[GUI]] Display Sailor Waypoints on [mapView]
+- [[GUI]] Add goto start and goto end button
+- [[GUI]] Hide and show parts of [mapView] and [boatInspector] from the menu point "View"
 
 ### Changed
 
+- [[GUI]] Display mainSailAngle and rudderAngle in [boatInspector]
 - [[Sailor]] Use index instead deleting [Commands] after executing them
 
 ## [0.0.1] - 2021-04-13
