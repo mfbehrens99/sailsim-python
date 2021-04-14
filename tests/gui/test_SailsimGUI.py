@@ -15,7 +15,5 @@ def test_main():
     world = World(Boat(), Wind([Windfield(0, 1)]), None)
     s = Simulation(world, 0.01, 1)
 
-    app = QApplication(sys.argv)
     window = SailsimGUI(s)
     window.show()
-    # sys.exit(app.exec_())
