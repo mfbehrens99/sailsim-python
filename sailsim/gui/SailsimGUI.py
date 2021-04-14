@@ -1,9 +1,7 @@
 """This class is the main GUI for the sailsim project."""
 
-import sys
-
 from PySide6.QtCore import QTimer
-from PySide6.QtWidgets import QApplication, QMainWindow
+from PySide6.QtWidgets import QMainWindow
 from sailsim.gui.qtmain import Ui_MainWindow
 
 from sailsim.gui.mapView import pointsToPath
@@ -27,6 +25,7 @@ class SailsimGUI(QMainWindow):
 
         self.ui.timeSlider.setMaximum(len(simulation))
         self.ui.timeSlider.setValue(self.frame)
+        self.ui.mapView.setWaypoints(self.simulation.world.boat.sailor.commandList)
         self.updatePath(5)
 
     def updateFrame(self, frameNr):
