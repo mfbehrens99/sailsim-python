@@ -41,6 +41,16 @@ def setMainSailAngleDeg(self, mainSailAngle):
     self.setMainSailAngle(mainSailAngle * pi / 180)
 
 
+def setRudderAngle(self, rudderAngle):
+    """Map angle into valid range and save."""
+    self.rudderAngle = angleKeepInterval(rudderAngle)
+
+
+def setRudderAngleDeg(self, rudderAngle):
+    """Convert degrees to radiants and run setMainSailAngle()."""
+    self.setRudderAngle(rudderAngle * pi / 180)
+
+
 def setConstants(self, mass, sailArea, hullArea, centerboardArea):
     """Define mass, sailArea, hullArea and centerboardArea (in kg, m^2)."""
     self.mass = mass
