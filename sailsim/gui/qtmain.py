@@ -169,10 +169,10 @@ class Ui_MainWindow(object):
         self.menuView.addAction(self.actionShowRudderMapView)
         self.menuView.addSeparator()
         self.menuView.addAction(self.actionShowBoat)
-        self.menuView.addAction(self.actionShowBoatDirection)
-        self.menuView.addAction(self.actionShowSpeed)
         self.menuView.addAction(self.actionShowMainSailBoatInspector)
         self.menuView.addAction(self.actionShowRudderBoatInspector)
+        self.menuView.addAction(self.actionShowBoatDirection)
+        self.menuView.addAction(self.actionShowSpeed)
         self.menuView.addAction(self.actionShowForces)
         self.menuHelp.addAction(self.actionOpenGithub)
 

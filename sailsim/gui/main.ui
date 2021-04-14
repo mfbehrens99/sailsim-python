@@ -156,10 +156,10 @@
     <addaction name="actionShowRudderMapView"/>
     <addaction name="separator"/>
     <addaction name="actionShowBoat"/>
-    <addaction name="actionShowBoatDirection"/>
-    <addaction name="actionShowSpeed"/>
     <addaction name="actionShowMainSailBoatInspector"/>
     <addaction name="actionShowRudderBoatInspector"/>
+    <addaction name="actionShowBoatDirection"/>
+    <addaction name="actionShowSpeed"/>
     <addaction name="actionShowForces"/>
    </widget>
    <widget class="QMenu" name="menuHelp">

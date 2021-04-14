@@ -91,17 +91,24 @@ class SailsimGUI(QMainWindow):
             self.playStop()
 
     def updateViewStates(self):
+        """Load states for QActions from child widgets."""
+        # Import states from mapView
         self.ui.actionShowWaypointLink.setChecked(self.ui.mapView.displayWaypointLink)
         self.ui.actionShowWaypoints.setChecked(self.ui.mapView.displayWaypoints)
         self.ui.actionShowMainSailMapView.setChecked(self.ui.mapView.displayMainSail)
         self.ui.actionShowRudderMapView.setChecked(self.ui.mapView.displayRudder)
 
+        # Import states from boatInspector
         self.ui.actionShowBoat.setChecked(self.ui.boatInspector.displayBoat)
-        self.ui.actionShowBoatDirection.setChecked(self.ui.boatInspector.displayBoatDirection)
-        self.ui.actionShowSpeed.setChecked(self.ui.boatInspector.displaySpeed)
         self.ui.actionShowRudderBoatInspector.setChecked(self.ui.boatInspector.displayRudder)
         self.ui.actionShowMainSailBoatInspector.setChecked(self.ui.boatInspector.displayMainSail)
+        self.ui.actionShowBoatDirection.setChecked(self.ui.boatInspector.displayBoatDirection)
+        self.ui.actionShowSpeed.setChecked(self.ui.boatInspector.displaySpeed)
         self.ui.actionShowForces.setChecked(self.ui.boatInspector.displayForces)
+
+        # Disable actions if boat is hidden
+        self.ui.actionShowRudderBoatInspector.setEnabled(self.ui.boatInspector.displayBoat)
+        self.ui.actionShowMainSailBoatInspector.setEnabled(self.ui.boatInspector.displayBoat)
 
     from .actionslots import actionViewShowWaypointLink, actionViewShowWaypoints, actionViewShowMainSailMapView, actionViewShowRudderMapView
     from .actionslots import actionViewShowBoat, actionViewShowBoatDirection, actionViewShowSpeed, actionViewShowMainSailBoatInspector, actionViewShowRudderBoatInspector, actionViewShowForces
