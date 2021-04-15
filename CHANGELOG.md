@@ -27,10 +27,12 @@ Template
 ### Added
 
 - [[GUI]] Display Sailor Wayspoints on [mapView]
+- [[Sailor]] Save each run in a frame for data analysis
 
 ### Changed
 
 - [[Sailor]] Use index instead deleting [Commands] after executing them
+- Improved CSV generation
 
 ## [0.0.1] - 2021-04-13
 

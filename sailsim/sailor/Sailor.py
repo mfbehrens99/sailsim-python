@@ -4,6 +4,7 @@ from sailsim.utils.coordconversion import polarToCart, cartToArg
 from sailsim.utils.anglecalculations import angleKeepInterval, directionKeepInterval
 
 from sailsim.sailor.Commands import Waypoint  # , Command
+from sailsim.sailor.FrameList import FrameList
 
 
 class Sailor:
@@ -11,12 +12,15 @@ class Sailor:
 
     from .sailorgetset import setCommandList, configBoat, configSailor, importBoat
 
+    frameList = []
+    frameNr = 0
+
     destX = 0
     destY = 0
     commandListIndex = 0
 
-    rudderAngle = None
     boatDirection = None
+    rudderAngle = None
 
     mainSailAngle = None
 
@@ -39,6 +43,7 @@ class Sailor:
             commandList:    List of command objects from sailsim.sailor.Commands
         """
         self.commandList = commandList
+        self.frameList = FrameList()
 
         self.tackingAngleBufferSize = 10 / 180 * pi
 
@@ -48,9 +53,9 @@ class Sailor:
 
         straightCourse = cartToArg(self.destX - posX, self.destY - posY)
         trueWindDir = trueWindDirection(gpsSpeed, gpsDir, windSpeed, directionKeepInterval(windAngle + compass))
-        windCourseAngle = angleKeepInterval(trueWindDir - straightCourse)
-
         leewayAngle = angleKeepInterval(gpsDir - compass)
+
+        windCourseAngle = angleKeepInterval(trueWindDir - straightCourse)
 
         # reachable in a straight line ?
         if abs(windCourseAngle) > pi - self.tackingAngleUpwind - self.tackingAngleBufferSize:
@@ -74,9 +79,19 @@ class Sailor:
         else:
             # TODO improve leeway calculation
             self.boatDirection = straightCourse - (leewayAngle if abs(leewayAngle) < 0.5 else 0)
+        self.rudderAngle = 0
 
+        # Rudder main sail calculations
         # NOTE this is a very simple approximation of the real curve
         self.mainSailAngle = angleKeepInterval((windAngle - pi)) / 2
+
+        # Save information to Frame
+        self.addFrame(
+            (posX, posY, gpsSpeed, gpsDir, compass, windSpeed, windAngle),
+            (straightCourse, trueWindDir, leewayAngle),
+            (0,), # tracking state
+            (0,), # courseOffset
+        )
 
     def checkCommand(self, posX, posY):
         """Execute commands from commandList."""
@@ -99,6 +114,15 @@ class Sailor:
         """Set Sailor's destination to speecific coordinates."""
         self.destX = destX
         self.destY = destY
+
+    def addFrame(self, *args):
+        """Add Frame to FrameList. Method is called from run."""
+        self.frameList.addFrame(
+            len(self.frameList),
+            (self.boatDirection, self.rudderAngle, self.mainSailAngle),
+            (self.destX, self.destY, self.commandListIndex),
+            *args,
+        )
 
 
 def trueWindDirection(gpsSpeed, gpsDir, windSpeed, windAngle):
