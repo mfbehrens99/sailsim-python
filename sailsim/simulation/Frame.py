@@ -1,3 +1,6 @@
+"""This module contains the Frame class."""
+
+
 class Frame():
     """This class is holding all data about one frame in the simulation."""
 
@@ -23,7 +26,6 @@ class Frame():
         self.boatSailLiftX = self.boatSailLiftY = None
         self.boatWaterDragX = self.boatWaterDragY = None
         self.boatWaterLiftX = self.boatWaterLiftY = None
-
 
     def collectSimulation(self, simulation):
         """Collect and save information about the state of the simulation."""
@@ -53,26 +55,13 @@ class Frame():
         (self.boatWaterDragX, self.boatWaterDragY) = (h.waterDragX, h.waterDragY)
         (self.boatWaterLiftX, self.boatWaterLiftY) = (h.waterLiftX, h.waterLiftY)
 
-    def collectWind(self, wind, x, y, size, distance):
+    def collectWind(self, wind, x, y):
         """Collect and save all information about the wind."""
-        windTable = []
-        for i in range(-size, size + 1):
-            for j in range(-size, size + 1):
-                coordX = x + i * distance
-                coordY = y + j * distance
-                windTable.append(wind.getWindCart(coordX, coordY, self.time))
-        self.windTable = windTable
+        self.boatWindX, self.boatWindY = wind.getWindCart(x, y, self.time)
 
-    def getWindList(self):
-        windList = []
-        for wind in self.windTable:
-            windList.append(wind[0])
-            windList.append(wind[1])
-        return windList
-
-    def getCSVLine(self):
+    def getData(self):
         """Return string that contains all data about this frame."""
-        data = [
+        return [
             self.frameNr, self.time,
             self.boatPosX, self.boatPosY, self.boatSpeedX, self.boatSpeedY, self.boatDirection,
             self.boatMainSailAngle, self.boatRudderAngle,
@@ -80,7 +69,5 @@ class Frame():
             self.boatForceX, self.boatForceY,
             self.boatSailDragX, self.boatSailDragY, self.boatSailLiftX, self.boatSailLiftY,
             self.boatWaterDragX, self.boatWaterDragY, self.boatWaterLiftX, self.boatWaterLiftY,
+            self.boatWindX, self.boatWindY,
         ]
-        data.extend(self.getWindList())
-        dataStr = [f'{x:.4f}'.rstrip('0').rstrip('.') for x in data] # FIXME very slow and inflexible
-        return ",".join(dataStr)
