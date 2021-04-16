@@ -17,7 +17,6 @@ class FrameList():
         frame = Frame()
         frame.collectSimulation(simulation)
         frame.collectBoat(simulation.world.boat)
-        frame.collectWind(simulation.world.wind, posX, posY)
         self.frames.append(frame)
 
     def reset(self):

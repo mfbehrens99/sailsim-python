@@ -4,6 +4,9 @@ class BoatDataHolder():
         self.boatSpeed = None
         self.apparentWindSpeed = None
 
+        self.trueWindX = None
+        self.trueWindY = None
+
         self.apparentWindX = self.apparentWindY = None
         self.apparentWindAngle = None
         self.leewayAngle = None

@@ -93,6 +93,7 @@ class Boat:
     def resultingForce(self, trueWindX, trueWindY):
         """Add up all reacting forces and return them as a tuple."""
         h = self.dataHolder
+        h.trueWindX, h.trueWindY = trueWindX, trueWindY
 
         # calculate apparent wind angle
         (h.apparentWindX, h.apparentWindY) = self.apparentWind(trueWindX, trueWindY)

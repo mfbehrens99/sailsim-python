@@ -7,7 +7,7 @@ class Frame():
     def __init__(self):
         self.frameNr = self.time = None
 
-        self.windTable = []
+        self.boatWindX = self.boatWindY = None
 
         self.boatPosX = self.boatPosY = None
         self.boatSpeedX = self.boatSpeedY = None
@@ -44,7 +44,8 @@ class Frame():
         self.boatRudderAngle = boat.rudderAngle
 
         h = boat.dataHolder
-        (self.boatApparentWindX, self.boatApparentWindY) = (h.apparentWindX, h.apparentWindY)
+        self.boatApparentWindX, self.boatApparentWindY = h.apparentWindX, h.apparentWindY
+        self.boatWindX, self.boatWindY = h.trueWindX, h.trueWindY
         self.boatApparentWindAngle = h.apparentWindAngle
         self.boatLeewayAngle = h.leewayAngle
         self.boatAngleOfAttack = h.angleOfAttack
@@ -54,10 +55,6 @@ class Frame():
         (self.boatSailLiftX, self.boatSailLiftY) = (h.sailLiftX, h.sailLiftY)
         (self.boatWaterDragX, self.boatWaterDragY) = (h.waterDragX, h.waterDragY)
         (self.boatWaterLiftX, self.boatWaterLiftY) = (h.waterLiftX, h.waterLiftY)
-
-    def collectWind(self, wind, x, y):
-        """Collect and save all information about the wind."""
-        self.boatWindX, self.boatWindY = wind.getWindCart(x, y, self.time)
 
     def getData(self):
         """Return string that contains all data about this frame."""
