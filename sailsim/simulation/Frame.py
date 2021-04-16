@@ -4,28 +4,27 @@
 class Frame():
     """This class is holding all data about one frame in the simulation."""
 
-    def __init__(self):
-        self.frameNr = self.time = None
+    frameNr = time = None
 
-        self.boatWindX = self.boatWindY = None
+    boatWindX = boatWindY = None
 
-        self.boatPosX = self.boatPosY = None
-        self.boatSpeedX = self.boatSpeedY = None
-        self.boatDirection = None
+    boatPosX = boatPosY = None
+    boatSpeedX = boatSpeedY = None
+    boatDirection = None
 
-        self.boatMainSailAngle = None
-        self.boatRudderAngle = None
+    boatMainSailAngle = None
+    boatRudderAngle = None
 
-        self.boatApparentWindX = self.boatApparentWindY = None
-        self.boatApparentWindAngle = None
-        self.boatLeewayAngle = None
-        self.boatAngleOfAttack = None
+    boatApparentWindX = boatApparentWindY = None
+    boatApparentWindAngle = None
+    boatLeewayAngle = None
+    boatAngleOfAttack = None
 
-        self.boatForceX = self.boatForceY = None
-        self.boatSailDragX = self.boatSailDragY = None
-        self.boatSailLiftX = self.boatSailLiftY = None
-        self.boatWaterDragX = self.boatWaterDragY = None
-        self.boatWaterLiftX = self.boatWaterLiftY = None
+    boatForceX = boatForceY = None
+    boatSailDragX = boatSailDragY = None
+    boatSailLiftX = boatSailLiftY = None
+    boatWaterDragX = boatWaterDragY = None
+    boatWaterLiftX = boatWaterLiftY = None
 
     def collectSimulation(self, simulation):
         """Collect and save information about the state of the simulation."""
