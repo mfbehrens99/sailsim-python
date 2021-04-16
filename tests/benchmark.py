@@ -2,15 +2,14 @@
 from sailsim.simulation.Simulation import Simulation
 from sailsim.world.World import World
 from sailsim.boat.Boat import Boat
-from sailsim.wind.Wind import Wind
+from sailsim.sailor.Sailor import Sailor
+from sailsim.sailor.Commands import commandListExample
 
 # Import Winds
+from sailsim.wind.Wind import Wind
 from sailsim.wind.Windfield import Windfield
 from sailsim.wind.Fluctuationfield import Fluctuationfield
-from sailsim.wind.Squallfield import Squallfield
 
-
-OUTPUT_PATH = "test"
 
 class Benchmark:
     """Test which module requires what partion of time when simulating."""
@@ -18,22 +17,27 @@ class Benchmark:
     def __init__(self):
         windfield = Windfield(0, 10)
         flucfield = Fluctuationfield(2, 10, 10, 0, 0, 1200)
-        squallfield = Squallfield(0, 0, 100, 1, 0) # TODO has to be enabled later
-        wind = Wind([windfield, flucfield, squallfield])
+        wind = Wind([windfield, flucfield])
 
-        b = Boat(0, 0, 0)
-        b.setMainSailAngleDeg(45)
+        self.b = Boat(0, 0, 0)
+        self.b.setMainSailAngleDeg(45)
 
-        w = World(b, wind, None)
-        self.s = Simulation(w, 0.01, 1024)
+        sailor = Sailor(commandListExample)
+        sailor.importBoat(self.b)
+        self.b.sailor = sailor
+
+        w = World(self.b, wind, None)
+        self.s = Simulation(w, 0.01)
+        self.s.step()
 
     def run(self, number=10000):
         for i in range(number):
             self.s.step()
-        self.s.frameList.saveCSV(OUTPUT_PATH)
+        self.s.frameList.saveCSV("simulation")
+        self.b.sailor.frameList.saveCSV("sailor")
 
 
 if __name__ == "__main__":
     import cProfile
     b = Benchmark()
-    cProfile.run("b.run()", sort="cumtime")
+    cProfile.run("b.run()", sort="cumtime", filename="test.profile")
