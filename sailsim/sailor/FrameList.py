@@ -2,7 +2,7 @@
 
 from csv import writer
 
-from sailsim.simulation.Frame import Frame
+from sailsim.sailor.Frame import Frame
 
 
 class FrameList():
@@ -11,9 +11,9 @@ class FrameList():
     def __init__(self):
         self.frames = []
 
-    def grabFrame(self, *args):
+    def addFrame(self, results, commands, inputs, generalCalcs, rudderCalcs, sailCalcs):
         """Append new frame with all information to list."""
-        f = Frame(*args)
+        f = Frame(len(self), results, commands, inputs, generalCalcs, rudderCalcs, sailCalcs)
         self.frames.append(f)
 
     def reset(self):

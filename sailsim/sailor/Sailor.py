@@ -115,13 +115,12 @@ class Sailor:
         self.destX = destX
         self.destY = destY
 
-    def addFrame(self, *args):
+    def addFrame(self, inputs, generalCalcs, rudderCalcs, sailCalcs):
         """Add Frame to FrameList. Method is called from run."""
         self.frameList.addFrame(
-            len(self.frameList),
             (self.boatDirection, self.rudderAngle, self.mainSailAngle),
             (self.destX, self.destY, self.commandListIndex),
-            *args,
+            inputs, generalCalcs, rudderCalcs, sailCalcs
         )
 
 

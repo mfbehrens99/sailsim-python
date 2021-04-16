@@ -62,27 +62,3 @@ class Frame:
             self.tackingState,
             self.courseOffset,
         ]
-
-
-csvHeader = [
-    "frameNr",
-    "boatDirection", "rudderAngle", "mainSailAngle",
-    "destX", "destY", "commandListIndex",
-    "posX", "posY", "gpsSpeed", "gpsDir", "compass", "windSpeed", "windAngle",
-    "straightCourse", "trueWindDirection", "leewayAngle",
-    "tackingState",
-    "courseOffset",
-]
-
-
-def saveCSV(frameList, name="sailor.csv"):
-    """Generate .csv file and save it to drive."""
-    if not name.endswith(".csv"):
-        name += ".csv"
-    with open(name, "w", newline="") as fs:
-        csvWriter = writer(fs)
-        csvWriter.writerow(csvHeader)
-        for frame in frameList:
-            data = [f'{x:.4f}'.rstrip('0').rstrip('.') for x in frame.getData()]
-            csvWriter.writerow(data)
-        fs.close()
