@@ -26,14 +26,18 @@
       <property name="spacing">
        <number>0</number>
       </property>
-      <property name="sizeConstraint">
-       <enum>QLayout::SetNoConstraint</enum>
-      </property>
       <item>
        <widget class="MapViewWidget" name="mapView" native="true"/>
       </item>
       <item>
-       <widget class="BoatInspectorWidget" name="boatInspector" native="true"/>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="BoatInspectorWidget" name="boatInspector" native="true"/>
+        </item>
+        <item>
+         <widget class="QWidget" name="boatInfo" native="true"/>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>
@@ -45,14 +49,22 @@
       <item>
        <widget class="QToolButton" name="buttonStartFrame">
         <property name="text">
-         <string>|&lt;</string>
+         <string>⏮</string>
+        </property>
+        <property name="icon">
+         <iconset resource="mainresource.qrc">
+          <normaloff>:/icons/assets/icons/iconmonstr-media-control-52.svg</normaloff>:/icons/assets/icons/iconmonstr-media-control-52.svg</iconset>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QToolButton" name="buttonDecFrame">
         <property name="text">
-         <string>&lt;</string>
+         <string>⏪</string>
+        </property>
+        <property name="icon">
+         <iconset resource="mainresource.qrc">
+          <normaloff>:/icons/assets/icons/iconmonstr-media-control-2.svg</normaloff>:/icons/assets/icons/iconmonstr-media-control-2.svg</iconset>
         </property>
         <property name="autoRepeat">
          <bool>true</bool>
@@ -68,7 +80,11 @@
       <item>
        <widget class="QToolButton" name="buttonPlay">
         <property name="text">
-         <string>|&gt;</string>
+         <string>⏵</string>
+        </property>
+        <property name="icon">
+         <iconset resource="mainresource.qrc">
+          <normaloff>:/icons/assets/icons/iconmonstr-media-control-3.svg</normaloff>:/icons/assets/icons/iconmonstr-media-control-3.svg</iconset>
         </property>
         <property name="checkable">
          <bool>true</bool>
@@ -81,7 +97,11 @@
       <item>
        <widget class="QToolButton" name="buttonIncFrame">
         <property name="text">
-         <string>&gt;</string>
+         <string>⏩</string>
+        </property>
+        <property name="icon">
+         <iconset resource="mainresource.qrc">
+          <normaloff>:/icons/assets/icons/iconmonstr-media-control-1.svg</normaloff>:/icons/assets/icons/iconmonstr-media-control-1.svg</iconset>
         </property>
         <property name="autoRepeat">
          <bool>true</bool>
@@ -97,14 +117,18 @@
       <item>
        <widget class="QToolButton" name="buttonEndFrame">
         <property name="text">
-         <string>&gt;|</string>
+         <string>⏭</string>
+        </property>
+        <property name="icon">
+         <iconset resource="mainresource.qrc">
+          <normaloff>:/icons/assets/icons/iconmonstr-media-control-53.svg</normaloff>:/icons/assets/icons/iconmonstr-media-control-53.svg</iconset>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="frameNr">
         <property name="text">
-         <string>0000/1023</string>
+         <string>0000/1000</string>
         </property>
        </widget>
       </item>

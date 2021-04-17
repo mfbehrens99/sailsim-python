@@ -66,16 +66,25 @@ class Ui_MainWindow(object):
         self.main = QHBoxLayout()
         self.main.setSpacing(0)
         self.main.setObjectName(u"main")
-        self.main.setSizeConstraint(QLayout.SetNoConstraint)
         self.mapView = MapViewWidget(self.widget)
         self.mapView.setObjectName(u"mapView")
 
         self.main.addWidget(self.mapView)
 
+        self.verticalLayout_3 = QVBoxLayout()
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.boatInspector = BoatInspectorWidget(self.widget)
         self.boatInspector.setObjectName(u"boatInspector")
 
-        self.main.addWidget(self.boatInspector)
+        self.verticalLayout_3.addWidget(self.boatInspector)
+
+        self.boatInfo = QWidget(self.widget)
+        self.boatInfo.setObjectName(u"boatInfo")
+
+        self.verticalLayout_3.addWidget(self.boatInfo)
+
+
+        self.main.addLayout(self.verticalLayout_3)
 
         self.main.setStretch(0, 2)
         self.main.setStretch(1, 1)
@@ -224,16 +233,15 @@ class Ui_MainWindow(object):
         self.actionShowBoatDirection.setText(QCoreApplication.translate("MainWindow", u"Direction", None))
         self.actionShowSpeed.setText(QCoreApplication.translate("MainWindow", u"Speed", None))
         self.actionShowForces.setText(QCoreApplication.translate("MainWindow", u"Forces", None))
-        self.buttonStartFrame.setText(QCoreApplication.translate("MainWindow", u"|<", None))
-        self.buttonDecFrame.setText(QCoreApplication.translate("MainWindow", u"<", None))
-        self.buttonPlay.setText(QCoreApplication.translate("MainWindow", u"|>", None))
-        self.buttonIncFrame.setText(QCoreApplication.translate("MainWindow", u">", None))
-        self.buttonEndFrame.setText(QCoreApplication.translate("MainWindow", u">|", None))
-        self.frameNr.setText(QCoreApplication.translate("MainWindow", u"0000/1023", None))
+        self.buttonStartFrame.setText(QCoreApplication.translate("MainWindow", u"\u23ee", None))
+        self.buttonDecFrame.setText(QCoreApplication.translate("MainWindow", u"\u23ea", None))
+        self.buttonPlay.setText(QCoreApplication.translate("MainWindow", u"\u23f5", None))
+        self.buttonIncFrame.setText(QCoreApplication.translate("MainWindow", u"\u23e9", None))
+        self.buttonEndFrame.setText(QCoreApplication.translate("MainWindow", u"\u23ed", None))
+        self.frameNr.setText(QCoreApplication.translate("MainWindow", u"0000/1000", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
         self.menuEdit.setTitle(QCoreApplication.translate("MainWindow", u"Edit", None))
         self.menuView.setTitle(QCoreApplication.translate("MainWindow", u"View", None))
         self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))
         self.menuTools.setTitle(QCoreApplication.translate("MainWindow", u"Tools", None))
     # retranslateUi
-
