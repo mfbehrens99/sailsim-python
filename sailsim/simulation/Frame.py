@@ -24,6 +24,9 @@ class Frame():
         self.boatWaterDragX = self.boatWaterDragY = None
         self.boatWaterLiftX = self.boatWaterLiftY = None
 
+        self.boatWaterDragRudderX = self.boatWaterDragRudderY = None
+        self.boatWaterLiftRudderX = self.boatWaterLiftRudderY = None
+
         self.boatMomentum = None
         self.boatWaterDragMomentum = None
         self.boatRudderMomentum = None
@@ -58,6 +61,9 @@ class Frame():
         (self.boatWaterDragX, self.boatWaterDragY) = (h.waterDragX, h.waterDragY)
         (self.boatWaterLiftX, self.boatWaterLiftY) = (h.waterLiftX, h.waterLiftY)
 
+        (self.boatWaterDragRudderX, self.boatWaterDragRudderY) = (h.waterDragRudderX, h.waterDragRudderY)
+        (self.boatWaterLiftRudderX, self.boatWaterLiftRudderY) = (h.waterLiftRudderX, h.waterLiftRudderY)
+
         self.boatMomentum = h.momentum
         self.boatWaterDragMomentum = h.waterDragMomentum
         self.boatRudderMomentum = h.rudderMomentum
@@ -89,6 +95,7 @@ class Frame():
             self.boatForceX, self.boatForceY,
             self.boatSailDragX, self.boatSailDragY, self.boatSailLiftX, self.boatSailLiftY,
             self.boatWaterDragX, self.boatWaterDragY, self.boatWaterLiftX, self.boatWaterLiftY,
+            self.boatWaterDragRudderX, self.boatWaterDragRudderY, self.boatWaterLiftRudderX, self.boatWaterLiftRudderY,
             self.boatMomentum, self.boatWaterDragMomentum, self.boatRudderMomentum,
         ]
         data.extend(self.getWindList())
