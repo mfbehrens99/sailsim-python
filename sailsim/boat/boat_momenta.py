@@ -15,4 +15,4 @@ def waterDragMomentum(self):
 
 
 def rudderMomentum(self, boatSpeedSq):
-    return self.length * 0.5 * self.waterLiftRudderScalar(boatSpeedSq)
+    return self.length * 0.5 * self.waterLiftRudder(boatSpeedSq)

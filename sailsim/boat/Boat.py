@@ -130,33 +130,40 @@ class Boat:
         (forceX, forceY) = (0, 0)
 
         # Sail forces
-        (h.sailDragX, h.sailDragY) = self.sailDrag(apparentWindNormX, apparentWindNormY, apparentWindSpeedSq)
+        scalarSailDrag = self.sailDrag(apparentWindSpeedSq)
+        (h.sailDragX, h.sailDragY) = self.scalarToDragForce(scalarSailDrag, apparentWindNormX, apparentWindNormY)
         forceX += h.sailDragX
         forceY += h.sailDragY
-        (h.sailLiftX, h.sailLiftY) = self.sailLift(apparentWindNormX, apparentWindNormY, apparentWindSpeedSq)
+        scalarSailLift = self.sailLift(apparentWindSpeedSq)
+        (h.sailLiftX, h.sailLiftY) = self.scalarToLiftForce(scalarSailLift, h.angleOfAttack, apparentWindNormX, apparentWindNormY)
         forceX += h.sailLiftX
         forceY += h.sailLiftY
 
         # Hull forces
-        (h.waterDragX, h.waterDragY) = self.waterDrag(speedNormX, speedNormY, boatSpeedSq)
+        scalarHullDrag = self.waterDrag(boatSpeedSq)
+        (h.waterDragX, h.waterDragY) = self.scalarToDragForce(scalarHullDrag, speedNormX, speedNormY)
         forceX += h.waterDragX
         forceY += h.waterDragY
-        (h.waterLiftX, h.waterLiftY) = self.waterLift(speedNormX, speedNormY, boatSpeedSq)
+        scalarHullLift = self.waterLift(boatSpeedSq)
+        (h.waterLiftX, h.waterLiftY) = self.scalarToLiftForce(scalarHullLift, h.leewayAngle, speedNormX, speedNormY)
         forceX += h.waterLiftX
         forceY += h.waterLiftY
 
         # Rudder forces
-        (h.waterDragRudderX, h.waterDragRudderY) = self.waterDragRudder(dirNormX, dirNormY, boatSpeedSq)
+        scalarRudderDrag = self.waterDragRudder(boatSpeedSq)
+        (h.waterDragRudderX, h.waterDragRudderY) = self.scalarToDragForce(scalarRudderDrag, speedNormX, speedNormY)
         forceX += h.waterDragRudderX
         forceY += h.waterDragRudderY
-        (h.waterLiftRudderX, h.waterLiftRudderY) = self.waterLiftRudder(dirNormX, dirNormY, boatSpeedSq)
+        scalarRudderLift = self.waterLiftRudder(boatSpeedSq)
+        print(scalarRudderLift)
+        (h.waterLiftRudderX, h.waterLiftRudderY) = self.scalarToLiftForce(scalarRudderLift, angleKeepInterval(h.leewayAngle+self.rudderAngle), speedNormX, speedNormY)
         forceX += h.waterLiftRudderX
         forceY += h.waterLiftRudderY
 
         (h.forceX, h.forceY) = (forceX, forceY)
         return (forceX, forceY)
 
-    from .boat_forces import sailDrag, sailLift, waterDrag, waterLift, waterDragRudder, waterLiftRudder, waterDragRudderScalar, waterLiftRudderScalar
+    from .boat_forces import sailDrag, sailLift, waterDrag, waterLift, waterDragRudder, waterLiftRudder, waterDragRudder, waterLiftRudder, scalarToDragForce, scalarToLiftForce
 
 
     # Momentum calculations
