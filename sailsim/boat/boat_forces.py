@@ -29,12 +29,12 @@ def waterLift(self, boatSpeedSq):
 
 
 # Rudder forces
-def waterLiftRudder(self, boatSpeedSq):
+def rudderLift(self, boatSpeedSq):
     """Calculates Lift caused by rudder."""
     return -0.5 * DENSITY_WATER * self.rudderArea * boatSpeedSq * self.coefficientWaterLift(angleKeepInterval(self.dataHolder.leewayAngle + self.rudderAngle))
 
 
-def waterDragRudder(self, boatSpeedSq):
+def rudderDrag(self, boatSpeedSq):
     """Calculates Force of the rudder that ist decelerating the boat."""
     return -0.5 * DENSITY_WATER * self.rudderArea * boatSpeedSq * self.coefficientWaterDrag(angleKeepInterval(self.dataHolder.leewayAngle + self.rudderAngle))
 
