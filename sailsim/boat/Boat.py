@@ -24,6 +24,23 @@ class Boat:
             speedY:     speed in y direction (in m/s)
             angSpeed:   angular speed in z direction (in rad/s)
         """
+
+        # Static properties
+        self.length = 4.2               # m
+        self.width = 1.63               # m
+        self.mass = 80                  # kg
+        self.momentumInertia = 1/12 * self.mass * (pow(self.length, 2) + pow(self.width, 2))  # kg/m^2
+        self.sailArea = 7.45            # m^2
+        self.hullArea = 4               # m^2
+        self.centerboardArea = 1        # m^2 # self.centerboardDepth * self.centerboardLength
+        self.centerboardDepth = 0       # m
+        self.centerboardLength = 0      # m
+        self.centerboardLever = -0.3    # m
+        self.rudderArea = .175          # m^2 # self.rudderDepth * self.rudderLength
+        self.rudderDepth = 0            # m
+        self.rudderLength = 0           # m
+        self.rudderLever = 2.1          # m
+
         # Dynamic properties
         self.posX = posX
         self.posY = posY
@@ -31,7 +48,8 @@ class Boat:
         self.speedY = speedY
 
         self.direction = directionKeepInterval(direction)
-        self.angSpeed = angSpeed    # rad/s
+        self.angSpeed = angSpeed        # rad/s
+        self.pivot = 0.5 * self.length  # m
 
         self.mainSailAngle = 0
         self.maxMainSailAngle = 80 / 180 * pi
@@ -41,16 +59,6 @@ class Boat:
 
         self.dataHolder = BoatDataHolder()
         self.sailor = None
-
-        # Static properties
-        self.length = 4.2           # m
-        self.width = 1.63           # m
-        self.mass = 80              # kg
-        self.momentumInertia = 1/12 * self.mass * (pow(self.length, 2) + pow(self.width, 2))  # kg/m^2
-        self.sailArea = 7.45        # m^2
-        self.hullArea = 4           # m^2
-        self.centerboardArea = 1    # m^2
-        self.rudderArea = .175      # m^2
 
         # Coefficients methods
         self.coefficientAirDrag = coefficientAirDrag

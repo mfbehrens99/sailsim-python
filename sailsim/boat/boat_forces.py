@@ -1,9 +1,16 @@
 """This module holdes some force calculation for the Boat class."""
 
-from math import sin
+from math import pi, sin
 
-from sailsim.utils.anglecalculations import angleKeepInterval
+from sailsim.utils.anglecalculations import angleKeepInterval, directionKeepInterval
+from sailsim.utils.coordconversion import polarToCart
 from sailsim.utils.constants import DENSITY_AIR, DENSITY_WATER
+
+
+def leverSpeedVector(self, lever):
+    """Calculate the speed vector at a certain point concidering the rotation."""
+    (orbSpeedX, orbSpeedY) = polarToCart(self.angSpeed * lever, directionKeepInterval(self.direction + pi))
+    return (self.speedX + orbSpeedX, self.speedY + orbSpeedY)
 
 
 # Sail forces
@@ -37,6 +44,7 @@ def rudderLift(self, boatSpeedSq):
 def rudderDrag(self, boatSpeedSq):
     """Calculates Force of the rudder that ist decelerating the boat."""
     return -0.5 * DENSITY_WATER * self.rudderArea * boatSpeedSq * self.coefficientWaterDrag(angleKeepInterval(self.dataHolder.leewayAngle + self.rudderAngle))
+
 
 # Conversions
 def scalarToLiftForce(self, scalarForce, angleOfAttack, normX, normY):
