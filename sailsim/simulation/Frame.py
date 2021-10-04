@@ -28,9 +28,9 @@ class Frame():
         self.boatRudderDragX = self.boatRudderDragY = None
         self.boatRudderLiftX = self.boatRudderLiftY = None
 
-        self.boatMomentum = None
-        self.boatWaterDragMomentum = None
-        self.boatRudderMomentum = None
+        self.boatTorque = None
+        self.boatWaterDragTorque = None
+        self.boatRudderTorque = None
 
 
     def collectSimulation(self, simulation):
@@ -65,9 +65,9 @@ class Frame():
         (self.boatRudderDragX, self.boatRudderDragY) = (h.rudderDragX, h.rudderDragY)
         (self.boatRudderLiftX, self.boatRudderLiftY) = (h.rudderLiftX, h.rudderLiftY)
 
-        self.boatMomentum = h.momentum
-        self.boatWaterDragMomentum = h.waterDragMomentum
-        self.boatRudderMomentum = h.rudderMomentum
+        self.boatTorque = h.torque
+        self.boatWaterDragTorque = h.waterDragTorque
+        self.boatRudderTorque = h.rudderTorque
 
     def collectWind(self, wind, x, y, size, distance):
         """Collect and save all information about the wind."""
@@ -97,7 +97,7 @@ class Frame():
             self.boatSailDragX, self.boatSailDragY, self.boatSailLiftX, self.boatSailLiftY,
             self.boatWaterDragX, self.boatWaterDragY, self.boatWaterLiftX, self.boatWaterLiftY,
             self.boatRudderDragX, self.boatRudderDragY, self.boatRudderLiftX, self.boatRudderLiftY,
-            self.boatMomentum, self.boatWaterDragMomentum, self.boatRudderMomentum,
+            self.boatTorque, self.boatWaterDragTorque, self.boatRudderTorque,
         ]
         data.extend(self.getWindList())
         dataStr = [f'{x:.4f}'.rstrip('0').rstrip('.') for x in data] # FIXME very slow and inflexible

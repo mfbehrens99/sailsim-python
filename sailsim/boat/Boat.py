@@ -71,20 +71,16 @@ class Boat:
 
 
     # Simulation
-    def applyForce(self, forceX, forceY, interval):
-        """Change speed according a force given."""
+    def applyCauses(self, forceX, forceY, torque, interval):
+        """Change speed according a force & torque given."""
         # △v = a * t ; F = m * a
         # △v = F / m * t
         self.speedX += forceX / self.mass * interval
         self.speedY += forceY / self.mass * interval
 
-    def applyMomentum(self, momentum, interval):
-        """Change angular speed according to a momentum given."""
-        # NOTE copied from applyForce()
-        # FIXME move this into applyForce()? Rename applyForce() function?
         # △ω = α * t; M = I * α
         # △ω = M / I * t
-        self.angSpeed += momentum / self.momentumInertia * interval
+        self.angSpeed += torque / self.momentumInertia * interval
 
     def moveInterval(self, interval):
         """Change position according to sailsDirection and speed."""
@@ -112,8 +108,8 @@ class Boat:
             self.rudderAngle = self.sailor.rudderAngle
 
 
-    # Force calculations
-    def resultingForce(self, trueWindX, trueWindY):
+    # Force & Torque calculations
+    def resultingCauses(self, trueWindX, trueWindY):
         """Add up all acting forces and return them as a tuple."""
         h = self.dataHolder
 
@@ -123,74 +119,70 @@ class Boat:
 
         apparentWindSpeedSq = cartToRadiusSq(h.apparentWindX, h.apparentWindY)
         h.apparentWindSpeed = sqrt(apparentWindSpeedSq)
-        boatSpeedSq = self.boatSpeedSq()
-        h.boatSpeed = sqrt(boatSpeedSq)
+        h.boatSpeed = self.boatSpeed()
+
+        # calculate flowSpeed
+        (flowSpeedRudderX, flowSpeedRudderY) = self.leverSpeedVector(self.rudderLever)
+        flowSpeedRudderSq = cartToRadiusSq(flowSpeedRudderX, flowSpeedRudderY)
+        flowSpeedRudder = sqrt(flowSpeedRudderSq)
+
+        (flowSpeedCenterboardX, flowSpeedCenterboardY) = self.leverSpeedVector(self.centerboardLever)
+        flowSpeedCenterboardSq = cartToRadiusSq(flowSpeedCenterboardX, flowSpeedCenterboardY)
+        flowSpeedCenterboard = sqrt(flowSpeedCenterboardSq)
 
         # normalise apparent wind vector and boat speed vetor
         # if vector is (0, 0) set normalised vector to (0, 0) aswell
         (apparentWindNormX, apparentWindNormY) = (h.apparentWindX / h.apparentWindSpeed, h.apparentWindY / h.apparentWindSpeed) if not h.apparentWindSpeed == 0 else (0, 0) # normalised apparent wind vector
-        (speedNormX, speedNormY) = (self.speedX / h.boatSpeed, self.speedY / h.boatSpeed) if not h.boatSpeed == 0 else (0, 0) # normalised speed vector
+        # (speedNormX, speedNormY) = (self.speedX / h.boatSpeed, self.speedY / h.boatSpeed) if not h.boatSpeed == 0 else (0, 0) # normalised speed vector
+        (flowSpeedRudderNormX, flowSpeedRudderNormY) = (flowSpeedRudderX / flowSpeedRudder, flowSpeedRudderY / flowSpeedRudder) if not flowSpeedRudder == 0 else (0, 0) # normalised speed vector
+        (flowSpeedCenterboardNormX, flowSpeedCenterboardNormY) = (flowSpeedCenterboardX / flowSpeedCenterboard, flowSpeedCenterboardY / flowSpeedCenterboard) if not flowSpeedCenterboard == 0 else (0, 0) # normalised speed vector
         (dirNormX, dirNormY) = (sin(self.direction), cos(self.direction))
 
         h.leewayAngle = self.calcLeewayAngle()
         h.angleOfAttack = self.angleOfAttack(h.apparentWindAngle)
 
         # Sum up all acting forces
-        (forceX, forceY) = (0, 0)
+        (forceX, forceY, torque) = (0, 0, 0)
 
         # Sail forces
-        scalarSailDrag = self.sailDrag(apparentWindSpeedSq)
-        (h.sailDragX, h.sailDragY) = self.scalarToDragForce(scalarSailDrag, apparentWindNormX, apparentWindNormY)
+        (h.sailDragX, h.sailDragY) = self.sailDrag(apparentWindSpeedSq, apparentWindNormX, apparentWindNormY)
         forceX += h.sailDragX
         forceY += h.sailDragY
-        scalarSailLift = self.sailLift(apparentWindSpeedSq)
-        (h.sailLiftX, h.sailLiftY) = self.scalarToLiftForce(scalarSailLift, h.angleOfAttack, apparentWindNormX, apparentWindNormY)
+        (h.sailLiftX, h.sailLiftY) = self.sailLift(apparentWindSpeedSq, apparentWindNormX, apparentWindNormY)
         forceX += h.sailLiftX
         forceY += h.sailLiftY
 
-        # Hull forces
-        scalarHullDrag = self.waterDrag(boatSpeedSq)
-        (h.waterDragX, h.waterDragY) = self.scalarToDragForce(scalarHullDrag, speedNormX, speedNormY)
+        # Centerboard forces
+        (h.waterDragX, h.waterDragY) = self.waterDrag(flowSpeedCenterboardSq, flowSpeedCenterboardNormX, flowSpeedCenterboardNormY)
         forceX += h.waterDragX
         forceY += h.waterDragY
-        scalarHullLift = self.waterLift(boatSpeedSq)
-        (h.waterLiftX, h.waterLiftY) = self.scalarToLiftForce(scalarHullLift, h.leewayAngle, speedNormX, speedNormY)
+        (h.waterLiftX, h.waterLiftY) = self.waterLift(flowSpeedCenterboardSq, flowSpeedCenterboardNormX, flowSpeedCenterboardNormY)
         forceX += h.waterLiftX
         forceY += h.waterLiftY
 
         # Rudder forces
-        scalarRudderDrag = self.rudderDrag(boatSpeedSq)
-        (h.rudderDragX, h.rudderDragY) = self.scalarToDragForce(scalarRudderDrag, speedNormX, speedNormY)
+        (h.rudderDragX, h.rudderDragY) = self.rudderDrag(flowSpeedRudderSq, flowSpeedRudderNormX, flowSpeedRudderNormY)
         forceX += h.rudderDragX
         forceY += h.rudderDragY
-        scalarRudderLift = self.rudderLift(boatSpeedSq)
-        print(scalarRudderLift)
-        (h.rudderLiftX, h.rudderLiftY) = self.scalarToLiftForce(scalarRudderLift, angleKeepInterval(h.leewayAngle+self.rudderAngle), speedNormX, speedNormY)
+        (h.rudderLiftX, h.rudderLiftY) = self.rudderLift(flowSpeedRudderSq, flowSpeedRudderNormX, flowSpeedRudderNormY)
         forceX += h.rudderLiftX
         forceY += h.rudderLiftY
 
-        (h.forceX, h.forceY) = (forceX, forceY)
-        return (forceX, forceY)
-
-    from .boat_forces import sailDrag, sailLift, waterDrag, waterLift, rudderDrag, rudderLift, rudderDrag, rudderLift, scalarToDragForce, scalarToLiftForce
+        # TODO Hull forces
 
 
-    # Momentum calculations
-    def resultingMomentum(self):
-        """Sum all acting momenta."""
-        h = self.dataHolder
-        resMomentum = 0
+        # Torques
+        h.waterDragTorque = self.waterDragTorque()
+        torque += h.waterDragTorque
 
-        h.waterDragMomentum = self.waterDragMomentum()
-        resMomentum += h.waterDragMomentum
+        h.rudderTorque = self.rudderTorque(h.rudderDragX + h.rudderLiftX, h.rudderDragY + h.rudderLiftY, dirNormX, dirNormY)
+        torque += h.rudderTorque
 
-        h.rudderMomentum = self.rudderMomentum(self.boatSpeedSq())
-        resMomentum += h.rudderMomentum
+        (h.forceX, h.forceY, h.torque) = (forceX, forceY, torque)
+        return (forceX, forceY, torque)
 
-        h.momentum = resMomentum
-        return resMomentum
-
-    from .boat_momenta import waterDragMomentum, rudderMomentum
+    from .boat_forces import leverSpeedVector, sailDrag, sailLift, waterDrag, waterLift, rudderDrag, rudderLift, scalarToDragForce, scalarToLiftForce
+    from .boat_torques import waterDragTorque, rudderTorque
 
 
     # Speed calculations

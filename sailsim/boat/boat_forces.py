@@ -1,6 +1,6 @@
 """This module holdes some force calculation for the Boat class."""
 
-from math import pi, sin
+from math import pi
 
 from sailsim.utils.anglecalculations import angleKeepInterval, directionKeepInterval
 from sailsim.utils.coordconversion import polarToCart
@@ -10,40 +10,46 @@ from sailsim.utils.constants import DENSITY_AIR, DENSITY_WATER
 def leverSpeedVector(self, lever):
     """Calculate the speed vector at a certain point concidering the rotation."""
     (orbSpeedX, orbSpeedY) = polarToCart(self.angSpeed * lever, directionKeepInterval(self.direction + pi))
-    return (self.speedX + orbSpeedX, self.speedY + orbSpeedY)
+    return (-self.speedX + orbSpeedX, -self.speedY + orbSpeedY)
 
 
 # Sail forces
-def sailDrag(self, apparentWindSpeedSq):
+def sailDrag(self, apparentWindSpeedSq, apparentWindNormX, apparentWindNormY):
     """Calculate the force that is created when wind blows against the boat."""
-    return 0.5 * DENSITY_AIR * self.sailArea * apparentWindSpeedSq * self.coefficientAirDrag(self.dataHolder.angleOfAttack)
+    scalarSailDrag = 0.5 * DENSITY_AIR * self.sailArea * apparentWindSpeedSq * self.coefficientAirDrag(self.dataHolder.angleOfAttack)
+    return self.scalarToDragForce(scalarSailDrag, apparentWindNormX, apparentWindNormY)
 
 
-def sailLift(self, apparentWindSpeedSq):
+def sailLift(self, apparentWindSpeedSq, apparentWindNormX, apparentWindNormY):
     """Calculate the lift force that is created when the wind changes its direction in the sail."""
-    return 0.5 * DENSITY_AIR * self.sailArea * apparentWindSpeedSq * self.coefficientAirLift(self.dataHolder.angleOfAttack)
+    scalarSailLift = 0.5 * DENSITY_AIR * self.sailArea * apparentWindSpeedSq * self.coefficientAirLift(self.dataHolder.angleOfAttack)
+    return self.scalarToLiftForce(scalarSailLift, self.dataHolder.angleOfAttack, apparentWindNormX, apparentWindNormY)
 
 
-# Hull forces
-def waterDrag(self, boatSpeedSq):
+# Centerboard forces
+def waterDrag(self, flowSpeedSq, flowSpeedCenterboardNormX, flowSpeedCenterboardNormY):
     """Calculate the drag force of the water that is decelerating the boat."""
-    return -0.5 * DENSITY_WATER * (self.hullArea + self.centerboardArea) * boatSpeedSq * self.coefficientWaterDrag(self.dataHolder.leewayAngle)
+    scalarCenterboardDrag = 0.5 * DENSITY_WATER * (self.hullArea + self.centerboardArea) * flowSpeedSq * self.coefficientWaterDrag(self.dataHolder.leewayAngle)
+    return self.scalarToDragForce(scalarCenterboardDrag, flowSpeedCenterboardNormX, flowSpeedCenterboardNormY)
 
 
-def waterLift(self, boatSpeedSq):
+def waterLift(self, flowSpeedSq, flowSpeedCenterboardNormX, flowSpeedCenterboardNormY):
     """Calculate force that is caused by lift forces in the water."""
-    return -0.5 * DENSITY_WATER * self.centerboardArea * boatSpeedSq * self.coefficientWaterLift(self.dataHolder.leewayAngle)
+    scalarCenterboardLift = 0.5 * DENSITY_WATER * self.centerboardArea * flowSpeedSq * self.coefficientWaterLift(self.dataHolder.leewayAngle)
+    return self.scalarToLiftForce(scalarCenterboardLift, self.dataHolder.leewayAngle, flowSpeedCenterboardNormX, flowSpeedCenterboardNormY)
 
 
 # Rudder forces
-def rudderLift(self, boatSpeedSq):
+def rudderLift(self, flowSpeedSq, flowSpeedRudderNormX, flowSpeedRudderNormY):
     """Calculates Lift caused by rudder."""
-    return -0.5 * DENSITY_WATER * self.rudderArea * boatSpeedSq * self.coefficientWaterLift(angleKeepInterval(self.dataHolder.leewayAngle + self.rudderAngle))
+    scalarRudderLift = 0.5 * DENSITY_WATER * self.rudderArea * flowSpeedSq * self.coefficientWaterLift(angleKeepInterval(self.dataHolder.leewayAngle + self.rudderAngle))
+    return self.scalarToLiftForce(scalarRudderLift, angleKeepInterval(self.dataHolder.leewayAngle + self.rudderAngle), flowSpeedRudderNormX, flowSpeedRudderNormY)
 
 
-def rudderDrag(self, boatSpeedSq):
+def rudderDrag(self, flowSpeedSq, flowSpeedRudderNormX, flowSpeedRudderNormY):
     """Calculates Force of the rudder that ist decelerating the boat."""
-    return -0.5 * DENSITY_WATER * self.rudderArea * boatSpeedSq * self.coefficientWaterDrag(angleKeepInterval(self.dataHolder.leewayAngle + self.rudderAngle))
+    scalarRudderDrag = 0.5 * DENSITY_WATER * self.rudderArea * flowSpeedSq * self.coefficientWaterDrag(angleKeepInterval(self.dataHolder.leewayAngle + self.rudderAngle))
+    return self.scalarToDragForce(scalarRudderDrag, flowSpeedRudderNormX, flowSpeedRudderNormY)
 
 
 # Conversions

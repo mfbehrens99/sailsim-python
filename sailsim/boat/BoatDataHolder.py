@@ -17,6 +17,6 @@ class BoatDataHolder():
         self.rudderDragX = self.rudderDragY = None
         self.rudderLiftX = self.rudderLiftY = None
 
-        self.momentum = None
-        self.waterDragMomentum = None
-        self.rudderMomentum = None
+        self.torque = None
+        self.waterDragTorque = None
+        self.rudderTorque = None
