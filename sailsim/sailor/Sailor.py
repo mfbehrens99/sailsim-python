@@ -76,12 +76,11 @@ class Sailor:
             self.boatDirection = straightCourse - (leewayAngle if abs(leewayAngle) < 0.5 else 0)
 
         offset = angleKeepInterval(self.boatDirection - compass)
-        # print(offset)
-        self.rudderAngle = offset * 0.3 / gpsSpeed if gpsSpeed != 0 else 0.00000001
+        self.rudderAngle = offset * 0.5 / gpsSpeed if gpsSpeed != 0 else 0.00000001
 
         # Prevent sailor from oversteering
         if abs(self.rudderAngle) > self.maxRudderAngle:
-            if self.maxRudderAngle > 0:
+            if self.rudderAngle > 0:
                 self.rudderAngle = self.maxRudderAngle
             else:
                 self.rudderAngle = -self.maxRudderAngle
