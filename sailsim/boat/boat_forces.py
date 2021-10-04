@@ -27,29 +27,31 @@ def sailLift(self, apparentWindSpeedSq, apparentWindNormX, apparentWindNormY):
 
 
 # Centerboard forces
-def waterDrag(self, flowSpeedSq, flowSpeedCenterboardNormX, flowSpeedCenterboardNormY):
+def centerboardDrag(self, flowSpeedSq, flowSpeedCenterboardNormX, flowSpeedCenterboardNormY):
     """Calculate the drag force of the water that is decelerating the boat."""
-    scalarCenterboardDrag = 0.5 * DENSITY_WATER * (self.hullArea + self.centerboardArea) * flowSpeedSq * self.coefficientWaterDrag(self.dataHolder.leewayAngle)
+    scalarCenterboardDrag = 0.5 * DENSITY_WATER * self.centerboardArea * flowSpeedSq * self.coefficientWaterDrag(self.dataHolder.leewayAngle)
     return self.scalarToDragForce(scalarCenterboardDrag, flowSpeedCenterboardNormX, flowSpeedCenterboardNormY)
 
 
-def waterLift(self, flowSpeedSq, flowSpeedCenterboardNormX, flowSpeedCenterboardNormY):
+def centerboardLift(self, flowSpeedSq, flowSpeedCenterboardNormX, flowSpeedCenterboardNormY):
     """Calculate force that is caused by lift forces in the water."""
     scalarCenterboardLift = 0.5 * DENSITY_WATER * self.centerboardArea * flowSpeedSq * self.coefficientWaterLift(self.dataHolder.leewayAngle)
     return self.scalarToLiftForce(scalarCenterboardLift, self.dataHolder.leewayAngle, flowSpeedCenterboardNormX, flowSpeedCenterboardNormY)
 
 
 # Rudder forces
+def rudderDrag(self, flowSpeedSq, flowSpeedRudderNormX, flowSpeedRudderNormY):
+    """Calculates Force of the rudder that ist decelerating the boat."""
+    scalarRudderDrag = 0.5 * DENSITY_WATER * self.rudderArea * flowSpeedSq * self.coefficientWaterDrag(angleKeepInterval(self.dataHolder.leewayAngle + self.rudderAngle))
+    return self.scalarToDragForce(scalarRudderDrag, flowSpeedRudderNormX, flowSpeedRudderNormY)
+
+
 def rudderLift(self, flowSpeedSq, flowSpeedRudderNormX, flowSpeedRudderNormY):
     """Calculates Lift caused by rudder."""
     scalarRudderLift = 0.5 * DENSITY_WATER * self.rudderArea * flowSpeedSq * self.coefficientWaterLift(angleKeepInterval(self.dataHolder.leewayAngle + self.rudderAngle))
     return self.scalarToLiftForce(scalarRudderLift, angleKeepInterval(self.dataHolder.leewayAngle + self.rudderAngle), flowSpeedRudderNormX, flowSpeedRudderNormY)
 
 
-def rudderDrag(self, flowSpeedSq, flowSpeedRudderNormX, flowSpeedRudderNormY):
-    """Calculates Force of the rudder that ist decelerating the boat."""
-    scalarRudderDrag = 0.5 * DENSITY_WATER * self.rudderArea * flowSpeedSq * self.coefficientWaterDrag(angleKeepInterval(self.dataHolder.leewayAngle + self.rudderAngle))
-    return self.scalarToDragForce(scalarRudderDrag, flowSpeedRudderNormX, flowSpeedRudderNormY)
 
 
 # Conversions

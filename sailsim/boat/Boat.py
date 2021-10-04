@@ -153,12 +153,12 @@ class Boat:
         forceY += h.sailLiftY
 
         # Centerboard forces
-        (h.waterDragX, h.waterDragY) = self.waterDrag(flowSpeedCenterboardSq, flowSpeedCenterboardNormX, flowSpeedCenterboardNormY)
-        forceX += h.waterDragX
-        forceY += h.waterDragY
-        (h.waterLiftX, h.waterLiftY) = self.waterLift(flowSpeedCenterboardSq, flowSpeedCenterboardNormX, flowSpeedCenterboardNormY)
-        forceX += h.waterLiftX
-        forceY += h.waterLiftY
+        (h.centerboardDragX, h.centerboardDragY) = self.centerboardDrag(flowSpeedCenterboardSq, flowSpeedCenterboardNormX, flowSpeedCenterboardNormY)
+        forceX += h.centerboardDragX
+        forceY += h.centerboardDragY
+        (h.centerboardLiftX, h.centerboardLiftY) = self.centerboardLift(flowSpeedCenterboardSq, flowSpeedCenterboardNormX, flowSpeedCenterboardNormY)
+        forceX += h.centerboardLiftX
+        forceY += h.centerboardLiftY
 
         # Rudder forces
         (h.rudderDragX, h.rudderDragY) = self.rudderDrag(flowSpeedRudderSq, flowSpeedRudderNormX, flowSpeedRudderNormY)
@@ -175,14 +175,17 @@ class Boat:
         h.waterDragTorque = self.waterDragTorque()
         torque += h.waterDragTorque
 
+        h.centerboardTorque = self.centerboardTorque(h.centerboardDragX + h.centerboardLiftX, h.centerboardDragY + h.centerboardLiftY, dirNormX, dirNormY)
+        torque += h.centerboardTorque
+
         h.rudderTorque = self.rudderTorque(h.rudderDragX + h.rudderLiftX, h.rudderDragY + h.rudderLiftY, dirNormX, dirNormY)
         torque += h.rudderTorque
 
         (h.forceX, h.forceY, h.torque) = (forceX, forceY, torque)
         return (forceX, forceY, torque)
 
-    from .boat_forces import leverSpeedVector, sailDrag, sailLift, waterDrag, waterLift, rudderDrag, rudderLift, scalarToDragForce, scalarToLiftForce
-    from .boat_torques import waterDragTorque, rudderTorque
+    from .boat_forces import leverSpeedVector, sailDrag, sailLift, centerboardDrag, centerboardLift, rudderDrag, rudderLift, scalarToDragForce, scalarToLiftForce
+    from .boat_torques import waterDragTorque, centerboardTorque, rudderTorque
 
 
     # Speed calculations

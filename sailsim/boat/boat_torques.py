@@ -14,5 +14,8 @@ def waterDragTorque(self):
     return -torque
 
 
+def centerboardTorque(self, centerboardX, centerboardY, dirNormX, dirNormY):
+    return (centerboardY * dirNormX - centerboardX * dirNormY) * self.centerboardLever # negative cross product
+
 def rudderTorque(self, rudderX, rudderY, dirNormX, dirNormY):
     return (rudderY * dirNormX - rudderX * dirNormY) * self.rudderLever # negative cross product
