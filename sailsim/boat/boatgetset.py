@@ -3,12 +3,14 @@ from math import pi
 from sailsim.utils.anglecalculations import angleKeepInterval, directionKeepInterval
 
 
-def setBoat(self, posX, posY, speedX=0, speedY=0):
+def setBoat(self, posX, posY, direction=0, speedX=0, speedY=0, angSpeed=0):
     """Set important properties of boat."""
     self.posX = posX
     self.posY = posY
+    self.direction = direction
     self.speedX = speedX
     self.speedY = speedY
+    self.angSpeed = angSpeed
 
 
 def getPos(self):
@@ -39,6 +41,16 @@ def setMainSailAngle(self, mainSailAngle):
 def setMainSailAngleDeg(self, mainSailAngle):
     """Convert degrees to radiants and run setMainSailAngle()."""
     self.setMainSailAngle(mainSailAngle * pi / 180)
+
+
+def setRudderAngle(self, rudderAngle):
+    """Map angle into valid range and save."""
+    self.rudderAngle = angleKeepInterval(rudderAngle)
+
+
+def setRudderAngleDeg(self, rudderAngle):
+    """Convert degrees to radiants and run setRudderAngle()."""
+    self.setRudderAngle(rudderAngle * pi / 180)
 
 
 def setConstants(self, mass, sailArea, hullArea, centerboardArea):
