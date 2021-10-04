@@ -10,7 +10,7 @@ from sailsim.boat.coefficientsapprox import coefficientAirDrag, coefficientAirLi
 class Boat:
     """Holds all information about the boat and calculates its speed, forces and torques."""
 
-    from .boatgetset import getPos, getSpeed, setDirection, setDirectionDeg, setMainSailAngle, setMainSailAngleDeg, setConstants
+    from .boatgetset import setBoat, getPos, getSpeed, setDirection, setDirectionDeg, setMainSailAngle, setMainSailAngleDeg, setRudderAngle, setRudderAngleDeg, setConstants
 
     def __init__(self, posX=0, posY=0, direction=0, speedX=0, speedY=0, angSpeed=0):
         """
@@ -95,20 +95,21 @@ class Boat:
 
     def runSailor(self):
         """Activate the sailing algorithm to decide what the boat should do."""
-        self.sailor.run(
-            self.posX,
-            self.posY,
-            self.dataHolder.boatSpeed,
-            cartToArg(self.speedX, self.speedY),
-            self.direction,
-            self.dataHolder.apparentWindSpeed,
-            self.dataHolder.apparentWindAngle
-        ) # Run sailor
+        if not self.sailor is None:
+            self.sailor.run(
+                self.posX,
+                self.posY,
+                self.dataHolder.boatSpeed,
+                cartToArg(self.speedX, self.speedY),
+                self.direction,
+                self.dataHolder.apparentWindSpeed,
+                self.dataHolder.apparentWindAngle
+            ) # Run sailor
 
-        # Set boat properties
-        self.mainSailAngle = self.sailor.mainSailAngle
-        # self.direction = self.sailor.boatDirection
-        self.rudderAngle = self.sailor.rudderAngle
+            # Set boat properties
+            self.mainSailAngle = self.sailor.mainSailAngle
+            # self.direction = self.sailor.boatDirection
+            self.rudderAngle = self.sailor.rudderAngle
 
 
     # Force calculations

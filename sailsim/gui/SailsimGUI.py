@@ -25,7 +25,8 @@ class SailsimGUI(QMainWindow):
 
         self.ui.timeSlider.setMaximum(len(simulation))
         self.ui.timeSlider.setValue(self.frame)
-        self.ui.mapView.setWaypoints(self.simulation.world.boat.sailor.commandList)
+        if not self.simulation.world.boat.sailor is None:
+            self.ui.mapView.setWaypoints(self.simulation.world.boat.sailor.commandList)
         self.updatePath(5)
 
     def updateFrame(self, frameNr):

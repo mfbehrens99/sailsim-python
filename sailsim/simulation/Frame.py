@@ -9,6 +9,7 @@ class Frame():
         self.boatPosX = self.boatPosY = None
         self.boatSpeedX = self.boatSpeedY = None
         self.boatDirection = None
+        self.boatAngSpeed = None
 
         self.boatMainSailAngle = None
         self.boatRudderAngle = None

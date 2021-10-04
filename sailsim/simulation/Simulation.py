@@ -24,13 +24,17 @@ class Simulation:
         self.frame = 0
         self.lastFrame = lastFrame
 
-    def run(self):
+    def run(self, steps=0):
         """Run whole Simulation if lastFrame is set."""
-        # Check if lastFrame exisists
-        if self.lastFrame is None:
-            raise Exception('Simulation has no lastFrame')
-        while self.frame <= self.lastFrame:
-            self.step()
+        if steps < 1:
+            # Check if lastFrame exisists
+            if self.lastFrame is None:
+                raise Exception('Simulation has no lastFrame')
+            while self.frame <= self.lastFrame:
+                self.step()
+        else:
+            for i in range(steps):
+                self.step()
 
     def step(self):
         """Run one step of the Simulation."""
