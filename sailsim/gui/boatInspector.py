@@ -1,6 +1,6 @@
 """This module contains the class declaration of BoatInspectorWidget."""
 
-from math import pi
+from math import pi, sin, cos
 
 from PySide6.QtCore import QPoint, QPointF, Qt
 from PySide6.QtGui import QPainter
@@ -23,6 +23,9 @@ class BoatInspectorWidget(QWidget):
     boatForceSailLift = QPointF(0, 0)
     boatForceWaterDrag = QPointF(0, 0)
     boatForceWaterLift = QPointF(0, 0)
+    boatForceRudderDrag = QPointF(0, 0)
+    boatForceRudderLift = QPointF(0, 0)
+    boatRudderPosition = QPointF(0, 0)
 
     def __init__(self, parent=None):
         super(BoatInspectorWidget, self).__init__(parent)
@@ -68,6 +71,8 @@ class BoatInspectorWidget(QWidget):
         painter.drawLine(QPoint(0, 0), self.boatForceSailLift * scaleForce)
         painter.drawLine(QPoint(0, 0), self.boatForceWaterDrag * scaleForce)
         painter.drawLine(QPoint(0, 0), self.boatForceWaterLift * scaleForce)
+        painter.drawLine(self.boatRudderPosition, self.boatRudderPosition+self.boatForceRudderDrag * scaleForce*4)
+        painter.drawLine(self.boatRudderPosition, self.boatRudderPosition+self.boatForceRudderLift * scaleForce*4)
 
     def viewFrame(self, frame):
         """Set the boat to a position saved in a frame given."""
@@ -79,6 +84,9 @@ class BoatInspectorWidget(QWidget):
         self.boatForceSailLift = QPointF(frame.boatSailLiftX, -frame.boatSailLiftY)
         self.boatForceWaterDrag = QPointF(frame.boatWaterDragX, -frame.boatWaterDragY)
         self.boatForceWaterLift = QPointF(frame.boatWaterLiftX, -frame.boatWaterLiftY)
+        self.boatForceRudderDrag = QPointF(frame.boatRudderDragX, -frame.boatRudderDragY)
+        self.boatForceRudderLift = QPointF(frame.boatRudderLiftX, -frame.boatRudderLiftY)
+        self.boatRudderPosition = QPointF(-sin(frame.boatDirection)*2.2*self.scaleBoat*self.radius, cos(frame.boatDirection)*2.2*self.scaleBoat*self.radius)
         self.update()
 
     def resizeEvent(self, event):
