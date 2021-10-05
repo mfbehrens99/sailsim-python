@@ -17,28 +17,27 @@ class ValueInspectorWidget(QTreeWidget):
 
         self.updateValueInspectorRow(self.topLevelItem(2), frame.boatSpeedX, frame.boatSpeedY)
 
-        # TODO has to be commented in once brances are merged
-        # self.ui.valueInspector.topLevelItem(3).setText(1, toString(frame.boatAngSpeed * 180 / pi))
+        self.topLevelItem(3).setText(1, toString(frame.boatAngSpeed * 180 / pi))
 
         # Display Forces
         itemForce = self.topLevelItem(4)
         self.updateValueInspectorRow(itemForce, frame.boatForceX, frame.boatForceY)
         self.updateValueInspectorRow(itemForce.child(0), frame.boatSailDragX, frame.boatSailDragY)
         self.updateValueInspectorRow(itemForce.child(1), frame.boatSailLiftX, frame.boatSailLiftY)
-        self.updateValueInspectorRow(itemForce.child(2), frame.boatWaterDragX, frame.boatWaterDragY)
-        self.updateValueInspectorRow(itemForce.child(3), frame.boatWaterLiftX, frame.boatWaterLiftY)
-        #self.updateValueInspectorRow(itemForce.child(4), frame.boatRudderDragX, frame.boatRudderDragY)
-        #self.updateValueInspectorRow(itemForce.child(5), frame.boatRudderLiftX, frame.boatRudderLiftY)
-        #self.updateValueInspectorRow(itemForce.child(6), frame.boatHullDragX, frame.boatHullDragY)
-        #self.updateValueInspectorRow(itemForce.child(7), frame.boatHullLiftX, frame.boatHullLiftY)
+        self.updateValueInspectorRow(itemForce.child(2), frame.boatCenterboardDragX, frame.boatCenterboardDragY)
+        self.updateValueInspectorRow(itemForce.child(3), frame.boatCenterboardLiftX, frame.boatCenterboardLiftY)
+        self.updateValueInspectorRow(itemForce.child(4), frame.boatRudderDragX, frame.boatRudderDragY)
+        self.updateValueInspectorRow(itemForce.child(5), frame.boatRudderLiftX, frame.boatRudderLiftY)
+        # self.updateValueInspectorRow(itemForce.child(6), frame.boatHullDragX, frame.boatHullDragY)
+        # self.updateValueInspectorRow(itemForce.child(7), frame.boatHullLiftX, frame.boatHullLiftY)
 
         # Display Torque
-        #itemTorque = self.topLevelItem(5)
-        #itemTorque.setText(1, toString(frame.boatTorque))
-        #itemTorque.child(0).setText(1, toString(frame.boatWaterDragTorque))
-        #itemTorque.child(1).setText(1, toString(frame.boatCenterboardTorque))
-        #itemTorque.child(2).setText(1, toString(frame.boatRudderTorque))
-        #itemTorque.child(3).setText(1, toString(frame.boatHullTorque))
+        itemTorque = self.topLevelItem(5)
+        itemTorque.setText(1, toString(frame.boatTorque))
+        itemTorque.child(0).setText(1, toString(frame.boatWaterDragTorque))
+        itemTorque.child(1).setText(1, toString(frame.boatCenterboardTorque))
+        itemTorque.child(2).setText(1, toString(frame.boatRudderTorque))
+        # itemTorque.child(3).setText(1, toString(frame.boatHullTorque))
 
         # Display Angles
         itemAngle = self.topLevelItem(6)

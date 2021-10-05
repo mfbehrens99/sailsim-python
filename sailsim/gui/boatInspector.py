@@ -90,8 +90,8 @@ class BoatInspectorWidget(QWidget):
             painter.setPen(Qt.red)
             painter.drawLine(QPoint(0, 0), self.boatForceSailDrag * scaleForce)
             painter.drawLine(QPoint(0, 0), self.boatForceSailLift * scaleForce)
-            painter.drawLine(QPoint(0, 0), self.boatForceWaterDrag * scaleForce)
-            painter.drawLine(QPoint(0, 0), self.boatForceWaterLift * scaleForce)
+            painter.drawLine(QPoint(0, 0), self.boatForceCenterboardDrag * scaleForce)
+            painter.drawLine(QPoint(0, 0), self.boatForceCenterboardLift * scaleForce)
             painter.drawLine(self.boatRudderPosition, self.boatRudderPosition+self.boatForceRudderDrag * scaleForce*4)
             painter.drawLine(self.boatRudderPosition, self.boatRudderPosition+self.boatForceRudderLift * scaleForce*4)
 
