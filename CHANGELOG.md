@@ -30,11 +30,12 @@ Template
 - [[GUI]] Display Sailor Waypoints on [mapView]
 - [[GUI]] Add goto start and goto end button
 - [[GUI]] Hide and show parts of [mapView] and [boatInspector] from the menu point "View"
+- [[GUI]] Add [valueInspector] to view raw values
 
 ### Changed
 
 - [[GUI]] Display mainSailAngle and rudderAngle in [boatInspector]
-- [[Sailor]] Use index instead deleting [Commands] after executing them
+- [[Sailor]] Use index instead of deleting [Commands] after executing them
 
 ## [0.0.1] - 2021-04-13
 
@@ -64,4 +65,5 @@ Template
 [GUI]: https://github.com/mfbehrens99/sailsim/tree/main/sailsim/gui
 [mapView]: https://github.com/mfbehrens99/sailsim/blob/main/sailsim/gui/mapView.py
 [boatInspector]: https://github.com/mfbehrens99/sailsim/blob/main/sailsim/gui/boatInspector.py
+[valueInspector]: https://github.com/mfbehrens99/sailsim/blob/main/sailsim/gui/valueInspector.py
 [utils]: https://github.com/mfbehrens99/sailsim/tree/main/sailsim/utils
