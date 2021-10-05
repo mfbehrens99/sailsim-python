@@ -48,10 +48,18 @@ class MapViewWidget(QWidget):
     waypoints = QPainterPath()
     path = QPainterPath()
 
+    # Boat properties
     boatPos = QPointF(0, 0)
     boatDir = 0
     boatMainSailAngle = 0
     boatRudderAngle = 0
+
+    # Display proerties
+    displayWaypointLink = True
+    displayWaypoints = True
+    displayPath = True
+    displayMainSail = True
+    displayRudder = True
 
     def __init__(self, parent=None):
         super(MapViewWidget, self).__init__(parent)
@@ -67,13 +75,16 @@ class MapViewWidget(QWidget):
         painter.translate(self.offset)
         painter.scale(self.scale, self.scale)
 
-        painter.setPen(QPen(Qt.gray, .1, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
-        painter.drawPath(self.waypointsLink)
-        painter.setPen(QPen(Qt.blue, .1, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
-        painter.drawPath(self.waypoints)
+        if self.displayWaypointLink:
+            painter.setPen(QPen(Qt.gray, .1, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
+            painter.drawPath(self.waypointsLink)
+        if self.displayWaypoints:
+            painter.setPen(QPen(Qt.blue, .1, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
+            painter.drawPath(self.waypoints)
 
-        painter.setPen(QPen(Qt.darkGray, 4 / self.scale, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
-        painter.drawPath(self.path)
+        if self.displayPath:
+            painter.setPen(QPen(Qt.darkGray, 4 / self.scale, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
+            painter.drawPath(self.path)
 
         painter.translate(self.boatPos)
         painter.rotate(self.boatDir)
@@ -81,10 +92,12 @@ class MapViewWidget(QWidget):
         painter.setPen(Qt.NoPen)
         painter.setBrush(Qt.black)
         painter.drawPath(boatPainterPath())
-        painter.setPen(QPen(Qt.green, 0.1, Qt.SolidLine, Qt.RoundCap))
-        painter.drawLine(QPointF(0, 0), QPointF(sin(self.boatMainSailAngle), cos(self.boatMainSailAngle)) * 2)
-        painter.setPen(QPen(Qt.blue, 0.1, Qt.SolidLine, Qt.RoundCap))
-        painter.drawLine(QPointF(0, 2.2), QPointF(sin(self.boatRudderAngle), cos(self.boatRudderAngle)) * 0.5 + QPointF(0, 2.2))
+        if self.displayMainSail:
+            painter.setPen(QPen(Qt.green, 0.1, Qt.SolidLine, Qt.RoundCap))
+            painter.drawLine(QPointF(0, 0), QPointF(sin(self.boatMainSailAngle), cos(self.boatMainSailAngle)) * 2)
+        if self.displayRudder:
+            painter.setPen(QPen(Qt.blue, 0.1, Qt.SolidLine, Qt.RoundCap))
+            painter.drawLine(QPointF(0, 2.2), QPointF(sin(self.boatRudderAngle), cos(self.boatRudderAngle)) * 0.5 + QPointF(0, 2.2))
 
     def setPath(self, path):
         """Change the path and updates the painter."""

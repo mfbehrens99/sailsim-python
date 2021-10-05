@@ -1,9 +1,9 @@
 """This module contains the class declaration of BoatInspectorWidget."""
 
-from math import pi
+from math import pi, sin, cos
 
 from PySide6.QtCore import QPoint, QPointF, Qt
-from PySide6.QtGui import QPainter
+from PySide6.QtGui import QPainter, QPen
 from PySide6.QtWidgets import QApplication, QWidget
 
 from sailsim.gui.mapView import boatPainterPath
@@ -18,11 +18,20 @@ class BoatInspectorWidget(QWidget):
 
     boatSpeed = QPointF(0, 0)
     boatForce = QPointF(0, 0)
+    boatMainSailAngle = QPointF(0, 0)
+    boatRudderAngle = QPointF(0, 0)
 
     boatForceSailDrag = QPointF(0, 0)
     boatForceSailLift = QPointF(0, 0)
     boatForceWaterDrag = QPointF(0, 0)
     boatForceWaterLift = QPointF(0, 0)
+
+    displayBoat = True
+    displayMainSail = True
+    displayRudder = True
+    displayBoatDirection = True
+    displaySpeed = True
+    displayForces = True
 
     def __init__(self, parent=None):
         super(BoatInspectorWidget, self).__init__(parent)
@@ -46,33 +55,47 @@ class BoatInspectorWidget(QWidget):
         painter.setPen(Qt.lightGray)
         painter.drawEllipse(QPoint(0, 0), self.radius, self.radius)
 
-        painter.scale(scaleBoat, scaleBoat)
-        painter.setPen(Qt.NoPen)
-        painter.setBrush(Qt.gray)
-        painter.drawPath(boatPainterPath())
-        painter.scale(1 / scaleBoat, 1 / scaleBoat)
+        if self.displayBoat:
+            painter.scale(scaleBoat, scaleBoat)
+            painter.setPen(Qt.NoPen)
+            painter.setBrush(Qt.gray)
+            painter.drawPath(boatPainterPath())
 
-        painter.setPen(Qt.green)
-        painter.drawLine(QPoint(0, 0), QPoint(0, -scaleBoat * 4))
+            if self.displayMainSail:
+                painter.setPen(QPen(Qt.black, 0.1, Qt.SolidLine, Qt.RoundCap))
+                painter.drawLine(QPoint(0, 0), self.boatMainSailAngle)
+            if self.displayRudder:
+                painter.setPen(QPen(Qt.black, 0.1, Qt.SolidLine, Qt.RoundCap))
+                painter.drawLine(QPointF(0, 2.2), self.boatRudderAngle)
+
+            painter.scale(1 / scaleBoat, 1 / scaleBoat)
+
+        if self.displayBoatDirection:
+            painter.setPen(Qt.green)
+            painter.drawLine(QPoint(0, 0), QPoint(0, -scaleBoat * 4))
 
         # Draw Vectors
         painter.resetTransform()
         painter.translate(self.offset)
-        painter.setPen(Qt.blue)
-        painter.drawLine(QPoint(0, 0), self.boatSpeed * scaleSpeed)
+        if self.displaySpeed:
+            painter.setPen(Qt.blue)
+            painter.drawLine(QPoint(0, 0), self.boatSpeed * scaleSpeed)
 
-        painter.setPen(Qt.darkRed)
-        painter.drawLine(QPoint(0, 0), self.boatForce * scaleForce)
-        painter.setPen(Qt.red)
-        painter.drawLine(QPoint(0, 0), self.boatForceSailDrag * scaleForce)
-        painter.drawLine(QPoint(0, 0), self.boatForceSailLift * scaleForce)
-        painter.drawLine(QPoint(0, 0), self.boatForceWaterDrag * scaleForce)
-        painter.drawLine(QPoint(0, 0), self.boatForceWaterLift * scaleForce)
+        if self.displayForces:
+            painter.setPen(Qt.darkRed)
+            painter.drawLine(QPoint(0, 0), self.boatForce * scaleForce)
+            painter.setPen(Qt.red)
+            painter.drawLine(QPoint(0, 0), self.boatForceSailDrag * scaleForce)
+            painter.drawLine(QPoint(0, 0), self.boatForceSailLift * scaleForce)
+            painter.drawLine(QPoint(0, 0), self.boatForceWaterDrag * scaleForce)
+            painter.drawLine(QPoint(0, 0), self.boatForceWaterLift * scaleForce)
 
     def viewFrame(self, frame):
         """Set the boat to a position saved in a frame given."""
         self.boatDirection = frame.boatDirection / pi * 180
         self.boatSpeed = QPointF(frame.boatSpeedX, -frame.boatSpeedY)
+        self.boatMainSailAngle = QPointF(-sin(frame.boatMainSailAngle), cos(frame.boatMainSailAngle)) * 2
+        self.boatRudderAngle = QPointF(0, 2.2) + QPointF(sin(frame.boatRudderAngle), cos(frame.boatRudderAngle)) * 0.5
 
         self.boatForce = QPointF(frame.boatForceX, -frame.boatForceY)
         self.boatForceSailDrag = QPointF(frame.boatSailDragX, -frame.boatSailDragY)
