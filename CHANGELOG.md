@@ -22,6 +22,27 @@ Template
 
 --->
 
+## [Unreleased]
+
+### Added
+
+- [[Boat]] Add torques to the boat to make it spin
+- [[Simulation]] Run simulation for x steps
+- [[Sailor]] Basic rudder steering
+- [[GUI]] Display rudder forces in [boatInspector]
+
+### Changed
+
+- [[Boat]] Move forces and torques to their own files
+- [[Boat]] Rename waterDrag and waterLift to centerboardDrag and centerboardLift
+- [[Sailor]] Don't delete Waypoints after executing them
+
+### Removed
+
+- [[Boat]] Removed Boat::getSpeedSq()
+
+
+
 ## [0.0.1] - 2021-04-13
 
 ### Added
@@ -47,4 +68,6 @@ Template
 [Sailor]: https://github.com/mfbehrens99/sailsim/blob/main/sailsim/sailor/Sailor.py
 [Wind]: https://github.com/mfbehrens99/sailsim/blob/main/sailsim/wind/Wind.py
 [GUI]: https://github.com/mfbehrens99/sailsim/tree/main/sailsim/gui
+[mapView]: https://github.com/mfbehrens99/sailsim/blob/main/sailsim/gui/mapView.py
+[boatInspector]: https://github.com/mfbehrens99/sailsim/blob/main/sailsim/gui/boatInspector.py
 [utils]: https://github.com/mfbehrens99/sailsim/tree/main/sailsim/utils

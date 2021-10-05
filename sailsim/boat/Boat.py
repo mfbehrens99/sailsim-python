@@ -70,21 +70,18 @@ class Boat:
         self.tackingAngleDownwind = 20 / 180 * pi
 
 
-    # Simulation
+    # Simulation methods
     def applyCauses(self, forceX, forceY, torque, interval):
         """Change speed according a force & torque given."""
-        # △v = a * t ; F = m * a
-        # △v = F / m * t
+        # Translation: △v = a * t; F = m * a -> △v = F / m * t
+        # Rotation:    △ω = α * t; M = I * α -> △ω = M / I * t
         self.speedX += forceX / self.mass * interval
         self.speedY += forceY / self.mass * interval
-
-        # △ω = α * t; M = I * α
-        # △ω = M / I * t
         self.angSpeed += torque / self.momentumInertia * interval
 
     def moveInterval(self, interval):
         """Change position according to sailsDirection and speed."""
-        # s = v * t
+        # △s = v * t; △α = ω * t
         self.posX += self.speedX * interval
         self.posY += self.speedY * interval
         self.direction = directionKeepInterval(self.direction + self.angSpeed * interval)
@@ -92,6 +89,7 @@ class Boat:
     def runSailor(self):
         """Activate the sailing algorithm to decide what the boat should do."""
         if not self.sailor is None:
+            # Run sailor if sailor exists
             self.sailor.run(
                 self.posX,
                 self.posY,
@@ -100,26 +98,24 @@ class Boat:
                 self.direction,
                 self.dataHolder.apparentWindSpeed,
                 self.dataHolder.apparentWindAngle
-            ) # Run sailor
+            )
 
-            # Set boat properties
+            # Retrieve boat properties from Sailor
             self.mainSailAngle = self.sailor.mainSailAngle
             # self.direction = self.sailor.boatDirection
             self.rudderAngle = self.sailor.rudderAngle
 
-
-    # Force & Torque calculations
     def resultingCauses(self, trueWindX, trueWindY):
         """Add up all acting forces and return them as a tuple."""
         h = self.dataHolder
 
+        h.boatSpeed = self.boatSpeed()
+
         # calculate apparent wind angle
         (h.apparentWindX, h.apparentWindY) = self.apparentWind(trueWindX, trueWindY)
         h.apparentWindAngle = self.apparentWindAngle(h.apparentWindX, h.apparentWindY)
-
         apparentWindSpeedSq = cartToRadiusSq(h.apparentWindX, h.apparentWindY)
         h.apparentWindSpeed = sqrt(apparentWindSpeedSq)
-        h.boatSpeed = self.boatSpeed()
 
         # calculate flowSpeed
         (flowSpeedRudderX, flowSpeedRudderY) = self.leverSpeedVector(self.rudderLever)
@@ -141,7 +137,6 @@ class Boat:
         h.leewayAngle = self.calcLeewayAngle()
         h.angleOfAttack = self.angleOfAttack(h.apparentWindAngle)
 
-        # Sum up all acting forces
         (forceX, forceY, torque) = (0, 0, 0)
 
         # Sail forces
@@ -184,14 +179,10 @@ class Boat:
         (h.forceX, h.forceY, h.torque) = (forceX, forceY, torque)
         return (forceX, forceY, torque)
 
+    # Import force and torque functions
     from .boat_forces import leverSpeedVector, sailDrag, sailLift, centerboardDrag, centerboardLift, rudderDrag, rudderLift, scalarToDragForce, scalarToLiftForce
     from .boat_torques import waterDragTorque, centerboardTorque, rudderTorque
 
-
-    # Speed calculations
-    def boatSpeedSq(self):
-        """Return speed of the boat but squared."""
-        return pow(self.speedX, 2) + pow(self.speedY, 2)
 
     def boatSpeed(self):
         """Return speed of the boat."""
@@ -218,4 +209,4 @@ class Boat:
 
     def __repr__(self):
         heading = round(cartToArg(self.speedX, self.speedY) * 180 / pi, 2)
-        return "Boat @(%s|%s), v=%sm/s twds %s°" % (round(self.posX, 3), round(self.posY, 3), round(sqrt(self.boatSpeedSq()), 2), heading)
+        return "Boat @(%s|%s), v=%sm/s twds %s°" % (round(self.posX, 3), round(self.posY, 3), round(self.boatSpeed(), 2), heading)
