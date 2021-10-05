@@ -429,20 +429,12 @@
         <property name="text">
          <string>⏮</string>
         </property>
-        <property name="icon">
-         <iconset resource="mainresource.qrc">
-          <normaloff>:/icons/assets/icons/iconmonstr-media-control-52.svg</normaloff>:/icons/assets/icons/iconmonstr-media-control-52.svg</iconset>
-        </property>
        </widget>
       </item>
       <item>
        <widget class="QToolButton" name="buttonDecFrame">
         <property name="text">
          <string>⏪</string>
-        </property>
-        <property name="icon">
-         <iconset resource="mainresource.qrc">
-          <normaloff>:/icons/assets/icons/iconmonstr-media-control-2.svg</normaloff>:/icons/assets/icons/iconmonstr-media-control-2.svg</iconset>
         </property>
         <property name="autoRepeat">
          <bool>true</bool>
@@ -460,10 +452,6 @@
         <property name="text">
          <string>⏵</string>
         </property>
-        <property name="icon">
-         <iconset resource="mainresource.qrc">
-          <normaloff>:/icons/assets/icons/iconmonstr-media-control-3.svg</normaloff>:/icons/assets/icons/iconmonstr-media-control-3.svg</iconset>
-        </property>
         <property name="checkable">
          <bool>true</bool>
         </property>
@@ -476,10 +464,6 @@
        <widget class="QToolButton" name="buttonIncFrame">
         <property name="text">
          <string>⏩</string>
-        </property>
-        <property name="icon">
-         <iconset resource="mainresource.qrc">
-          <normaloff>:/icons/assets/icons/iconmonstr-media-control-1.svg</normaloff>:/icons/assets/icons/iconmonstr-media-control-1.svg</iconset>
         </property>
         <property name="autoRepeat">
          <bool>true</bool>
@@ -496,10 +480,6 @@
        <widget class="QToolButton" name="buttonEndFrame">
         <property name="text">
          <string>⏭</string>
-        </property>
-        <property name="icon">
-         <iconset resource="mainresource.qrc">
-          <normaloff>:/icons/assets/icons/iconmonstr-media-control-53.svg</normaloff>:/icons/assets/icons/iconmonstr-media-control-53.svg</iconset>
         </property>
        </widget>
       </item>
