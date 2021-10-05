@@ -44,15 +44,16 @@ sailor.importBoat(b)
 w = World(b, wind, None)
 s = Simulation(w, 0.01, 1000)
 
-
 # Run simulation
-s.run()
-
-app = QApplication(sys.argv)
-
-window = SailsimGUI(s)
-window.show()
-
-sys.exit(app.exec_())
+try:
+    s.run()
+except OverflowError:
+    s.lastFrame = s.frame - 1
+    print("Overflow after Frame", s.frame)
 
 s.frameList.saveCSV(OUTPUT_PATH)
+
+app = QApplication(sys.argv)
+window = SailsimGUI(s)
+window.show()
+sys.exit(app.exec())

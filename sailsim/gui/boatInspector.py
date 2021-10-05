@@ -23,8 +23,11 @@ class BoatInspectorWidget(QWidget):
 
     boatForceSailDrag = QPointF(0, 0)
     boatForceSailLift = QPointF(0, 0)
-    boatForceWaterDrag = QPointF(0, 0)
-    boatForceWaterLift = QPointF(0, 0)
+    boatForceCenterboardDrag = QPointF(0, 0)
+    boatForceCenterboardLift = QPointF(0, 0)
+    boatForceRudderDrag = QPointF(0, 0)
+    boatForceRudderLift = QPointF(0, 0)
+    boatRudderPosition = QPointF(0, 0)
 
     displayBoat = True
     displayMainSail = True
@@ -89,6 +92,8 @@ class BoatInspectorWidget(QWidget):
             painter.drawLine(QPoint(0, 0), self.boatForceSailLift * scaleForce)
             painter.drawLine(QPoint(0, 0), self.boatForceWaterDrag * scaleForce)
             painter.drawLine(QPoint(0, 0), self.boatForceWaterLift * scaleForce)
+            painter.drawLine(self.boatRudderPosition, self.boatRudderPosition+self.boatForceRudderDrag * scaleForce*4)
+            painter.drawLine(self.boatRudderPosition, self.boatRudderPosition+self.boatForceRudderLift * scaleForce*4)
 
     def viewFrame(self, frame):
         """Set the boat to a position saved in a frame given."""
@@ -100,8 +105,11 @@ class BoatInspectorWidget(QWidget):
         self.boatForce = QPointF(frame.boatForceX, -frame.boatForceY)
         self.boatForceSailDrag = QPointF(frame.boatSailDragX, -frame.boatSailDragY)
         self.boatForceSailLift = QPointF(frame.boatSailLiftX, -frame.boatSailLiftY)
-        self.boatForceWaterDrag = QPointF(frame.boatWaterDragX, -frame.boatWaterDragY)
-        self.boatForceWaterLift = QPointF(frame.boatWaterLiftX, -frame.boatWaterLiftY)
+        self.boatForceCenterboardDrag = QPointF(frame.boatCenterboardDragX, -frame.boatCenterboardDragY)
+        self.boatForceCenterboardLift = QPointF(frame.boatCenterboardLiftX, -frame.boatCenterboardLiftY)
+        self.boatForceRudderDrag = QPointF(frame.boatRudderDragX, -frame.boatRudderDragY)
+        self.boatForceRudderLift = QPointF(frame.boatRudderLiftX, -frame.boatRudderLiftY)
+        self.boatRudderPosition = QPointF(-sin(frame.boatDirection)*2.2*self.scaleBoat*self.radius, cos(frame.boatDirection)*2.2*self.scaleBoat*self.radius)
         self.update()
 
     def resizeEvent(self, event):

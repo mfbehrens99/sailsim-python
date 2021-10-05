@@ -40,12 +40,14 @@ class FrameList():
         """Generate head of .csv file."""
         headers = [
             "frame", "time",
-            "boatPosX", "boatPosY", "boatSpeedX", "boatSpeedY", "boatDirection",
+            "boatPosX", "boatPosY", "boatSpeedX", "boatSpeedY", "boatDirection", "boatAngSpeed",
             "boatMainSailAngle", "boatRudderAngle",
             "boatApparentWindX", "boatApparentWindY", "boatApparentWindAngle", "boatLeewayAngle", "boatAngleOfAttack",
             "boatForceX", "boatForceY",
             "boatSailDragX", "boatSailDragY", "boatSailLiftX", "boatSailLiftY",
             "boatWaterDragX", "boatWaterDragY", "boatWaterLiftX", "boatWaterLiftY",
+            "boatRudderDragX", "boatRudderDragY", "boatRudderLiftX", "boatRudderLiftY",
+            "boatTorque", "boatWaterDragTorque", "boatCenterboardTorque", "boatRudderTorque",
         ]
         headers.extend(self.getWindHeader())
         return ",".join(headers)

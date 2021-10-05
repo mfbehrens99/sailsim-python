@@ -26,6 +26,10 @@ Template
 
 ### Added
 
+- [[Boat]] Add torques to the boat to make it spin
+- [[Simulation]] Run simulation for x steps
+- [[Sailor]] Basic rudder steering
+- [[GUI]] Display rudder forces in [boatInspector]
 - [[Boat]] Add setter methods for rudderAngle
 - [[GUI]] Display Sailor Waypoints on [mapView]
 - [[GUI]] Add goto start and goto end button
@@ -34,8 +38,17 @@ Template
 
 ### Changed
 
+- [[Boat]] Move forces and torques to their own files
+- [[Boat]] Rename waterDrag and waterLift to centerboardDrag and centerboardLift
+- [[Sailor]] Don't delete Waypoints after executing them
 - [[GUI]] Display mainSailAngle and rudderAngle in [boatInspector]
 - [[Sailor]] Use index instead of deleting [Commands] after executing them
+
+### Removed
+
+- [[Boat]] Removed Boat::getSpeedSq()
+
+
 
 ## [0.0.1] - 2021-04-13
 

@@ -75,13 +75,23 @@ class Sailor:
             # TODO improve leeway calculation
             self.boatDirection = straightCourse - (leewayAngle if abs(leewayAngle) < 0.5 else 0)
 
+        offset = angleKeepInterval(self.boatDirection - compass)
+        self.rudderAngle = offset * 0.5 / gpsSpeed if gpsSpeed != 0 else 0.00000001
+
+        # Prevent sailor from oversteering
+        if abs(self.rudderAngle) > self.maxRudderAngle:
+            if self.rudderAngle > 0:
+                self.rudderAngle = self.maxRudderAngle
+            else:
+                self.rudderAngle = -self.maxRudderAngle
+
         # NOTE this is a very simple approximation of the real curve
         self.mainSailAngle = angleKeepInterval((windAngle - pi)) / 2
 
     def checkCommand(self, posX, posY):
         """Execute commands from commandList."""
         # TODO make prettier
-        while len(self.commandList) > 0:
+        while len(self.commandList) > self.commandListIndex:
             success = None
             command = self.commandList[self.commandListIndex]
             if isinstance(command, Waypoint):
