@@ -1,4 +1,5 @@
 from math import sqrt, pi, sin, cos
+from sailsim.boat.FrameList import FrameList
 
 from sailsim.utils.anglecalculations import angleKeepInterval, directionKeepInterval
 from sailsim.utils.coordconversion import cartToRadiusSq, cartToArg
@@ -68,6 +69,8 @@ class Boat:
 
         self.tackingAngleUpwind = 45 / 180 * pi
         self.tackingAngleDownwind = 20 / 180 * pi
+
+        self.frameList = FrameList()
 
 
     # Simulation methods

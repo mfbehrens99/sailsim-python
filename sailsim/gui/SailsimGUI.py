@@ -35,7 +35,7 @@ class SailsimGUI(QMainWindow):
 
     def updateFrame(self, frameNr):
         """Update display when the frame changed."""
-        frames = self.simulation.frameList.frames
+        frames = self.simulation.world.boat.frameList.frames
         if frameNr < len(frames):
             self.frame = frameNr
             frame = frames[frameNr]
@@ -49,7 +49,7 @@ class SailsimGUI(QMainWindow):
 
     def updatePath(self, pathStep):
         """Update the path displayed on the MapViewWidget with the current data from the simulation."""
-        coordinates = self.simulation.frameList.getCoordinateList()
+        coordinates = self.simulation.world.boat.frameList.getCoordinateList()
         if len(coordinates) > 0:
             self.ui.mapView.setPath(pointsToPath(coordinates, pathStep))
 

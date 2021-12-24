@@ -1,7 +1,5 @@
 from copy import deepcopy
 
-from sailsim.simulation.FrameList import FrameList
-
 
 class Simulation:
     """Main simulation class in this project."""
@@ -17,7 +15,6 @@ class Simulation:
         """
         self.world = world
         self.initWorld = deepcopy(world)
-        self.frameList = FrameList()
 
         # Timing
         self.timestep = timestep
@@ -47,7 +44,7 @@ class Simulation:
         (forceX, forceY, torque) = self.world.boat.resultingCauses(windX, windY)
 
         # Save frame
-        self.frameList.grabFrame(self)
+        self.world.boat.frameList.grabFrame(self, self.world.boat)
         self.frame += 1
 
         self.world.boat.runSailor()
