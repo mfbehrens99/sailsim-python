@@ -7,8 +7,6 @@ class FrameList():
     def __init__(self):
         self.frames = []
 
-        self.windSize = 0
-        self.windDistance = 10
 
     def grabFrame(self, simulation, boat):
         """Append new frame with all information to list."""
@@ -16,7 +14,7 @@ class FrameList():
         frame = Frame()
         frame.collectSimulation(simulation)
         frame.collectBoat(boat)
-        frame.collectWind(simulation.world.wind, posX, posY, self.windSize, self.windDistance)
+        frame.collectWind(simulation.wind, posX, posY)
         self.frames.append(frame)
 
     def reset(self):
@@ -48,17 +46,10 @@ class FrameList():
             "boatWaterDragX", "boatWaterDragY", "boatWaterLiftX", "boatWaterLiftY",
             "boatRudderDragX", "boatRudderDragY", "boatRudderLiftX", "boatRudderLiftY",
             "boatTorque", "boatWaterDragTorque", "boatCenterboardTorque", "boatRudderTorque",
+            "windX", "windY",
         ]
-        headers.extend(self.getWindHeader())
         return ",".join(headers)
 
-    def getWindHeader(self):
-        windHeader = []
-        for i in range(0, 2 * self.windSize + 1):
-            for j in range(0, 2 * self.windSize + 1):
-                windHeader.append("wind" + str(i) + "_" + str(j) + "X")
-                windHeader.append("wind" + str(i) + "_" + str(j) + "Y")
-        return windHeader
 
     def saveCSV(self, name="output.csv"):
         """Generate .csv file and save it to drive."""
@@ -145,15 +136,9 @@ class Frame():
         self.boatCenterboardTorque = h.centerboardTorque
         self.boatRudderTorque = h.rudderTorque
 
-    def collectWind(self, wind, x, y, size, distance):
+    def collectWind(self, wind, x, y):
         """Collect and save all information about the wind."""
-        windTable = []
-        for i in range(-size, size + 1):
-            for j in range(-size, size + 1):
-                coordX = x + i * distance
-                coordY = y + j * distance
-                windTable.append(wind.getWindCart(coordX, coordY, self.time))
-        self.windTable = windTable
+        self.wind = wind.getWindCart(x, y, self.time)
 
     def getWindList(self):
         windList = []

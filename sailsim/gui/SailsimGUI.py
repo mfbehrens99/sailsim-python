@@ -27,15 +27,15 @@ class SailsimGUI(QMainWindow):
 
         self.ui.timeSlider.setMaximum(len(simulation))
         self.ui.timeSlider.setValue(self.frame)
-        if self.simulation.world.boat.sailor is not None:
-            self.ui.mapView.setWaypoints(self.simulation.world.boat.sailor.commandList)
+        if self.simulation.boat.sailor is not None:
+            self.ui.mapView.setWaypoints(self.simulation.boat.sailor.commandList)
         self.updatePath(5)
         self.updateFrame(0)
         self.updateViewStates()
 
     def updateFrame(self, frameNr):
         """Update display when the frame changed."""
-        frames = self.simulation.world.boat.frameList.frames
+        frames = self.simulation.boat.frameList.frames
         if frameNr < len(frames):
             self.frame = frameNr
             frame = frames[frameNr]
@@ -49,7 +49,7 @@ class SailsimGUI(QMainWindow):
 
     def updatePath(self, pathStep):
         """Update the path displayed on the MapViewWidget with the current data from the simulation."""
-        coordinates = self.simulation.world.boat.frameList.getCoordinateList()
+        coordinates = self.simulation.boat.frameList.getCoordinateList()
         if len(coordinates) > 0:
             self.ui.mapView.setPath(pointsToPath(coordinates, pathStep))
 
