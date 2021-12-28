@@ -140,44 +140,30 @@ class Boat:
         h.leewayAngle = self.calcLeewayAngle()
         h.angleOfAttack = self.angleOfAttack(h.apparentWindAngle)
 
-        (forceX, forceY, torque) = (0, 0, 0)
 
         # Sail forces
         (h.sailDragX, h.sailDragY) = self.sailDrag(apparentWindSpeedSq, apparentWindNormX, apparentWindNormY)
-        forceX += h.sailDragX
-        forceY += h.sailDragY
         (h.sailLiftX, h.sailLiftY) = self.sailLift(apparentWindSpeedSq, apparentWindNormX, apparentWindNormY)
-        forceX += h.sailLiftX
-        forceY += h.sailLiftY
 
         # Centerboard forces
         (h.centerboardDragX, h.centerboardDragY) = self.centerboardDrag(flowSpeedCenterboardSq, flowSpeedCenterboardNormX, flowSpeedCenterboardNormY)
-        forceX += h.centerboardDragX
-        forceY += h.centerboardDragY
         (h.centerboardLiftX, h.centerboardLiftY) = self.centerboardLift(flowSpeedCenterboardSq, flowSpeedCenterboardNormX, flowSpeedCenterboardNormY)
-        forceX += h.centerboardLiftX
-        forceY += h.centerboardLiftY
 
         # Rudder forces
         (h.rudderDragX, h.rudderDragY) = self.rudderDrag(flowSpeedRudderSq, flowSpeedRudderNormX, flowSpeedRudderNormY)
-        forceX += h.rudderDragX
-        forceY += h.rudderDragY
         (h.rudderLiftX, h.rudderLiftY) = self.rudderLift(flowSpeedRudderSq, flowSpeedRudderNormX, flowSpeedRudderNormY)
-        forceX += h.rudderLiftX
-        forceY += h.rudderLiftY
 
         # TODO Hull forces
 
 
         # Torques
         h.waterDragTorque = self.waterDragTorque()
-        torque += h.waterDragTorque
-
         h.centerboardTorque = self.centerboardTorque(h.centerboardDragX + h.centerboardLiftX, h.centerboardDragY + h.centerboardLiftY, dirNormX, dirNormY)
-        torque += h.centerboardTorque
-
         h.rudderTorque = self.rudderTorque(h.rudderDragX + h.rudderLiftX, h.rudderDragY + h.rudderLiftY, dirNormX, dirNormY)
-        torque += h.rudderTorque
+
+        forceX = h.sailDragX + h.sailLiftX + h.centerboardDragX + h.centerboardLiftX + h.rudderDragX + h.rudderLiftX
+        forceY = h.sailDragY + h.sailLiftY + h.centerboardDragY + h.centerboardLiftY + h.rudderDragY + h.rudderLiftY
+        torque = h.waterDragTorque + h.centerboardTorque + h.rudderTorque
 
         (h.forceX, h.forceY, h.torque) = (forceX, forceY, torque)
         return (forceX, forceY, torque)
