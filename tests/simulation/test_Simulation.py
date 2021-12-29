@@ -15,10 +15,10 @@ class TestSimulation():
 
     def test_reset(self):
         self.s.reset()
-        assert len(self.s.frameList) == 0
+        assert len(self.s.boat.frameList) == 0
         assert self.s.frame == 0
 
     def test_run(self):
         self.s.run()
-        assert len(self.s.frameList) == self.s.lastFrame + 1
+        assert len(self.s.boat.frameList) == self.s.lastFrame + 1
         assert self.s.frame == self.s.lastFrame + 1
