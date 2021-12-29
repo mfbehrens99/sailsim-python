@@ -33,7 +33,7 @@ class Boat:
     temp_waterDragTorque = None
     temp_rudderTorque = None
     temp_centerboardTorque = rudderTorque = None
-    
+
     def __init__(self, posX=0, posY=0, direction=0, speedX=0, speedY=0, angSpeed=0):
         """
         Create a boat.
@@ -213,4 +213,4 @@ class Boat:
 
     def __repr__(self):
         heading = round(cartToArg(self.speedX, self.speedY) * 180 / pi, 2)
-        return "Boat @(%s|%s), v=%sm/s twds %s°" % (round(self.posX, 3), round(self.posY, 3), round(self.boatSpeed(), 2), heading)
+        return f"Boat @({round(self.posX, 3)}|{round(self.posY, 3)}|{heading}°), v={round(self.boatSpeed(), 2)}m/s"

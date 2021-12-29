@@ -32,7 +32,7 @@ class Wind:
         windfields = sum(isinstance(x, Windfield) for x in self.winds)
         fluctuationfields = sum(type(x) is Fluctuationfield for x in self.winds)
         squallfields = sum(type(x) is Squallfield for x in self.winds)
-        return "Wind made up of %s winds:\n\t%s Windfields\n\t%s Fluctuationfields\n\t%s Squallfields" % (len(self.winds), windfields, fluctuationfields, squallfields)
+        return f"Wind made up of {len(self.winds)} winds:\n\t{windfields} Windfields\n\t{fluctuationfields} Fluctuationfields\n\t{squallfields} Squallfields"
 
     def __len__(self):
         return len(self.winds)

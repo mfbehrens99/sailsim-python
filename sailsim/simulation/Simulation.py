@@ -32,7 +32,7 @@ class Simulation:
             while self.frame <= self.lastFrame:
                 self.step()
         else:
-            for i in range(steps):
+            for _ in range(steps):
                 self.step()
 
     def step(self):
@@ -79,8 +79,8 @@ class Simulation:
     def __repr__(self):
         """Return basic information about the simulation."""
         if self.lastFrame is None:
-            return "sailsim @frm%s(%ss), %sms\n%s\n----------" % (self.frame, self.getTime(), self.timestep * 1000, self.boat, self.wind)
-        return "sailsim @frm%s/%s(%ss,%s%%), %sms\n%s\n----------" % (self.frame, self.lastFrame, self.getTime(), str(round(self.frame * 100 / self.lastFrame, 1)).zfill(4), self.timestep * 1000, self.boat, self.wind)
+            return f"sailsim @frm{self.frame}({self.getTime()}s), {self.timestep * 1000}ms"
+        return f"sailsim @frm{self.frame}/{self.lastFrame}({self.getTime()}s), {self.timestep * 1000}ms"
 
     def __len__(self):
         """Return number of frames. Might be None."""
