@@ -22,6 +22,26 @@ Template
 
 --->
 
+## [Unreleased]
+
+### Added
+
+- Add .pyrclint
+- Add .vscode stuff
+
+### Changed
+
+- Moved [Framelist] from [Simulation] to [Boat]
+- Tonns of nicer python (like using with statements for opening files)
+
+
+### Removed
+
+- [[World]]
+- [[Boat]] Removed BoatDataHolder
+- [[FrameList]] Removed WindTable 
+
+
 ## [0.0.2] - 2021-12-29
 
 ### Added
@@ -64,7 +84,8 @@ Template
 
 
 <!--- Versions --->
-[Unreleased]: https://github.com/mfbehrens99/sailsim/compare/v0.0.1...HEAD
+[Unreleased]: https://github.com/mfbehrens99/sailsim/compare/v0.0.2...HEAD
+[0.1.0]: https://github.com/mfbehrens99/sailsim/compare/v0.0.2...v0.1.0
 [0.0.2]: https://github.com/mfbehrens99/sailsim/compare/v0.0.1...v0.0.2
 [0.0.1]: https://github.com/mfbehrens99/sailsim/releases/tag/v0.0.1
 
@@ -72,6 +93,7 @@ Template
 [Simulation]: https://github.com/mfbehrens99/sailsim/blob/main/sailsim/simulation/Simulation.py
 [World]: https://github.com/mfbehrens99/sailsim/blob/main/sailsim/world/World.py
 [Boat]:https://github.com/mfbehrens99/sailsim/blob/main/sailsim/boat/Boat.py
+[FrameList]:https://github.com/mfbehrens99/sailsim/blob/main/sailsim/boat/FrameList.py
 [Sailor]: https://github.com/mfbehrens99/sailsim/blob/main/sailsim/sailor/Sailor.py
 [Commands]: https://github.com/mfbehrens99/sailsim/blob/main/sailsim/sailor/Commands.py
 [Wind]: https://github.com/mfbehrens99/sailsim/blob/main/sailsim/wind/Wind.py
@@ -80,3 +102,4 @@ Template
 [boatInspector]: https://github.com/mfbehrens99/sailsim/blob/main/sailsim/gui/boatInspector.py
 [valueInspector]: https://github.com/mfbehrens99/sailsim/blob/main/sailsim/gui/valueInspector.py
 [utils]: https://github.com/mfbehrens99/sailsim/tree/main/sailsim/utils
+[tests]: https://github.com/mfbehrens99/sailsim/tree/main/tests
