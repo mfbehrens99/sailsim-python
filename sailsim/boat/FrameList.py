@@ -55,9 +55,8 @@ class FrameList():
         """Generate .csv file and save it to drive."""
         if not name.endswith(".csv"):
             name += ".csv"
-        file = open(name, "w")
-        file.write(self.getCSV())
-        file.close()
+        with open(name, "w", encoding="utf-8") as file:
+            file.write(self.getCSV())
 
     def __len__(self):
         """Return length of the frameList."""
