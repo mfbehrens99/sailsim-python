@@ -23,8 +23,8 @@ class FrameList():
 
     def getCoordinateList(self):
         out = []
-        for f in self.frames:
-            out.append((f.boatPosX, f.boatPosY))
+        for frame in self.frames:
+            out.append((frame.boatPosX, frame.boatPosY))
         return out
 
     def getCSV(self):
@@ -116,25 +116,24 @@ class Frame():
         self.boatMainSailAngle = boat.mainSailAngle
         self.boatRudderAngle = boat.rudderAngle
 
-        h = boat.dataHolder
-        (self.boatApparentWindX, self.boatApparentWindY) = (h.apparentWindX, h.apparentWindY)
-        self.boatApparentWindAngle = h.apparentWindAngle
-        self.boatLeewayAngle = h.leewayAngle
-        self.boatAngleOfAttack = h.angleOfAttack
+        (self.boatApparentWindX, self.boatApparentWindY) = (boat.temp_apparentWindX, boat.temp_apparentWindY)
+        self.boatApparentWindAngle = boat.temp_apparentWindAngle
+        self.boatLeewayAngle = boat.temp_leewayAngle
+        self.boatAngleOfAttack = boat.temp_angleOfAttack
 
-        (self.boatForceX, self.boatForceY) = (h.forceX, h.forceY)
-        (self.boatSailDragX, self.boatSailDragY) = (h.sailDragX, h.sailDragY)
-        (self.boatSailLiftX, self.boatSailLiftY) = (h.sailLiftX, h.sailLiftY)
-        (self.boatCenterboardDragX, self.boatCenterboardDragY) = (h.centerboardDragX, h.centerboardDragY)
-        (self.boatCenterboardLiftX, self.boatCenterboardLiftY) = (h.centerboardLiftX, h.centerboardLiftY)
+        (self.boatForceX, self.boatForceY) = (boat.temp_forceX, boat.temp_forceY)
+        (self.boatSailDragX, self.boatSailDragY) = (boat.temp_sailDragX, boat.temp_sailDragY)
+        (self.boatSailLiftX, self.boatSailLiftY) = (boat.temp_sailLiftX, boat.temp_sailLiftY)
+        (self.boatCenterboardDragX, self.boatCenterboardDragY) = (boat.temp_centerboardDragX, boat.temp_centerboardDragY)
+        (self.boatCenterboardLiftX, self.boatCenterboardLiftY) = (boat.temp_centerboardLiftX, boat.temp_centerboardLiftY)
 
-        (self.boatRudderDragX, self.boatRudderDragY) = (h.rudderDragX, h.rudderDragY)
-        (self.boatRudderLiftX, self.boatRudderLiftY) = (h.rudderLiftX, h.rudderLiftY)
+        (self.boatRudderDragX, self.boatRudderDragY) = (boat.temp_rudderDragX, boat.temp_rudderDragY)
+        (self.boatRudderLiftX, self.boatRudderLiftY) = (boat.temp_rudderLiftX, boat.temp_rudderLiftY)
 
-        self.boatTorque = h.torque
-        self.boatWaterDragTorque = h.waterDragTorque
-        self.boatCenterboardTorque = h.centerboardTorque
-        self.boatRudderTorque = h.rudderTorque
+        self.boatTorque = boat.temp_torque
+        self.boatWaterDragTorque = boat.temp_waterDragTorque
+        self.boatCenterboardTorque = boat.temp_centerboardTorque
+        self.boatRudderTorque = boat.temp_rudderTorque
 
     def collectWind(self, wind, x, y):
         """Collect and save all information about the wind."""

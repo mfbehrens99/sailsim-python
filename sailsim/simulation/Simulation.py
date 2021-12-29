@@ -43,7 +43,8 @@ class Simulation:
         # Calculate Forces on boat
         (boatX, boatY) = self.boat.getPos()                           # Fetch boat position
         (windX, windY) = self.wind.getWindCart(boatX, boatY, time)    # Get wind
-        (forceX, forceY, torque) = self.boat.resultingCauses(windX, windY)
+        self.boat.updateTemporaryData(windX, windY)
+        (forceX, forceY, torque) = self.boat.resultingCauses()
 
         # Save frame
         self.boat.frameList.grabFrame(self, self.boat)
