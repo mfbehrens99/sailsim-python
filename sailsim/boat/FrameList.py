@@ -69,7 +69,7 @@ class Frame():
     def __init__(self):
         self.frameNr = self.time = None
 
-        self.windTable = []
+        self.windX = self.windY = None
 
         self.boatPosX = self.boatPosY = None
         self.boatSpeedX = self.boatSpeedY = None
@@ -136,14 +136,8 @@ class Frame():
 
     def collectWind(self, wind, x, y):
         """Collect and save all information about the wind."""
-        self.wind = wind.getWindCart(x, y, self.time)
+        (self.windX, self.windY) = wind.getWindCart(x, y, self.time)
 
-    def getWindList(self):
-        windList = []
-        for wind in self.windTable:
-            windList.append(wind[0])
-            windList.append(wind[1])
-        return windList
 
     def getCSVLine(self):
         """Return string that contains all data about this frame."""
@@ -157,7 +151,7 @@ class Frame():
             self.boatCenterboardDragX, self.boatCenterboardDragY, self.boatCenterboardLiftX, self.boatCenterboardLiftY,
             self.boatRudderDragX, self.boatRudderDragY, self.boatRudderLiftX, self.boatRudderLiftY,
             self.boatTorque, self.boatWaterDragTorque, self.boatCenterboardTorque, self.boatRudderTorque,
+            self.windX, self.windY,
         ]
-        data.extend(self.getWindList())
         dataStr = [f'{x:.4f}'.rstrip('0').rstrip('.') for x in data] # FIXME very slow and inflexible
         return ",".join(dataStr)
