@@ -5,6 +5,8 @@ from math import pi, sqrt
 from PySide6.QtWidgets import QTreeWidget
 
 def toString(text):
+    if text is None:
+        return "None"
     return f'{text:.4f}'.rstrip('0').rstrip('.')
 
 class ValueInspectorWidget(QTreeWidget):

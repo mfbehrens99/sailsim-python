@@ -92,9 +92,9 @@ class MapViewWidget(QWidget):
         painter.setPen(Qt.NoPen)
         painter.setBrush(Qt.black)
         painter.drawPath(boatPainterPath())
-        if self.displayMainSail:
+        if self.displayMainSail and not self.boatMainSailAngle is None:
             painter.setPen(QPen(Qt.green, 0.1, Qt.SolidLine, Qt.RoundCap))
-            painter.drawLine(QPointF(0, 0), QPointF(sin(self.boatMainSailAngle), cos(self.boatMainSailAngle)) * 2)
+            painter.drawLine(QPointF(0, 0), QPointF(-sin(self.boatMainSailAngle), cos(self.boatMainSailAngle)) * 2)
         if self.displayRudder:
             painter.setPen(QPen(Qt.blue, 0.1, Qt.SolidLine, Qt.RoundCap))
             painter.drawLine(QPointF(0, 2.2), QPointF(sin(self.boatRudderAngle), cos(self.boatRudderAngle)) * 0.5 + QPointF(0, 2.2))
@@ -126,7 +126,7 @@ class MapViewWidget(QWidget):
         """Set boat to a position given."""
         self.boatPos = QPointF(posX, -posY)
         self.boatDir = direction / pi * 180
-        self.boatMainSailAngle = -mainSailAngle
+        self.boatMainSailAngle = mainSailAngle
         self.boatRudderAngle = rudderAngle
         self.update()
 

@@ -135,17 +135,18 @@ class Boat:
         (dirNormX, dirNormY) = (sin(self.direction), cos(self.direction))
 
         h.leewayAngle = self.calcLeewayAngle()
-        h.angleOfAttack = self.angleOfAttack(h.apparentWindAngle)
 
         (forceX, forceY, torque) = (0, 0, 0)
 
         # Sail forces
-        (h.sailDragX, h.sailDragY) = self.sailDrag(apparentWindSpeedSq, apparentWindNormX, apparentWindNormY)
-        forceX += h.sailDragX
-        forceY += h.sailDragY
-        (h.sailLiftX, h.sailLiftY) = self.sailLift(apparentWindSpeedSq, apparentWindNormX, apparentWindNormY)
-        forceX += h.sailLiftX
-        forceY += h.sailLiftY
+        if not self.mainSailAngle is None:
+            h.angleOfAttack = self.angleOfAttack(h.apparentWindAngle)
+            (h.sailDragX, h.sailDragY) = self.sailDrag(apparentWindSpeedSq, apparentWindNormX, apparentWindNormY)
+            forceX += h.sailDragX
+            forceY += h.sailDragY
+            (h.sailLiftX, h.sailLiftY) = self.sailLift(apparentWindSpeedSq, apparentWindNormX, apparentWindNormY)
+            forceX += h.sailLiftX
+            forceY += h.sailLiftY
 
         # Centerboard forces
         (h.centerboardDragX, h.centerboardDragY) = self.centerboardDrag(flowSpeedCenterboardSq, flowSpeedCenterboardNormX, flowSpeedCenterboardNormY)
@@ -173,7 +174,7 @@ class Boat:
         h.centerboardTorque = self.centerboardTorque(h.centerboardDragX + h.centerboardLiftX, h.centerboardDragY + h.centerboardLiftY, dirNormX, dirNormY)
         torque += h.centerboardTorque
 
-        h.rudderTorque = self.rudderTorque(h.rudderDragX + h.rudderLiftX, h.rudderDragY + h.rudderLiftY, dirNormX, dirNormY)
+        h.rudderTorque = self.rudderTorque(h.rudderDragX + h.rudderLiftX, h.rudderDragY + h.rudderLiftY, dirNormX, dirNormY) * 4
         torque += h.rudderTorque
 
         (h.forceX, h.forceY, h.torque) = (forceX, forceY, torque)

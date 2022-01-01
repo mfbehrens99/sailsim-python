@@ -64,7 +64,7 @@ class BoatInspectorWidget(QWidget):
             painter.setBrush(Qt.gray)
             painter.drawPath(boatPainterPath())
 
-            if self.displayMainSail:
+            if self.displayMainSail and not self.boatMainSailAngle is None:
                 painter.setPen(QPen(Qt.black, 0.1, Qt.SolidLine, Qt.RoundCap))
                 painter.drawLine(QPoint(0, 0), self.boatMainSailAngle)
             if self.displayRudder:
@@ -99,7 +99,7 @@ class BoatInspectorWidget(QWidget):
         """Set the boat to a position saved in a frame given."""
         self.boatDirection = frame.boatDirection / pi * 180
         self.boatSpeed = QPointF(frame.boatSpeedX, -frame.boatSpeedY)
-        self.boatMainSailAngle = QPointF(-sin(frame.boatMainSailAngle), cos(frame.boatMainSailAngle)) * 2
+        self.boatMainSailAngle = QPointF(-sin(frame.boatMainSailAngle), cos(frame.boatMainSailAngle)) * 2 if not frame.boatMainSailAngle is None else None
         self.boatRudderAngle = QPointF(0, 2.2) + QPointF(sin(frame.boatRudderAngle), cos(frame.boatRudderAngle)) * 0.5
 
         self.boatForce = QPointF(frame.boatForceX, -frame.boatForceY)
