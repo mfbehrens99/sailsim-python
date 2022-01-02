@@ -13,12 +13,12 @@ def actionViewShowWaypoints(self, state):
 
 
 def actionViewShowMainSailMapView(self, state):
-    self.ui.mapView.displayMainSail = state
+    self.ui.mapView.boat.displayMainSail = state
     self.ui.mapView.update()
 
 
 def actionViewShowRudderMapView(self, state):
-    self.ui.mapView.displayRudder = state
+    self.ui.mapView.boat.displayRudder = state
     self.ui.mapView.update()
 
 

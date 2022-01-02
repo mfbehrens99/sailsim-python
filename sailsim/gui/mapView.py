@@ -23,15 +23,60 @@ def pointsToPath(points, jump=1):
         path.lineTo(QPointF(point[0], -point[1]))
     return path
 
+class GUIBoat():
+    position = QPointF(0, 0)
+    direction = 0
+    mainSailAngle = 0
+    rudderAngle = 0
 
-def boatPainterPath():
-    """Return the QPainterPath for drawing a boat."""
-    boat = QPainterPath()
-    boat.moveTo(0, -2)
-    boat.cubicTo(QPointF(1, -.5), QPointF(1, .5), QPointF(.8, 2.2))
-    boat.lineTo(-.8, 2.2)
-    boat.cubicTo(QPointF(-1, .5), QPointF(-1, -.5), QPointF(0, -2))
-    return boat
+    path = None
+
+    displayMainSail = True
+    displayRudder = True
+    displayPath = True
+
+    def __init__(self, frameList):
+        self.frameList = frameList
+        self.updateBoatPath()
+
+    def paintBoat(self, painter, scale):
+        if self.displayPath:
+            painter.setPen(QPen(Qt.darkGray, 4 / scale, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
+            painter.drawPath(self.path)
+
+        painter.translate(self.position)
+        painter.rotate(self.direction)
+
+        GUIBoat.drawBoatShape(painter, Qt.black)
+        if self.displayMainSail:
+            painter.setPen(QPen(Qt.green, 0.1, Qt.SolidLine, Qt.RoundCap))
+            painter.drawLine(QPointF(0, 0), QPointF(-sin(self.mainSailAngle), cos(self.mainSailAngle)) * 2)
+        if self.displayRudder:
+            painter.setPen(QPen(Qt.blue, 0.1, Qt.SolidLine, Qt.RoundCap))
+            painter.drawLine(QPointF(0, 2.2), QPointF(sin(self.rudderAngle), cos(self.rudderAngle)) * 0.5 + QPointF(0, 2.2))
+
+    def set(self, frame):
+        self.position = QPointF(frame.boatPosX, -frame.boatPosY)
+        self.direction = frame.boatDirection / pi * 180
+        self.mainSailAngle = frame.boatMainSailAngle
+        self.rudderAngle = frame.boatRudderAngle
+
+    def updateBoatPath(self, jump=1):
+        """Convert a pointlist into a QPainterPath."""
+        points = self.frameList.getCoordinateList()
+        self.path = pointsToPath(points, jump)
+
+    @staticmethod
+    def drawBoatShape(painter, color):
+        """Return the QPainterPath for drawing a boat."""
+        painter.setPen(Qt.NoPen)
+        painter.setBrush(color)
+        boat = QPainterPath()
+        boat.moveTo(0, -2)
+        boat.cubicTo(QPointF(1, -.5), QPointF(1, .5), QPointF(.8, 2.2))
+        boat.lineTo(-.8, 2.2)
+        boat.cubicTo(QPointF(-1, .5), QPointF(-1, -.5), QPointF(0, -2))
+        painter.drawPath(boat)
 
 
 class MapViewWidget(QWidget):
@@ -48,18 +93,12 @@ class MapViewWidget(QWidget):
     waypoints = QPainterPath()
     path = QPainterPath()
 
-    # Boat properties
-    boatPos = QPointF(0, 0)
-    boatDir = 0
-    boatMainSailAngle = 0
-    boatRudderAngle = 0
+    boat = None
 
     # Display proerties
     displayWaypointLink = True
     displayWaypoints = True
     displayPath = True
-    displayMainSail = True
-    displayRudder = True
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -86,23 +125,11 @@ class MapViewWidget(QWidget):
             painter.setPen(QPen(Qt.darkGray, 4 / self.scale, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
             painter.drawPath(self.path)
 
-        painter.translate(self.boatPos)
-        painter.rotate(self.boatDir)
+        self.boat.paintBoat(painter, self.scale)
 
-        painter.setPen(Qt.NoPen)
-        painter.setBrush(Qt.black)
-        painter.drawPath(boatPainterPath())
-        if self.displayMainSail:
-            painter.setPen(QPen(Qt.green, 0.1, Qt.SolidLine, Qt.RoundCap))
-            painter.drawLine(QPointF(0, 0), QPointF(sin(self.boatMainSailAngle), cos(self.boatMainSailAngle)) * 2)
-        if self.displayRudder:
-            painter.setPen(QPen(Qt.blue, 0.1, Qt.SolidLine, Qt.RoundCap))
-            painter.drawLine(QPointF(0, 2.2), QPointF(sin(self.boatRudderAngle), cos(self.boatRudderAngle)) * 0.5 + QPointF(0, 2.2))
-
-    def setPath(self, path):
-        """Change the path and updates the painter."""
-        self.path = path
-        self.update()
+    def setBoat(self, boat):
+        """Register a boat for the mapView."""
+        self.boat = GUIBoat(boat.frameList)
 
     def setWaypoints(self, commands):
         """Display the waypoints in a commandList on mapView."""
@@ -120,14 +147,7 @@ class MapViewWidget(QWidget):
 
     def viewFrame(self, frame):
         """Set the boat to a position saved in a frame given."""
-        self.setBoat(frame.boatPosX, frame.boatPosY, frame.boatDirection, frame.boatMainSailAngle, frame.boatRudderAngle)
-
-    def setBoat(self, posX, posY, direction, mainSailAngle, rudderAngle):
-        """Set boat to a position given."""
-        self.boatPos = QPointF(posX, -posY)
-        self.boatDir = direction / pi * 180
-        self.boatMainSailAngle = -mainSailAngle
-        self.boatRudderAngle = rudderAngle
+        self.boat.set(frame)
         self.update()
 
     def resizeEvent(self, event):
@@ -152,7 +172,7 @@ class MapViewWidget(QWidget):
         elif event.key() == Qt.Key_Up:
             self.scroll(0, +ScrollStep)
         else:
-            super(MapViewWidget, self).keyPressEvent(event)
+            super().keyPressEvent(event)
 
     def wheelEvent(self, event):
         """Zoom in and out when mouse wheel is moved."""

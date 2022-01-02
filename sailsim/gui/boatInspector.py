@@ -6,7 +6,7 @@ from PySide6.QtCore import QPoint, QPointF, Qt
 from PySide6.QtGui import QPainter, QPen
 from PySide6.QtWidgets import QApplication, QWidget
 
-from sailsim.gui.mapView import boatPainterPath
+from sailsim.gui.mapView import GUIBoat
 
 
 class BoatInspectorWidget(QWidget):
@@ -62,7 +62,7 @@ class BoatInspectorWidget(QWidget):
             painter.scale(scaleBoat, scaleBoat)
             painter.setPen(Qt.NoPen)
             painter.setBrush(Qt.gray)
-            painter.drawPath(boatPainterPath())
+            GUIBoat.drawBoatShape(painter, Qt.gray)
 
             if self.displayMainSail:
                 painter.setPen(QPen(Qt.black, 0.1, Qt.SolidLine, Qt.RoundCap))

@@ -20,16 +20,16 @@ class SailsimGUI(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-        # Set up timer for play button
+        # Playback and timeSlider
         self.timer = QTimer(self)
         self.timer.setInterval(simulation.timestep * 1000)
         self.timer.timeout.connect(self.playStep)
-
         self.ui.timeSlider.setMaximum(len(simulation))
         self.ui.timeSlider.setValue(self.frame)
+
+        self.ui.mapView.setBoat(simulation.boat)
         if self.simulation.boat.sailor is not None:
             self.ui.mapView.setWaypoints(self.simulation.boat.sailor.commandList)
-        self.updatePath(5)
         self.updateFrame(0)
         self.updateViewStates()
 
@@ -46,12 +46,6 @@ class SailsimGUI(QMainWindow):
             self.ui.mapView.viewFrame(frame)
             self.ui.boatInspector.viewFrame(frame)
             self.ui.valueInspector.viewFrame(frame)
-
-    def updatePath(self, pathStep):
-        """Update the path displayed on the MapViewWidget with the current data from the simulation."""
-        coordinates = self.simulation.boat.frameList.getCoordinateList()
-        if len(coordinates) > 0:
-            self.ui.mapView.setPath(pointsToPath(coordinates, pathStep))
 
     def incFrame(self):
         """Move to the next frame if it is in the range of the slider."""
