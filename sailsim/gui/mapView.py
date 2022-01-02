@@ -9,9 +9,9 @@ from PySide6.QtWidgets import QApplication, QWidget
 from sailsim.sailor.Commands import Waypoint
 
 # Map constants
-ZoomInFactor = 1.25
-ZoomOutFactor = 1 / ZoomInFactor
-ScrollStep = 10
+ZOOMINFACTOR = 1.25
+ZOOMOUTFACTOR = 1 / ZOOMINFACTOR
+SCROLLSTEP = 10
 
 
 def pointsToPath(points, jump=1):
@@ -140,17 +140,17 @@ class MapViewWidget(QWidget):
         """Move mapView according to the button pressed."""
         # TODO is this working?
         if event.key() == Qt.Key_Plus:
-            self.zoom(ZoomInFactor)
+            self.zoom(ZOOMINFACTOR)
         elif event.key() == Qt.Key_Minus:
-            self.zoom(ZoomOutFactor)
+            self.zoom(ZOOMOUTFACTOR)
         elif event.key() == Qt.Key_Left:
-            self.scroll(+ScrollStep, 0)
+            self.scroll(+SCROLLSTEP, 0)
         elif event.key() == Qt.Key_Right:
-            self.scroll(-ScrollStep, 0)
+            self.scroll(-SCROLLSTEP, 0)
         elif event.key() == Qt.Key_Down:
-            self.scroll(0, -ScrollStep)
+            self.scroll(0, -SCROLLSTEP)
         elif event.key() == Qt.Key_Up:
-            self.scroll(0, +ScrollStep)
+            self.scroll(0, +SCROLLSTEP)
         else:
             super(MapViewWidget, self).keyPressEvent(event)
 
@@ -158,7 +158,7 @@ class MapViewWidget(QWidget):
         """Zoom in and out when mouse wheel is moved."""
         numDegrees = event.angleDelta().y() / 8
         numSteps = numDegrees / 32
-        self.zoom(pow(ZoomInFactor, numSteps))
+        self.zoom(pow(ZOOMINFACTOR, numSteps))
 
     def mousePressEvent(self, event):
         if event.buttons() == Qt.LeftButton:

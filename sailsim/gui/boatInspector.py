@@ -44,9 +44,8 @@ class BoatInspectorWidget(QWidget):
 
         self.boatDirection = 0
 
-    def paintEvent(self, event):
-        r = self.radius
-        scaleBoat, scaleSpeed, scaleForce = self.scaleBoat * r, self.scaleSpeed * r, self.scaleForce * r
+    def paintEvent(self, _event):
+        scaleBoat, scaleSpeed, scaleForce = self.scaleBoat * self.radius, self.scaleSpeed * self.radius, self.scaleForce * self.radius
 
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing, True)

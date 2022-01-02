@@ -10,12 +10,7 @@ from sailsim.simulation.Simulation import Simulation
 from sailsim.boat.Boat import Boat
 from sailsim.sailor.Sailor import Sailor
 from sailsim.sailor.Commands import commandListExample, Waypoint
-
-# Import Winds
-from sailsim.wind.Wind import Wind
-from sailsim.wind.Windfield import Windfield
 from sailsim.wind.Fluctuationfield import Fluctuationfield
-from sailsim.wind.Squallfield import Squallfield
 
 # Define Wind
 wind = Fluctuationfield(0, 10, 1)
