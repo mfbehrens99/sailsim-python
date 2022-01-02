@@ -18,10 +18,7 @@ from sailsim.wind.Fluctuationfield import Fluctuationfield
 from sailsim.wind.Squallfield import Squallfield
 
 # Define Wind
-wf = Windfield(0, 10)
-flctf = Fluctuationfield(1)
-sqf = Squallfield(0, 0, 100, 1, 0) # TODO has to be enabled later
-wind = Wind([wf, flctf, sqf])
+wind = Fluctuationfield(0, 10, 1)
 
 # Create and configure boat and sailor
 sailor = Sailor(commandListExample)
@@ -33,7 +30,7 @@ b.sailor = sailor
 sailor.importBoat(b)
 
 # Create simulation
-s = Simulation(b, wind, 0.01, 1000)
+s = Simulation(b, wind, 0.01, 10000)
 
 # Run simulation
 try:
