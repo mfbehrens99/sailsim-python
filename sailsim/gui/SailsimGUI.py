@@ -96,8 +96,8 @@ class SailsimGUI(QMainWindow):
         # Import states from mapView
         self.ui.actionShowWaypointLink.setChecked(self.ui.mapView.displayWaypointLink)
         self.ui.actionShowWaypoints.setChecked(self.ui.mapView.displayWaypoints)
-        self.ui.actionShowMainSailMapView.setChecked(self.ui.mapView.displayMainSail)
-        self.ui.actionShowRudderMapView.setChecked(self.ui.mapView.displayRudder)
+        self.ui.actionShowMainSailMapView.setChecked(self.ui.mapView.boat.displayMainSail)
+        self.ui.actionShowRudderMapView.setChecked(self.ui.mapView.boat.displayRudder)
 
         # Import states from boatInspector
         self.ui.actionShowBoat.setChecked(self.ui.boatInspector.displayBoat)

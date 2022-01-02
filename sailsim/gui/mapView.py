@@ -42,7 +42,7 @@ class MapViewWidget(QWidget):
 
     offset = QPointF()
     scale = 4
-    lastDragPos = QPoint()
+    lastDragPos = QPointF()
 
     waypointsLink = QPainterPath()
     waypoints = QPainterPath()
@@ -62,13 +62,13 @@ class MapViewWidget(QWidget):
     displayRudder = True
 
     def __init__(self, parent=None):
-        super(MapViewWidget, self).__init__(parent)
+        super().__init__(parent)
 
         self.setWindowTitle("MapViewWidget")
         self.setCursor(Qt.CrossCursor)
         self.resize(550, 400)
 
-    def paintEvent(self, event):
+    def paintEvent(self, _event):
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing, True)
 
@@ -140,9 +140,9 @@ class MapViewWidget(QWidget):
         """Move mapView according to the button pressed."""
         # TODO is this working?
         if event.key() == Qt.Key_Plus:
-            self.zoom(ZoomInFactor)
+            self.zoomCenter(ZoomInFactor)
         elif event.key() == Qt.Key_Minus:
-            self.zoom(ZoomOutFactor)
+            self.zoomCenter(ZoomOutFactor)
         elif event.key() == Qt.Key_Left:
             self.scroll(+ScrollStep, 0)
         elif event.key() == Qt.Key_Right:
@@ -173,12 +173,19 @@ class MapViewWidget(QWidget):
     def zoom(self, zoomFactor):
         """Zoom the mapView and keep mouse in the same spot."""
         self.scale *= zoomFactor
-        self.offset += (self.mapFromGlobal(QCursor.pos()) - self.offset) * (1 - zoomFactor)
+        self.offset *= zoomFactor
+        self.offset += QPointF(self.mapFromGlobal(QCursor.pos())) * (1 - zoomFactor)
+        self.update()
+
+    def zoomCenter(self, zoomFactor):
+        self.scale *= zoomFactor
+        self.offset *= zoomFactor
+        self.offset += QPointF(self.windowWidth/2, self.windowHeight/2) * (1 - zoomFactor)
         self.update()
 
     def scroll(self, deltaX, deltaY):
         """Translate mapView."""
-        self.offset += QPoint(deltaX, deltaY)
+        self.offset += QPointF(deltaX, deltaY)
         self.update()
 
 
