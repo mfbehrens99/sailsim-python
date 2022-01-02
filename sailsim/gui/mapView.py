@@ -40,7 +40,7 @@ class MapViewWidget(QWidget):
     windowWidth = 0
     windowHeight = 0
 
-    offset = QPoint()
+    offset = QPointF()
     scale = 4
     lastDragPos = QPoint()
 
@@ -162,12 +162,12 @@ class MapViewWidget(QWidget):
 
     def mousePressEvent(self, event):
         if event.buttons() == Qt.LeftButton:
-            self.lastDragPos = QPoint(event.pos())
+            self.lastDragPos = event.position()
 
     def mouseMoveEvent(self, event):
         if event.buttons() & Qt.LeftButton:
-            self.offset += event.pos() - self.lastDragPos
-            self.lastDragPos = QPoint(event.pos())
+            self.offset += event.position() - self.lastDragPos
+            self.lastDragPos = event.position()
             self.update()
 
     def zoom(self, zoomFactor):
@@ -189,5 +189,5 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
     widget = MapViewWidget()
     widget.show()
-    r = app.exec_()
+    r = app.exec()
     sys.exit(r)
