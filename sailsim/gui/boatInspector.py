@@ -21,6 +21,8 @@ class BoatInspectorWidget(QWidget):
     boatMainSailAngle = QPointF(0, 0)
     boatRudderAngle = QPointF(0, 0)
 
+    boat = None
+
     boatForceSailDrag = QPointF(0, 0)
     boatForceSailLift = QPointF(0, 0)
     boatForceCenterboardDrag = QPointF(0, 0)
@@ -52,48 +54,14 @@ class BoatInspectorWidget(QWidget):
         painter.setRenderHint(QPainter.Antialiasing, True)
 
         painter.translate(self.offset)
-        painter.rotate(self.boatDirection)
 
         # (temporary) circle around boat
         painter.setPen(Qt.lightGray)
         painter.drawEllipse(QPoint(0, 0), self.radius, self.radius)
 
-        if self.displayBoat:
-            painter.scale(scaleBoat, scaleBoat)
-            painter.setPen(Qt.NoPen)
-            painter.setBrush(Qt.gray)
-            GUIBoat.drawBoatShape(painter, Qt.gray)
+        painter.scale(scaleBoat, scaleBoat)
+        self.boat.paintBoatInspector(painter, self.radius)
 
-            if self.displayMainSail:
-                painter.setPen(QPen(Qt.black, 0.1, Qt.SolidLine, Qt.RoundCap))
-                painter.drawLine(QPoint(0, 0), self.boatMainSailAngle)
-            if self.displayRudder:
-                painter.setPen(QPen(Qt.black, 0.1, Qt.SolidLine, Qt.RoundCap))
-                painter.drawLine(QPointF(0, 2.2), self.boatRudderAngle)
-
-            painter.scale(1 / scaleBoat, 1 / scaleBoat)
-
-        if self.displayBoatDirection:
-            painter.setPen(Qt.green)
-            painter.drawLine(QPoint(0, 0), QPoint(0, -scaleBoat * 4))
-
-        # Draw Vectors
-        painter.resetTransform()
-        painter.translate(self.offset)
-        if self.displaySpeed:
-            painter.setPen(Qt.blue)
-            painter.drawLine(QPoint(0, 0), self.boatSpeed * scaleSpeed)
-
-        if self.displayForces:
-            painter.setPen(Qt.darkRed)
-            painter.drawLine(QPoint(0, 0), self.boatForce * scaleForce)
-            painter.setPen(Qt.red)
-            painter.drawLine(QPoint(0, 0), self.boatForceSailDrag * scaleForce)
-            painter.drawLine(QPoint(0, 0), self.boatForceSailLift * scaleForce)
-            painter.drawLine(QPoint(0, 0), self.boatForceCenterboardDrag * scaleForce)
-            painter.drawLine(QPoint(0, 0), self.boatForceCenterboardLift * scaleForce)
-            painter.drawLine(self.boatRudderPosition, self.boatRudderPosition+self.boatForceRudderDrag * scaleForce*4)
-            painter.drawLine(self.boatRudderPosition, self.boatRudderPosition+self.boatForceRudderLift * scaleForce*4)
 
     def viewFrame(self, frame):
         """Set the boat to a position saved in a frame given."""

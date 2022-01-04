@@ -29,37 +29,98 @@ class GUIBoat():
     mainSailAngle = 0
     rudderAngle = 0
 
+    boatSpeed = QPointF(0, 0)
+    boatForce = QPointF(0, 0)
+
+    boatForceSailDrag = QPointF(0, 0)
+    boatForceSailLift = QPointF(0, 0)
+    boatForceCenterboardDrag = QPointF(0, 0)
+    boatForceCenterboardLift = QPointF(0, 0)
+    boatForceRudderDrag = QPointF(0, 0)
+    boatForceRudderLift = QPointF(0, 0)
+    boatRudderPosition = QPointF(0, 0)
+
     path = None
 
     displayMainSail = True
     displayRudder = True
     displayPath = True
+    displayForces = True
 
-    def __init__(self, frameList):
-        self.frameList = frameList
+    def __init__(self, boat):
+        self.frameList = boat.frameList
         self.updateBoatPath()
 
-    def paintBoat(self, painter, scale):
-        if self.displayPath:
-            painter.setPen(QPen(Qt.darkGray, 4 / scale, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
-            painter.drawPath(self.path)
+    def paintMapView(self, painter, scale):
+        self.paintPath(painter, scale)
 
         painter.translate(self.position)
         painter.rotate(self.direction)
 
-        GUIBoat.drawBoatShape(painter, Qt.black)
+        self.paintBoat(painter, Qt.black)
+
+    def paintBoatInspector(self, painter, radius):
+        painter.rotate(self.direction)
+        self.paintBoat(painter, Qt.black)
+        painter.rotate(-self.direction)
+
+        self.paintVectors(painter)
+
+    def paintBoat(self, painter, color):
+        GUIBoat.drawBoatShape(painter, color)
         if self.displayMainSail:
             painter.setPen(QPen(Qt.green, 0.1, Qt.SolidLine, Qt.RoundCap))
-            painter.drawLine(QPointF(0, 0), QPointF(-sin(self.mainSailAngle), cos(self.mainSailAngle)) * 2)
+            painter.drawLine(QPointF(0, 0), self.mainSail)
         if self.displayRudder:
             painter.setPen(QPen(Qt.blue, 0.1, Qt.SolidLine, Qt.RoundCap))
-            painter.drawLine(QPointF(0, 2.2), QPointF(sin(self.rudderAngle), cos(self.rudderAngle)) * 0.5 + QPointF(0, 2.2))
+            rudderPoint = QPointF(0, 2.2)
+            painter.drawLine(rudderPoint, rudderPoint + self.rudder)
+
+    def paintPath(self, painter, scale):
+        if self.displayPath:
+            painter.setPen(QPen(Qt.darkGray, 4 / scale, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
+            painter.drawPath(self.path)
+
+    def paintVectors(self, painter):
+        scaleSpeed = 8
+        scaleForce = 1 / 2048
+        painter.scale(1/4, 1/4)
+
+        # Display Direction and Speed
+        painter.setPen(Qt.green)
+        painter.drawLine(QPoint(0, 0), self.directionVector * 16)
+        painter.setPen(Qt.blue)
+        painter.drawLine(QPoint(0, 0), self.boatSpeed * scaleSpeed)
+
+        if self.displayForces:
+            painter.setPen(Qt.darkRed)
+            painter.drawLine(QPoint(0, 0), self.boatForce * scaleForce)
+            painter.setPen(Qt.red)
+            painter.drawLine(QPoint(0, 0), self.boatForceSailDrag * scaleForce)
+            painter.drawLine(QPoint(0, 0), self.boatForceSailLift * scaleForce)
+            painter.drawLine(QPoint(0, 0), self.boatForceCenterboardDrag * scaleForce)
+            painter.drawLine(QPoint(0, 0), self.boatForceCenterboardLift * scaleForce)
+            painter.drawLine(self.boatRudderPosition, self.boatRudderPosition+self.boatForceRudderDrag * scaleForce*4)
+            painter.drawLine(self.boatRudderPosition, self.boatRudderPosition+self.boatForceRudderLift * scaleForce*4)
+        painter.scale(4, 4)
 
     def set(self, frame):
         self.position = QPointF(frame.boatPosX, -frame.boatPosY)
         self.direction = frame.boatDirection / pi * 180
-        self.mainSailAngle = frame.boatMainSailAngle
-        self.rudderAngle = frame.boatRudderAngle
+        self.directionVector = -QPointF(-sin(frame.boatDirection), cos(frame.boatDirection))
+        self.mainSail = QPointF(-sin(frame.boatMainSailAngle), cos(frame.boatMainSailAngle)) * 2
+        self.rudder = QPointF(sin(frame.boatRudderAngle), cos(frame.boatRudderAngle)) * 0.5
+
+        self.boatSpeed = QPointF(frame.boatSpeedX, -frame.boatSpeedY)
+        self.boatForce = QPointF(frame.boatForceX, -frame.boatForceY)
+
+        self.boatForceSailDrag = QPointF(frame.boatSailDragX, -frame.boatSailDragY)
+        self.boatForceSailLift = QPointF(frame.boatSailLiftX, -frame.boatSailLiftY)
+        self.boatForceCenterboardDrag = QPointF(frame.boatCenterboardDragX, -frame.boatCenterboardDragY)
+        self.boatForceCenterboardLift = QPointF(frame.boatCenterboardLiftX, -frame.boatCenterboardLiftY)
+        self.boatForceRudderDrag = QPointF(frame.boatRudderDragX, -frame.boatRudderDragY)
+        self.boatForceRudderLift = QPointF(frame.boatRudderLiftX, -frame.boatRudderLiftY)
+        self.boatRudderPosition = QPointF(-sin(frame.boatDirection)*2.2, cos(frame.boatDirection)*2.2)
 
     def updateBoatPath(self, jump=1):
         """Convert a pointlist into a QPainterPath."""
@@ -125,11 +186,7 @@ class MapViewWidget(QWidget):
             painter.setPen(QPen(Qt.darkGray, 4 / self.scale, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
             painter.drawPath(self.path)
 
-        self.boat.paintBoat(painter, self.scale)
-
-    def setBoat(self, boat):
-        """Register a boat for the mapView."""
-        self.boat = GUIBoat(boat.frameList)
+        self.boat.paintMapView(painter, self.scale)
 
     def setWaypoints(self, commands):
         """Display the waypoints in a commandList on mapView."""

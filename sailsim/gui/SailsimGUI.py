@@ -4,7 +4,7 @@ from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QMainWindow
 from sailsim.gui.qtmain import Ui_MainWindow
 
-from sailsim.gui.mapView import pointsToPath
+from sailsim.gui.mapView import GUIBoat
 
 
 class SailsimGUI(QMainWindow):
@@ -27,7 +27,9 @@ class SailsimGUI(QMainWindow):
         self.ui.timeSlider.setMaximum(len(simulation))
         self.ui.timeSlider.setValue(self.frame)
 
-        self.ui.mapView.setBoat(simulation.boat)
+        boat = GUIBoat(simulation.boat)
+        self.ui.mapView.boat = boat
+        self.ui.boatInspector.boat = boat
         if self.simulation.boat.sailor is not None:
             self.ui.mapView.setWaypoints(self.simulation.boat.sailor.commandList)
         self.updateFrame(0)
