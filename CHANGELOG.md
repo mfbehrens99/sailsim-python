@@ -22,6 +22,12 @@ Template
 
 --->
 
+## [Unreleased]
+
+### Changed
+
+- Upgrade python project to new standart
+
 ## [0.0.2] - 2021-12-29
 
 ### Added
