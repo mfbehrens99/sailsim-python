@@ -35,8 +35,8 @@ class Fluctuationfield(Windfield):
 
     def getWindCart(self, x, y, t):
         """Return cartesian components of the windfield at the position (x,y) as a tuple."""
-        windX = self.noiseX.noise3d(x * self.scale, y * self.scale, t * self.speed) * self.amplitude + self.speedX
-        windY = self.noiseY.noise3d(x * self.scale, y * self.scale, t * self.speed) * self.amplitude + self.speedY
+        windX = self.noiseX.noise3(x * self.scale, y * self.scale, t * self.speed) * self.amplitude + self.speedX
+        windY = self.noiseY.noise3(x * self.scale, y * self.scale, t * self.speed) * self.amplitude + self.speedY
         return (windX, windY)
 
     def setScale(self, scale):
