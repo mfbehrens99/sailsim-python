@@ -7,3 +7,13 @@ addopts = "-ra -q --cov=sailsim"
 testpaths = [
     "tests",
 ]
+
+[tool.pylint.'MASTER']
+max-line-length = 150
+
+disable = "no-name-in-module"
+
+class-naming-style = "PascalCase"
+function-naming-style = "camelCase"
+method-naming-style = "camelCase"
+variable-naming-style = "camelCase"
