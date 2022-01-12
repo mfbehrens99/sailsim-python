@@ -7,9 +7,19 @@ from PySide6.QtWidgets import QApplication, QGraphicsRectItem, QGraphicsView, QG
 from sailsim.gui.qgraphicsitems import GUIBoat, GUIPath
 
 # Map constants
-ZoomInFactor = 1.25
-ZoomOutFactor = 1 / ZoomInFactor
-ScrollStep = 1
+ZOOMINFACTOR = 1.25
+ZOOMOUTFACTOR = 1 / ZOOMINFACTOR
+SCROLLSTEP = 10
+
+
+def pointsToPath(points, jump=1):
+    """Convert a pointlist into a QPainterPath."""
+    path = QPainterPath()
+    path.moveTo(QPointF(points[0][0], -points[0][1]))
+    for i in range(0, len(points), jump)[1:]:
+        point = points[i]
+        path.lineTo(QPointF(point[0], -point[1]))
+    return path
 
 
 class MapViewScene(QGraphicsScene):
@@ -69,18 +79,17 @@ class MapViewView(QGraphicsView):
         """Move mapView according to the button pressed."""
         # TODO translation is not working
         if event.key() == Qt.Key_Plus:
-            self.scale(ZoomInFactor, ZoomInFactor)
+            self.zoom(ZOOMINFACTOR)
         elif event.key() == Qt.Key_Minus:
-            self.scale(ZoomOutFactor, ZoomOutFactor)
+            self.zoom(ZOOMOUTFACTOR)
         elif event.key() == Qt.Key_Left:
-            self.translate(ScrollStep, 0)
+            self.scroll(+SCROLLSTEP, 0)
         elif event.key() == Qt.Key_Right:
-            self.translate(-ScrollStep, 0)
+            self.scroll(-SCROLLSTEP, 0)
         elif event.key() == Qt.Key_Down:
-            self.translate(0, -ScrollStep)
-            self.update()
+            self.scroll(0, -SCROLLSTEP)
         elif event.key() == Qt.Key_Up:
-            self.translate(0, ScrollStep)
+            self.scroll(0, +SCROLLSTEP)
         else:
             super().keyPressEvent(event)
 
@@ -88,7 +97,7 @@ class MapViewView(QGraphicsView):
         """Zoom in and out when mouse wheel is moved."""
         numDegrees = event.angleDelta().y() / 8
         numSteps = numDegrees / 32
-        self.zoom(pow(ZoomInFactor, numSteps))
+        self.zoom(pow(ZOOMINFACTOR, numSteps))
 
     def zoom(self, zoomFactor):
         """Zoom the mapView and keep mouse in the same spot."""
