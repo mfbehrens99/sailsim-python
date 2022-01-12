@@ -26,13 +26,42 @@
       <property name="spacing">
        <number>0</number>
       </property>
+      <property name="sizeConstraint">
+       <enum>QLayout::SetNoConstraint</enum>
+      </property>
       <item>
-       <widget class="MapViewWidget" name="mapView" native="true"/>
+       <widget class="MapViewView" name="mapView">
+        <property name="verticalScrollBarPolicy">
+         <enum>Qt::ScrollBarAlwaysOff</enum>
+        </property>
+        <property name="horizontalScrollBarPolicy">
+         <enum>Qt::ScrollBarAlwaysOff</enum>
+        </property>
+        <property name="renderHints">
+         <set>QPainter::Antialiasing</set>
+        </property>
+        <property name="dragMode">
+         <enum>QGraphicsView::ScrollHandDrag</enum>
+        </property>
+        <property name="transformationAnchor">
+         <enum>QGraphicsView::AnchorUnderMouse</enum>
+        </property>
+       </widget>
       </item>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_3" stretch="1,1">
+        <property name="sizeConstraint">
+         <enum>QLayout::SetNoConstraint</enum>
+        </property>
         <item>
-         <widget class="BoatInspectorWidget" name="boatInspector" native="true"/>
+         <widget class="QGraphicsView" name="boatInspector">
+          <property name="verticalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOff</enum>
+          </property>
+          <property name="horizontalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOff</enum>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="ValueInspectorWidget" name="valueInspector">
@@ -671,24 +700,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>MapViewWidget</class>
-   <extends>QWidget</extends>
-   <header>sailsim.gui.mapView</header>
-   <container>1</container>
-   <slots>
-    <slot>viewFrame(int)</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BoatInspectorWidget</class>
-   <extends>QWidget</extends>
-   <header>sailsim.gui.boatInspector</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>ValueInspectorWidget</class>
    <extends>QTreeWidget</extends>
    <header>sailsim.gui.valueInspector</header>
+  </customwidget>
+  <customwidget>
+   <class>MapViewView</class>
+   <extends>QGraphicsView</extends>
+   <header>sailsim.gui.mapView</header>
   </customwidget>
  </customwidgets>
  <tabstops>

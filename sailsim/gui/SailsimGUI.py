@@ -4,13 +4,20 @@ from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QMainWindow
 from sailsim.gui.qtmain import Ui_MainWindow
 
-from sailsim.gui.mapView import GUIBoat
+from sailsim.gui.mapView import MapViewScene
+# from sailsim.gui.boatInspector import BoatInspectorScene
 
 
 class SailsimGUI(QMainWindow):
     """Main GUI for sailsim."""
 
     def __init__(self, simulation):
+        """
+        Create SailsimGUI object.
+
+        Args:
+            simulation      Simulation that should be displayed
+        """
         super().__init__()
 
         self.simulation = simulation
@@ -27,26 +34,30 @@ class SailsimGUI(QMainWindow):
         self.ui.timeSlider.setMaximum(len(simulation))
         self.ui.timeSlider.setValue(self.frame)
 
-        boat = GUIBoat(simulation.boat)
-        self.ui.mapView.boat = boat
-        self.ui.boatInspector.boat = boat
-        if self.simulation.boat.sailor is not None:
-            self.ui.mapView.setWaypoints(self.simulation.boat.sailor.commandList)
-        self.updateFrame(0)
-        self.updateViewStates()
+        self.mapViewScene = MapViewScene(simulation.boat)
+        self.ui.mapView.setScene(self.mapViewScene)
+        # self.boatInspectorScene = BoatInspectorScene()
+        # self.ui.boatInspectorView.setScene(self.boatInspectorScene)
 
-    def updateFrame(self, frameNr):
+        # self.ui.mapView.boat = boat
+        # self.ui.boatInspectorView.boat = boat
+        # if self.simulation.boat.sailor is not None:
+        #     self.ui.mapView.setWaypoints(self.simulation.boat.sailor.commandList)
+        # self.updateFrame(0)
+        # self.updateViewStates()
+
+    def updateFrame(self, framenumber):
         """Update display when the frame changed."""
         frames = self.simulation.boat.frameList.frames
-        if frameNr < len(frames):
-            self.frame = frameNr
-            frame = frames[frameNr]
+        if framenumber < len(frames):
+            self.frame = framenumber
+            frame = frames[framenumber]
 
             # Update widgets
             maxFrame = str(len(self.simulation))
-            self.ui.frameNr.setText(str(frameNr).zfill(len(maxFrame)) + "/" + maxFrame)
-            self.ui.mapView.viewFrame(frame)
-            self.ui.boatInspector.viewFrame(frame)
+            self.ui.frameNr.setText(str(framenumber).zfill(len(maxFrame)) + "/" + maxFrame)
+            self.mapViewScene.viewFrame(framenumber)
+            # self.boatInspectorScene.viewFrame(frame)
             self.ui.valueInspector.viewFrame(frame)
 
     def incFrame(self):

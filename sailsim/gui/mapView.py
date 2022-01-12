@@ -1,150 +1,19 @@
 """This module contains the class declaration for the MapViewWidget."""
 
-from math import pi, sin, cos
+from PySide6.QtCore import QPointF, Qt
+from PySide6.QtGui import QCursor, QPainter, QPainterPath
+from PySide6.QtWidgets import QApplication, QGraphicsRectItem, QGraphicsView, QGraphicsScene
 
-from PySide6.QtCore import QPoint, QPointF, Qt
-from PySide6.QtGui import QCursor, QPainter, QPainterPath, QPen
-from PySide6.QtWidgets import QApplication, QWidget
-
-from sailsim.sailor.Commands import Waypoint
+from sailsim.gui.qgraphicsitems import GUIBoat, GUIPath
 
 # Map constants
 ZoomInFactor = 1.25
 ZoomOutFactor = 1 / ZoomInFactor
-ScrollStep = 10
+ScrollStep = 1
 
 
-def pointsToPath(points, jump=1):
-    """Convert a pointlist into a QPainterPath."""
-    path = QPainterPath()
-    path.moveTo(QPointF(points[0][0], -points[0][1]))
-    for i in range(0, len(points), jump)[1:]:
-        point = points[i]
-        path.lineTo(QPointF(point[0], -point[1]))
-    return path
-
-class GUIBoat():
-    position = QPointF(0, 0)
-    direction = 0
-    mainSailAngle = 0
-    rudderAngle = 0
-
-    boatSpeed = QPointF(0, 0)
-    boatForce = QPointF(0, 0)
-
-    boatForceSailDrag = QPointF(0, 0)
-    boatForceSailLift = QPointF(0, 0)
-    boatForceCenterboardDrag = QPointF(0, 0)
-    boatForceCenterboardLift = QPointF(0, 0)
-    boatForceRudderDrag = QPointF(0, 0)
-    boatForceRudderLift = QPointF(0, 0)
-    boatRudderPosition = QPointF(0, 0)
-
-    path = None
-
-    displayMainSail = True
-    displayRudder = True
-    displayPath = True
-    displayForces = True
-
-    def __init__(self, boat):
-        self.frameList = boat.frameList
-        self.updateBoatPath()
-
-    def paintMapView(self, painter, scale):
-        self.paintPath(painter, scale)
-
-        painter.translate(self.position)
-        painter.rotate(self.direction)
-
-        self.paintBoat(painter, Qt.black)
-
-    def paintBoatInspector(self, painter, radius):
-        painter.rotate(self.direction)
-        self.paintBoat(painter, Qt.black)
-        painter.rotate(-self.direction)
-
-        self.paintVectors(painter)
-
-    def paintBoat(self, painter, color):
-        GUIBoat.drawBoatShape(painter, color)
-        if self.displayMainSail:
-            painter.setPen(QPen(Qt.green, 0.1, Qt.SolidLine, Qt.RoundCap))
-            painter.drawLine(QPointF(0, 0), self.mainSail)
-        if self.displayRudder:
-            painter.setPen(QPen(Qt.blue, 0.1, Qt.SolidLine, Qt.RoundCap))
-            rudderPoint = QPointF(0, 2.2)
-            painter.drawLine(rudderPoint, rudderPoint + self.rudder)
-
-    def paintPath(self, painter, scale):
-        if self.displayPath:
-            painter.setPen(QPen(Qt.darkGray, 4 / scale, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
-            painter.drawPath(self.path)
-
-    def paintVectors(self, painter):
-        scaleSpeed = 8
-        scaleForce = 1 / 2048
-        painter.scale(1/4, 1/4)
-
-        # Display Direction and Speed
-        painter.setPen(Qt.green)
-        painter.drawLine(QPoint(0, 0), self.directionVector * 16)
-        painter.setPen(Qt.blue)
-        painter.drawLine(QPoint(0, 0), self.boatSpeed * scaleSpeed)
-
-        if self.displayForces:
-            painter.setPen(Qt.darkRed)
-            painter.drawLine(QPoint(0, 0), self.boatForce * scaleForce)
-            painter.setPen(Qt.red)
-            painter.drawLine(QPoint(0, 0), self.boatForceSailDrag * scaleForce)
-            painter.drawLine(QPoint(0, 0), self.boatForceSailLift * scaleForce)
-            painter.drawLine(QPoint(0, 0), self.boatForceCenterboardDrag * scaleForce)
-            painter.drawLine(QPoint(0, 0), self.boatForceCenterboardLift * scaleForce)
-            painter.drawLine(self.boatRudderPosition, self.boatRudderPosition+self.boatForceRudderDrag * scaleForce*4)
-            painter.drawLine(self.boatRudderPosition, self.boatRudderPosition+self.boatForceRudderLift * scaleForce*4)
-        painter.scale(4, 4)
-
-    def set(self, frame):
-        self.position = QPointF(frame.boatPosX, -frame.boatPosY)
-        self.direction = frame.boatDirection / pi * 180
-        self.directionVector = -QPointF(-sin(frame.boatDirection), cos(frame.boatDirection))
-        self.mainSail = QPointF(-sin(frame.boatMainSailAngle), cos(frame.boatMainSailAngle)) * 2
-        self.rudder = QPointF(sin(frame.boatRudderAngle), cos(frame.boatRudderAngle)) * 0.5
-
-        self.boatSpeed = QPointF(frame.boatSpeedX, -frame.boatSpeedY)
-        self.boatForce = QPointF(frame.boatForceX, -frame.boatForceY)
-
-        self.boatForceSailDrag = QPointF(frame.boatSailDragX, -frame.boatSailDragY)
-        self.boatForceSailLift = QPointF(frame.boatSailLiftX, -frame.boatSailLiftY)
-        self.boatForceCenterboardDrag = QPointF(frame.boatCenterboardDragX, -frame.boatCenterboardDragY)
-        self.boatForceCenterboardLift = QPointF(frame.boatCenterboardLiftX, -frame.boatCenterboardLiftY)
-        self.boatForceRudderDrag = QPointF(frame.boatRudderDragX, -frame.boatRudderDragY)
-        self.boatForceRudderLift = QPointF(frame.boatRudderLiftX, -frame.boatRudderLiftY)
-        self.boatRudderPosition = QPointF(-sin(frame.boatDirection)*2.2, cos(frame.boatDirection)*2.2)
-
-    def updateBoatPath(self, jump=1):
-        """Convert a pointlist into a QPainterPath."""
-        points = self.frameList.getCoordinateList()
-        self.path = pointsToPath(points, jump)
-
-    @staticmethod
-    def drawBoatShape(painter, color):
-        """Return the QPainterPath for drawing a boat."""
-        painter.setPen(Qt.NoPen)
-        painter.setBrush(color)
-        boat = QPainterPath()
-        boat.moveTo(0, -2)
-        boat.cubicTo(QPointF(1, -.5), QPointF(1, .5), QPointF(.8, 2.2))
-        boat.lineTo(-.8, 2.2)
-        boat.cubicTo(QPointF(-1, .5), QPointF(-1, -.5), QPointF(0, -2))
-        painter.drawPath(boat)
-
-
-class MapViewWidget(QWidget):
+class MapViewScene(QGraphicsScene):
     """Map Widget that displays the boat and its path."""
-
-    windowWidth = 0
-    windowHeight = 0
 
     offset = QPointF()
     scale = 4
@@ -154,80 +23,64 @@ class MapViewWidget(QWidget):
     waypoints = QPainterPath()
     path = QPainterPath()
 
-    boat = None
-
     # Display proerties
     displayWaypointLink = True
     displayWaypoints = True
     displayPath = True
 
-    def __init__(self, parent=None):
+    def __init__(self, boat, parent=None):
+        """
+        Create a MapViewScene.
+
+        Args:
+            boat: Boat      Boat of the simulation
+            parent          Parent of the QGraphicsScene
+        """
         super().__init__(parent)
 
-        self.setWindowTitle("MapViewWidget")
-        self.setCursor(Qt.CrossCursor)
-        self.resize(550, 400)
+        self.boat = GUIBoat(boat)
+        self.path = GUIPath(boat)
+        self.addItem(self.boat)
+        self.addItem(self.path)
 
-    def paintEvent(self, _event):
-        painter = QPainter(self)
-        painter.setRenderHint(QPainter.Antialiasing, True)
+        # Make area scrollable beyond boat boundaries
+        # TODO find nicer way to do this
+        self.addItem(QGraphicsRectItem(-2048, -2048, 4096, 4096))
 
-        painter.translate(self.offset)
-        painter.scale(self.scale, self.scale)
-
-        if self.displayWaypointLink:
-            painter.setPen(QPen(Qt.gray, .1, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
-            painter.drawPath(self.waypointsLink)
-        if self.displayWaypoints:
-            painter.setPen(QPen(Qt.blue, .1, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
-            painter.drawPath(self.waypoints)
-
-        if self.displayPath:
-            painter.setPen(QPen(Qt.darkGray, 4 / self.scale, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin))
-            painter.drawPath(self.path)
-
-        self.boat.paintMapView(painter, self.scale)
-
-    def setWaypoints(self, commands):
-        """Display the waypoints in a commandList on mapView."""
-        if len(commands) > 0:
-            wpPath = QPainterPath()
-            # TODO find out boat starting coordinates
-            wpLinkList = [[0, 0]]
-            for command in commands:
-                if isinstance(command, Waypoint):
-                    wpPath.addEllipse(QPoint(command.destX, -command.destY), command.radius, command.radius)
-                    wpLinkList.append([command.destX, command.destY])
-            self.waypointsLink = pointsToPath(wpLinkList)
-            self.waypoints = wpPath
-            self.update()
-
-    def viewFrame(self, frame):
+    def viewFrame(self, framenumber):
         """Set the boat to a position saved in a frame given."""
-        self.boat.set(frame)
-        self.update()
+        self.boat.setFrame(framenumber)
 
-    def resizeEvent(self, event):
-        """Keep center of the map in the center."""
-        width, height = event.size().width(), event.size().height()
-        self.offset -= QPoint((self.windowWidth - width) / 2, (self.windowHeight - height) / 2)
-        self.windowWidth, self.windowHeight = width, height
+
+class MapViewView(QGraphicsView):
+    """QT Viewport for viewing the MapViewScene."""
+
+    def __init__(self, parent=None):
+        """Create and configure MapViewView object."""
+        super().__init__(parent)
+
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setRenderHints(QPainter.Antialiasing)
+        self.setDragMode(QGraphicsView.ScrollHandDrag)
+        self.setTransformationAnchor(QGraphicsView.AnchorUnderMouse)
 
     def keyPressEvent(self, event):
         """Move mapView according to the button pressed."""
-        # TODO is this working?
+        # TODO translation is not working
         if event.key() == Qt.Key_Plus:
-            self.zoomCenter(ZoomInFactor)
+            self.scale(ZoomInFactor, ZoomInFactor)
         elif event.key() == Qt.Key_Minus:
-            self.zoomCenter(ZoomOutFactor)
+            self.scale(ZoomOutFactor, ZoomOutFactor)
         elif event.key() == Qt.Key_Left:
-            self.scroll(+ScrollStep, 0)
+            self.translate(ScrollStep, 0)
         elif event.key() == Qt.Key_Right:
-            self.scroll(-ScrollStep, 0)
+            self.translate(-ScrollStep, 0)
         elif event.key() == Qt.Key_Down:
-            self.scroll(0, -ScrollStep)
+            self.translate(0, -ScrollStep)
+            self.update()
         elif event.key() == Qt.Key_Up:
-            self.scroll(0, +ScrollStep)
+            self.translate(0, ScrollStep)
         else:
             super().keyPressEvent(event)
 
@@ -237,41 +90,26 @@ class MapViewWidget(QWidget):
         numSteps = numDegrees / 32
         self.zoom(pow(ZoomInFactor, numSteps))
 
-    def mousePressEvent(self, event):
-        if event.buttons() == Qt.LeftButton:
-            self.lastDragPos = event.position()
-
-    def mouseMoveEvent(self, event):
-        if event.buttons() & Qt.LeftButton:
-            self.offset += event.position() - self.lastDragPos
-            self.lastDragPos = event.position()
-            self.update()
-
     def zoom(self, zoomFactor):
         """Zoom the mapView and keep mouse in the same spot."""
-        self.scale *= zoomFactor
-        self.offset *= zoomFactor
-        self.offset += QPointF(self.mapFromGlobal(QCursor.pos())) * (1 - zoomFactor)
-        self.update()
+        self.scale(zoomFactor, zoomFactor)
+        delta_x, delta_y = (QPointF(self.mapFromGlobal(QCursor.pos())) * (1 - zoomFactor)).toTuple()
+        self.translate(delta_x, delta_y)
 
-    def zoomCenter(self, zoomFactor):
-        self.scale *= zoomFactor
-        self.offset *= zoomFactor
-        self.offset += QPointF(self.windowWidth/2, self.windowHeight/2) * (1 - zoomFactor)
-        self.update()
 
-    def scroll(self, deltaX, deltaY):
-        """Translate mapView."""
-        self.offset += QPointF(deltaX, deltaY)
-        self.update()
+def main():
+    """Run simple test program."""
+    import sys
+
+    from sailsim.boat.Boat import Boat
+
+    app = QApplication(sys.argv)
+    view = MapViewView()
+    view.setScene(MapViewScene(Boat()))
+    view.show()
+    window = app.exec()
+    sys.exit(window)
 
 
 if __name__ == '__main__':
-
-    import sys
-
-    app = QApplication(sys.argv)
-    widget = MapViewWidget()
-    widget.show()
-    r = app.exec()
-    sys.exit(r)
+    main()

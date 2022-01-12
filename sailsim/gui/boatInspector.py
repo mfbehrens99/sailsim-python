@@ -4,12 +4,12 @@ from math import pi, sin, cos
 
 from PySide6.QtCore import QPoint, QPointF, Qt
 from PySide6.QtGui import QPainter, QPen
-from PySide6.QtWidgets import QApplication, QWidget
+from PySide6.QtWidgets import QApplication, QGraphicsScene
 
 from sailsim.gui.mapView import GUIBoat
 
 
-class BoatInspectorWidget(QWidget):
+class BoatInspectorScene(QGraphicsScene):
     """Display the state of the boat."""
 
     scaleBoat = 1 / 4
@@ -39,7 +39,7 @@ class BoatInspectorWidget(QWidget):
     displayForces = True
 
     def __init__(self, parent=None):
-        super(BoatInspectorWidget, self).__init__(parent)
+        super().__init__(parent)
 
         self.offset = QPoint(0, 0)
         self.radius = 0
@@ -61,7 +61,6 @@ class BoatInspectorWidget(QWidget):
 
         painter.scale(scaleBoat, scaleBoat)
         self.boat.paintBoatInspector(painter, self.radius)
-
 
     def viewFrame(self, frame):
         """Set the boat to a position saved in a frame given."""

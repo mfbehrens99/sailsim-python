@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'main.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.2.0
+## Created by: Qt User Interface Compiler version 6.2.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -16,13 +16,12 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QIcon, QImage, QKeySequence, QLinearGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
-from PySide6.QtWidgets import (QApplication, QHBoxLayout, QHeaderView, QLabel,
-    QMainWindow, QMenu, QMenuBar, QSizePolicy,
-    QSlider, QToolButton, QTreeWidgetItem, QVBoxLayout,
-    QWidget, QAbstractItemView)
+from PySide6.QtWidgets import (QAbstractItemView, QApplication, QGraphicsView, QHBoxLayout, QHeaderView,
+    QLabel, QLayout, QMainWindow, QMenu,
+    QMenuBar, QSizePolicy, QSlider, QToolButton,
+    QTreeWidgetItem, QVBoxLayout, QWidget)
 
-from sailsim.gui.boatInspector import BoatInspectorWidget
-from sailsim.gui.mapView import MapViewWidget
+from sailsim.gui.mapView import MapViewView
 from sailsim.gui.valueInspector import ValueInspectorWidget
 
 class Ui_MainWindow(object):
@@ -75,15 +74,24 @@ class Ui_MainWindow(object):
         self.main = QHBoxLayout()
         self.main.setSpacing(0)
         self.main.setObjectName(u"main")
-        self.mapView = MapViewWidget(self.widget)
+        self.main.setSizeConstraint(QLayout.SetNoConstraint)
+        self.mapView = MapViewView(self.widget)
         self.mapView.setObjectName(u"mapView")
+        self.mapView.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.mapView.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.mapView.setRenderHints(QPainter.Antialiasing)
+        self.mapView.setDragMode(QGraphicsView.ScrollHandDrag)
+        self.mapView.setTransformationAnchor(QGraphicsView.AnchorUnderMouse)
 
         self.main.addWidget(self.mapView)
 
         self.verticalLayout_3 = QVBoxLayout()
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.boatInspector = BoatInspectorWidget(self.widget)
+        self.verticalLayout_3.setSizeConstraint(QLayout.SetNoConstraint)
+        self.boatInspector = QGraphicsView(self.widget)
         self.boatInspector.setObjectName(u"boatInspector")
+        self.boatInspector.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.boatInspector.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
         self.verticalLayout_3.addWidget(self.boatInspector)
 
