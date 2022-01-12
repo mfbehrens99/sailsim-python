@@ -1,0 +1,12 @@
+pytest
+pytest-cov
+
+pylint
+flake8
+mypy
+
+pycodestyle
+pydocstyle
+autopep8
+
+tox

@@ -31,6 +31,7 @@ Template
 
 ### Changed
 
+- Upgrade python project to new standart
 - Moved [Framelist] from [Simulation] to [Boat]
 - Tonns of nicer python (like using with statements for opening files)
 
@@ -39,7 +40,8 @@ Template
 
 - [[World]]
 - [[Boat]] Removed BoatDataHolder
-- [[FrameList]] Removed WindTable 
+- [[FrameList]] Removed WindTable
+
 
 
 ## [0.0.2] - 2021-12-29
