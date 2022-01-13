@@ -1,0 +1,2 @@
+PySide6
+opensimplex >= 0.4
