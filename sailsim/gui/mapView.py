@@ -1,46 +1,24 @@
 """This module contains the class declaration for the MapViewWidget."""
 
 from PySide6.QtCore import QPointF, Qt
-from PySide6.QtGui import QCursor, QPainter, QPainterPath
-from PySide6.QtWidgets import QApplication, QGraphicsRectItem, QGraphicsView, QGraphicsScene
+from PySide6.QtGui import QCursor, QKeyEvent, QPainter, QWheelEvent
+from PySide6.QtWidgets import QApplication, QGraphicsRectItem, QGraphicsScene, QGraphicsView
 
-from sailsim.gui.qgraphicsitems import GUIBoat, GUIPath
+from sailsim.boat.Boat import Boat
+from sailsim.gui.qgraphicsitems import BoatVectors, GUIBoat, GUIBoatPath
 
-# Map constants
-ZOOMINFACTOR = 1.25
-ZOOMOUTFACTOR = 1 / ZOOMINFACTOR
-SCROLLSTEP = 10
-
-
-def pointsToPath(points, jump=1):
-    """Convert a pointlist into a QPainterPath."""
-    path = QPainterPath()
-    path.moveTo(QPointF(points[0][0], -points[0][1]))
-    for i in range(0, len(points), jump)[1:]:
-        point = points[i]
-        path.lineTo(QPointF(point[0], -point[1]))
-    return path
+# map movements constants
+ZOOM_IN_FACTOR = 1.25
+ZOOM_OUT_FACTOR = 1 / ZOOM_IN_FACTOR
+SCROLL_STEP = 10
 
 
 class MapViewScene(QGraphicsScene):
     """Map Widget that displays the boat and its path."""
 
-    offset = QPointF()
-    scale = 4
-    lastDragPos = QPointF()
-
-    waypointsLink = QPainterPath()
-    waypoints = QPainterPath()
-    path = QPainterPath()
-
-    # Display proerties
-    displayWaypointLink = True
-    displayWaypoints = True
-    displayPath = True
-
-    def __init__(self, boat, parent=None):
+    def __init__(self, boat: Boat, parent=None) -> None:
         """
-        Create a MapViewScene.
+        Create a MapViewScene object.
 
         Args:
             boat: Boat      Boat of the simulation
@@ -49,23 +27,26 @@ class MapViewScene(QGraphicsScene):
         super().__init__(parent)
 
         self.boat = GUIBoat(boat)
-        self.path = GUIPath(boat)
+        self.path = GUIBoatPath(boat)
+        self.boatVectors = BoatVectors(boat)
         self.addItem(self.boat)
         self.addItem(self.path)
+        self.addItem(self.boatVectors)
 
         # Make area scrollable beyond boat boundaries
         # TODO find nicer way to do this
         self.addItem(QGraphicsRectItem(-2048, -2048, 4096, 4096))
 
-    def viewFrame(self, framenumber):
+    def viewFrame(self, framenumber: int) -> None:
         """Set the boat to a position saved in a frame given."""
         self.boat.setFrame(framenumber)
+        self.boatVectors.setFrame(framenumber)
 
 
 class MapViewView(QGraphicsView):
     """QT Viewport for viewing the MapViewScene."""
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None) -> None:
         """Create and configure MapViewView object."""
         super().__init__(parent)
 
@@ -75,42 +56,40 @@ class MapViewView(QGraphicsView):
         self.setDragMode(QGraphicsView.ScrollHandDrag)
         self.setTransformationAnchor(QGraphicsView.AnchorUnderMouse)
 
-    def keyPressEvent(self, event):
+    def keyPressEvent(self, event: QKeyEvent) -> None:
         """Move mapView according to the button pressed."""
         # TODO translation is not working
         if event.key() == Qt.Key_Plus:
-            self.zoom(ZOOMINFACTOR)
+            self.zoom(ZOOM_IN_FACTOR)
         elif event.key() == Qt.Key_Minus:
-            self.zoom(ZOOMOUTFACTOR)
+            self.zoom(ZOOM_OUT_FACTOR)
         elif event.key() == Qt.Key_Left:
-            self.scroll(+SCROLLSTEP, 0)
+            self.scroll(SCROLL_STEP, 0)
         elif event.key() == Qt.Key_Right:
-            self.scroll(-SCROLLSTEP, 0)
+            self.scroll(-SCROLL_STEP, 0)
         elif event.key() == Qt.Key_Down:
-            self.scroll(0, -SCROLLSTEP)
+            self.scroll(0, -SCROLL_STEP)
         elif event.key() == Qt.Key_Up:
-            self.scroll(0, +SCROLLSTEP)
+            self.scroll(0, SCROLL_STEP)
         else:
             super().keyPressEvent(event)
 
-    def wheelEvent(self, event):
+    def wheelEvent(self, event: QWheelEvent) -> None:
         """Zoom in and out when mouse wheel is moved."""
         numDegrees = event.angleDelta().y() / 8
         numSteps = numDegrees / 32
-        self.zoom(pow(ZOOMINFACTOR, numSteps))
+        self.zoom(pow(ZOOM_IN_FACTOR, numSteps))
 
-    def zoom(self, zoomFactor):
+    def zoom(self, zoomFactor: float) -> None:
         """Zoom the mapView and keep mouse in the same spot."""
         self.scale(zoomFactor, zoomFactor)
-        delta_x, delta_y = (QPointF(self.mapFromGlobal(QCursor.pos())) * (1 - zoomFactor)).toTuple()
-        self.translate(delta_x, delta_y)
+        delta = (QPointF(self.mapFromGlobal(QCursor.pos())) * (1 - zoomFactor))
+        self.translate(delta.x(), delta.y())
 
 
 def main():
     """Run simple test program."""
     import sys
-
-    from sailsim.boat.Boat import Boat
 
     app = QApplication(sys.argv)
     view = MapViewView()

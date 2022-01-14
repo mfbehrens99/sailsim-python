@@ -30,23 +30,7 @@
        <enum>QLayout::SetNoConstraint</enum>
       </property>
       <item>
-       <widget class="MapViewView" name="mapView">
-        <property name="verticalScrollBarPolicy">
-         <enum>Qt::ScrollBarAlwaysOff</enum>
-        </property>
-        <property name="horizontalScrollBarPolicy">
-         <enum>Qt::ScrollBarAlwaysOff</enum>
-        </property>
-        <property name="renderHints">
-         <set>QPainter::Antialiasing</set>
-        </property>
-        <property name="dragMode">
-         <enum>QGraphicsView::ScrollHandDrag</enum>
-        </property>
-        <property name="transformationAnchor">
-         <enum>QGraphicsView::AnchorUnderMouse</enum>
-        </property>
-       </widget>
+       <widget class="MapViewView" name="mapView"/>
       </item>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_3" stretch="1,1">

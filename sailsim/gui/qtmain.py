@@ -77,11 +77,6 @@ class Ui_MainWindow(object):
         self.main.setSizeConstraint(QLayout.SetNoConstraint)
         self.mapView = MapViewView(self.widget)
         self.mapView.setObjectName(u"mapView")
-        self.mapView.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.mapView.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.mapView.setRenderHints(QPainter.Antialiasing)
-        self.mapView.setDragMode(QGraphicsView.ScrollHandDrag)
-        self.mapView.setTransformationAnchor(QGraphicsView.AnchorUnderMouse)
 
         self.main.addWidget(self.mapView)
 

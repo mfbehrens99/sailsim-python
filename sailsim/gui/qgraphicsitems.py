@@ -1,14 +1,41 @@
-"""Contains modules for GUI elements"""
+"""Contains modules for GUI elements."""
 
-from math import acos, cos, pi, sin, atan2
+from math import atan2, cos, pi, sin, sqrt
 from functools import cached_property
+from typing import Optional, Union
 
-from PySide6.QtCore import QPoint, QPointF, QLine, QLineF, QRect, QRectF, QSize
-from PySide6.QtGui import QBrush, QPainterPath, QPen, QPolygonF, Qt
-from PySide6.QtWidgets import QGraphicsItem, QGraphicsLineItem, QGraphicsPathItem
+from PySide6.QtCore import QLineF, QPoint, QPointF, QRectF
+from PySide6.QtGui import QPainter, QPainterPath, QPen, QPolygonF, Qt
+from PySide6.QtWidgets import QGraphicsItem, QGraphicsLineItem, QGraphicsPathItem, QStyleOptionGraphicsItem, QWidget
+
+from sailsim.boat.Boat import Boat
+
+
+def painterScale(painter: QPainter) -> float:
+    """Calculate the scale of a QPainter."""
+    # TODO method appears to have issues
+    return sqrt(painter.transform().m11()**2 + painter.transform().m22()**2)
+
+
+def dynamicSizePen(pen: QPen, painter: QPainter) -> QPen:
+    """Change the thickness of the pen depending of the zoom of the painter."""
+    pen.setWidthF(pen.widthF() / painterScale(painter))
+    return pen
+
+
+def pointsToPath(points: list[tuple[float, float]], jump: int = 1) -> QPainterPath:
+    """Convert a pointlist into a QPainterPath."""
+    path = QPainterPath()
+    path.moveTo(QPointF(points[0][0], -points[0][1]))
+    for i in range(0, len(points), jump)[1:]:
+        point = points[i]
+        path.lineTo(QPointF(point[0], -point[1]))
+    return path
 
 
 class GUIBoat(QGraphicsItem):
+    """Display a sailsim boat in a QGraphicsScene."""
+
     mainSail = QLineF(0, 0, 0, 2)
     rudder = QLineF(0, 2.2, 0, 2.2)
 
@@ -17,16 +44,19 @@ class GUIBoat(QGraphicsItem):
     displayPath = True
     displayForces = True
 
-    def __init__(self, boat, parent=None):
-        """Creates a GUIBoat Objects.
+    def __init__(self, boat: Boat, parent=None) -> None:
+        """
+        Create a GUIBoat Objects.
 
         Args:
             boat:   Boat to display
-            parent: Parent of the QGraphicsItem"""
+            parent: Parent of the QGraphicsItem
+        """
         super().__init__(parent)
         self.frameList = boat.frameList
 
-    def paint(self, painter, _option, _widget):
+    def paint(self, painter: QPainter, _option: QStyleOptionGraphicsItem, _widget: Optional[QWidget] = None) -> None:
+        """Paint the boat on the painter given."""
         painter.setPen(Qt.NoPen)
         painter.setBrush(Qt.black)
         painter.drawPath(self.boatShape)
@@ -38,7 +68,13 @@ class GUIBoat(QGraphicsItem):
             painter.setPen(QPen(Qt.blue, 0.1, Qt.SolidLine, Qt.RoundCap))
             painter.drawLine(self.rudder)
 
-    def boundingRect(self):
+        # Draw bounding rectangle (for testing)
+        # painter.setPen(dynamicSizePen(QPen(Qt.black), painter))
+        # painter.setBrush(Qt.NoBrush)
+        # painter.drawRect(self.boundingRect())
+
+    def boundingRect(self) -> QRectF:
+        """Return bounding rect of the boat."""
         return self.boatShape.boundingRect() | QRectF(self.mainSail.p1(), self.mainSail.p2()) | QRectF(self.rudder.p1(), self.rudder.p2())
 
     @cached_property
@@ -51,11 +87,13 @@ class GUIBoat(QGraphicsItem):
         boat.cubicTo(QPointF(-1, .5), QPointF(-1, -.5), QPointF(0, -2))
         return boat
 
-    def setFrame(self, framenumber):
-        """Load frame x from the framelist.
+    def setFrame(self, framenumber: int) -> None:
+        """
+        Load frame x from the framelist.
 
         Args:
-            framenumber:int   number of the frame"""
+            framenumber: int   number of the frame
+        """
         frame = self.frameList[framenumber]
         self.setPos(QPointF(frame.boatPosX, -frame.boatPosY))
         self.setRotation(frame.boatDirection / pi * 180)
@@ -65,121 +103,166 @@ class GUIBoat(QGraphicsItem):
 
 
 class QGraphicsArrowItem(QGraphicsLineItem):
-    arrowHead = None
-    def __init__(self, *args):
+    """Draws a arrow with head."""
+
+    arrowHead: QPolygonF
+    headSize = 10.0
+    arrowAngle = .4
+
+    def __init__(self, *args) -> None:
+        """Create a QGraphicsArrowItem."""
         super().__init__(*args)
-        self._brush = QBrush(self.pen().color())
-        self.updatedHead()
 
-    def shape(self):
-        path = super().shape()
-        path.addPolygon(self.arrowHead)
-        return path
-
-    def updatePosition(self):
-        line = QLineF(self.mapFromItem(self.myStartItem, 0, 0), self.mapFromItem(self.myEndItem, 0, 0))
-        self.setLine(line)
-
-    def updatedHead(self):
-        line = self.line()
-        angle = atan2(line.dy(), line.dx())
-        arrowAngle = .3
-        point1 = line.p2() + QPointF(cos(pi/2 - angle - arrowAngle), sin(pi/2 - angle - arrowAngle)) * 10
-        point2 = line.p2() + QPointF(cos(pi/2 - angle + arrowAngle), sin(pi/2 - angle + arrowAngle)) * 10
-        self.arrowHead = QPolygonF([point1, line.p2(), point2])
-
-    def setLine(self, line):
         self.updateHead()
-        super().setLine(line)
 
-    def setBrush(self, brush):
-        self._brush = brush
+    def paint(self, painter: QPainter, _option: QStyleOptionGraphicsItem, _widget: Optional[QWidget] = None) -> None:
+        """Paint QGraphicsArrowItem on the painter given."""
+        self.updateHead(self.headSize / painterScale(painter))
 
-    def brush(self):
-        return self._brush
+        # Don't draw arrow if it intersects with itself
+        if self.arrowHead.containsPoint(self.line().p1(), Qt.OddEvenFill) or self.line().length() == 0:
+            return
 
-    def paint(self, painter, option, widget=None):
-        super().paint(painter, option, widget)
+        # Draw arrow line
+        painter.setPen(dynamicSizePen(self.pen(), painter))
+        painter.drawLine(self.line())
+
+        # Draw arrow head
         painter.setPen(Qt.NoPen)
-        painter.setBrush(self._brush)
+        painter.setBrush(self.pen().color())
         painter.drawPolygon(self.arrowHead)
 
+        # Draw bounding rectangle (for testing)
+        # painter.setPen(dynamicSizePen(self.pen(), painter))
+        # painter.setBrush(Qt.NoBrush)
+        # painter.drawRect(self.boundingRect())
 
-def pointsToPath(points, jump=1):
-    """Convert a pointlist into a QPainterPath."""
-    path = QPainterPath()
-    path.moveTo(QPointF(points[0][0], -points[0][1]))
-    for i in range(0, len(points), jump)[1:]:
-        point = points[i]
-        path.lineTo(QPointF(point[0], -point[1]))
-    return path
+    def boundingRect(self) -> QRectF:
+        """Return the bounding rectangle of the QGraphicsArrowItem."""
+        return super().boundingRect() | self.arrowHead.boundingRect()
+
+    def updateHead(self, scale: float = 1.0) -> None:
+        """Update shape and size of the arrow head."""
+        line = self.line()
+        angle = atan2(line.dy(), line.dx())
+
+        line1 = QPointF(sin(pi/2 - angle - self.arrowAngle), cos(pi/2 - angle - self.arrowAngle))
+        line2 = QPointF(sin(pi/2 - angle + self.arrowAngle), cos(pi/2 - angle + self.arrowAngle))
+        self.arrowHead = QPolygonF([line.p2() - line1 * scale, line.p2(), line.p2() - line2 * scale])
+
+    def setEndPoint(self, point: Union[QPoint, QPointF]) -> None:
+        """Set the end point of the QGraphicsArrowItem."""
+        line = self.line()
+        line.setP2(point)
+        self.setLine(line)
 
 
-class GUIPath(QGraphicsPathItem):
-    def __init__(self, boat, *args):
+class GUIBoatPath(QGraphicsPathItem):
+    """Display the path of a sailsim boat in a QGraphicsScene."""
+
+    def __init__(self, boat: Boat, *args) -> None:
+        """Create a GUIBoatPath object."""
         super().__init__(*args)
         self.frameList = boat.frameList
         self.updateBoatPath(5)
 
-    def updateBoatPath(self, jump=1):
+    def updateBoatPath(self, jump: int = 1) -> None:
         """Convert a pointlist into a QPainterPath."""
         points = self.frameList.getCoordinateList()
         self.setPath(pointsToPath(points, jump))
 
-    def paint(self, painter, *args):
-        transform = painter.transform()
-        scale = min(transform.m11(), transform.m22())
-        pen = self.pen()
-        pen.setWidthF(self.pen().widthF() / scale)
-        painter.setPen(pen)
+    def paint(self, painter: QPainter, _option: QStyleOptionGraphicsItem, _widget: Optional[QWidget] = None) -> None:
+        """Paint the boat path on the painter given."""
+        painter.setPen(dynamicSizePen(self.pen(), painter))
         painter.drawPath(self.path())
 
 
 class BoatVectors(QGraphicsItem):
-    boatSpeed = QPointF(0, 0)
-    boatForce = QPointF(0, 0)
+    """Display boat vectors of a sailsim boat in a QGraphicsScene."""
 
-    boatForceSailDrag = QPointF(0, 0)
-    boatForceSailLift = QPointF(0, 0)
-    boatForceCenterboardDrag = QPointF(0, 0)
-    boatForceCenterboardLift = QPointF(0, 0)
-    boatForceRudderDrag = QPointF(0, 0)
-    boatForceRudderLift = QPointF(0, 0)
-    boatRudderPosition = QPointF(0, 0)
+    boatSpeed = QGraphicsArrowItem()
+    boatForce = QGraphicsArrowItem()
 
-    def __init__(self, boat, parent) -> None:
+    boatForceSailDrag = QGraphicsArrowItem()
+    boatForceSailLift = QGraphicsArrowItem()
+    boatForceCenterboardDrag = QGraphicsArrowItem()
+    boatForceCenterboardLift = QGraphicsArrowItem()
+    boatForceRudderDrag = QGraphicsArrowItem()
+    boatForceRudderLift = QGraphicsArrowItem()
+    boatRudderPosition = QGraphicsArrowItem()
+
+    followBoat = True
+
+    def __init__(self, boat: Boat, parent=None) -> None:
+        """Create a BoatVectors object."""
         super().__init__(parent)
+
         self.frameList = boat.frameList
 
-    def paint(self, painter):
-        scaleSpeed = 8
-        scaleForce = 1 / 2048
-        painter.scale(1/4, 1/4)
+        self.boatSpeed.setPen(QPen(Qt.blue))
+        self.boatForce.setPen(QPen(Qt.darkRed))
 
+        redPen = QPen(Qt.red)
+        self.boatForceSailDrag.setPen(redPen)
+        self.boatForceSailLift.setPen(redPen)
+        self.boatForceCenterboardDrag.setPen(redPen)
+        self.boatForceCenterboardLift.setPen(redPen)
+        self.boatForceRudderDrag.setPen(redPen)
+        self.boatForceRudderLift.setPen(redPen)
+
+    def paint(self, painter: QPainter, option: QStyleOptionGraphicsItem, widget: Optional[QWidget] = None) -> None:
+        """Paint boat Vectors with the painter given."""
         # Display Direction and Speed
-        painter.setPen(Qt.blue)
-        painter.drawLine(QPoint(0, 0), self.boatSpeed * scaleSpeed)
+        self.boatSpeed.paint(painter, option, widget)
+        self.boatForce.paint(painter, option, widget)
 
-        painter.setPen(Qt.darkRed)
-        painter.drawLine(QPoint(0, 0), self.boatForce * scaleForce)
-        painter.setPen(Qt.red)
-        painter.drawLine(QPoint(0, 0), self.boatForceSailDrag * scaleForce)
-        painter.drawLine(QPoint(0, 0), self.boatForceSailLift * scaleForce)
-        painter.drawLine(QPoint(0, 0), self.boatForceCenterboardDrag * scaleForce)
-        painter.drawLine(QPoint(0, 0), self.boatForceCenterboardLift * scaleForce)
-        painter.drawLine(self.boatRudderPosition, self.boatRudderPosition+self.boatForceRudderDrag * scaleForce*4)
-        painter.drawLine(self.boatRudderPosition, self.boatRudderPosition+self.boatForceRudderLift * scaleForce*4)
-        painter.scale(4, 4)
+        self.boatForceSailDrag.paint(painter, option, widget)
+        self.boatForceSailLift.paint(painter, option, widget)
 
-    def setFrame(self, framenumber):
+        self.boatForceCenterboardDrag.paint(painter, option, widget)
+        self.boatForceCenterboardLift.paint(painter, option, widget)
+
+        self.boatForceRudderDrag.paint(painter, option, widget)
+        self.boatForceRudderLift.paint(painter, option, widget)
+
+        # Draw bounding rectangle (for testing)
+        # painter.setPen(dynamicSizePen(QPen(Qt.black), painter))
+        # painter.setBrush(Qt.NoBrush)
+        # painter.drawRect(self.boundingRect())
+
+    def boundingRect(self) -> QRectF:
+        """Return bounding rectangle of the boat vectors."""
+        return (self.boatSpeed.boundingRect() | self.boatForce.boundingRect()
+                | self.boatForceSailDrag.boundingRect() | self.boatForceSailLift.boundingRect()
+                | self.boatForceCenterboardDrag.boundingRect() | self.boatForceCenterboardLift.boundingRect()
+                | self.boatForceRudderDrag.boundingRect() | self.boatForceRudderLift.boundingRect()
+                )
+
+    def setFrame(self, framenumber: int) -> None:
+        """
+        Load frame x from the framelist.
+
+        Args:
+            framenumber: int   number of the frame
+        """
         frame = self.frameList[framenumber]
-        self.boatSpeed = QPointF(frame.boatSpeedX, -frame.boatSpeedY)
-        self.boatForce = QPointF(frame.boatForceX, -frame.boatForceY)
 
-        self.boatForceSailDrag = QPointF(frame.boatSailDragX, -frame.boatSailDragY)
-        self.boatForceSailLift = QPointF(frame.boatSailLiftX, -frame.boatSailLiftY)
-        self.boatForceCenterboardDrag = QPointF(frame.boatCenterboardDragX, -frame.boatCenterboardDragY)
-        self.boatForceCenterboardLift = QPointF(frame.boatCenterboardLiftX, -frame.boatCenterboardLiftY)
-        self.boatForceRudderDrag = QPointF(frame.boatRudderDragX, -frame.boatRudderDragY)
-        self.boatForceRudderLift = QPointF(frame.boatRudderLiftX, -frame.boatRudderLiftY)
-        self.boatRudderPosition = QPointF(-sin(frame.boatDirection)*2.2, cos(frame.boatDirection)*2.2)
+        scaleForce = 1 / 1024
+
+        if self.followBoat:
+            self.setPos(QPointF(frame.boatPosX, -frame.boatPosY))
+
+        self.boatSpeed.setEndPoint(QPointF(frame.boatSpeedX, -frame.boatSpeedY))
+        self.boatForce.setEndPoint(QPointF(frame.boatForceX, -frame.boatForceY) * scaleForce)
+
+        self.boatForceSailDrag.setEndPoint(QPointF(frame.boatSailDragX, -frame.boatSailDragY) * scaleForce)
+        self.boatForceSailLift.setEndPoint(QPointF(frame.boatSailLiftX, -frame.boatSailLiftY) * scaleForce)
+
+        self.boatForceCenterboardDrag.setEndPoint(QPointF(frame.boatCenterboardDragX, -frame.boatCenterboardDragY) * scaleForce)
+        self.boatForceCenterboardLift.setEndPoint(QPointF(frame.boatCenterboardLiftX, -frame.boatCenterboardLiftY) * scaleForce)
+
+        rudderStartPoint = QPointF(-sin(frame.boatDirection)*2.2, cos(frame.boatDirection)*2.2)
+        self.boatForceRudderDrag.setLine(QLineF(rudderStartPoint,
+                                                rudderStartPoint + QPointF(frame.boatRudderDragX, -frame.boatRudderDragY) * scaleForce))
+        self.boatForceRudderLift.setLine(QLineF(rudderStartPoint,
+                                                rudderStartPoint + QPointF(frame.boatRudderLiftX, -frame.boatRudderLiftY) * scaleForce))
