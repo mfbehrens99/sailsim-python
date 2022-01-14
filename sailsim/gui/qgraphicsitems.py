@@ -184,7 +184,7 @@ class GUIBoatPath(QGraphicsPathItem):
         painter.drawPath(self.path())
 
 
-class BoatVectors(QGraphicsItem):
+class GUIBoatVectors(QGraphicsItem):
     """Display boat vectors of a sailsim boat in a QGraphicsScene."""
 
     boatSpeed = QGraphicsArrowItem()

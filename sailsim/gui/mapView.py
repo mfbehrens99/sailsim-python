@@ -5,7 +5,7 @@ from PySide6.QtGui import QColor, QCursor, QKeyEvent, QPainter, QPen, QResizeEve
 from PySide6.QtWidgets import QApplication, QGraphicsRectItem, QGraphicsScene, QGraphicsView
 
 from sailsim.boat.Boat import Boat
-from sailsim.gui.qgraphicsitems import BoatVectors, GUIBoat, GUIBoatPath
+from sailsim.gui.qgraphicsitems import GUIBoatVectors, GUIBoat, GUIBoatPath
 
 # map movements constants
 ZOOM_IN_FACTOR = 1.25
@@ -35,7 +35,7 @@ class MapViewScene(QGraphicsScene):
         self.path.setPen(QPen(Qt.black, 2))
         self.addItem(self.path)
 
-        self.boatVectors = BoatVectors(boat)
+        self.boatVectors = GUIBoatVectors(boat)
         self.addItem(self.boatVectors)
 
         # Make area scrollable beyond boat boundaries

@@ -5,7 +5,7 @@ from PySide6.QtGui import QColor, QMouseEvent, QPainter, QResizeEvent, QWheelEve
 from PySide6.QtWidgets import QApplication, QGraphicsScene, QGraphicsRectItem, QGraphicsView
 
 from sailsim.boat.Boat import Boat
-from sailsim.gui.qgraphicsitems import BoatVectors, GUIBoat
+from sailsim.gui.qgraphicsitems import GUIBoatVectors, GUIBoat
 
 
 class BoatInspectorScene(QGraphicsScene):
@@ -38,7 +38,7 @@ class BoatInspectorScene(QGraphicsScene):
         self.boat.allowMovement = False
         self.addItem(self.boat)
 
-        self.boatVectors = BoatVectors(boat)
+        self.boatVectors = GUIBoatVectors(boat)
         self.boatVectors.followBoat = False
         self.addItem(self.boatVectors)
 
