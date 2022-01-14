@@ -202,7 +202,7 @@ class GUIBoatVectors(QGraphicsItem):
     followBoat = True
 
     def __init__(self, boat: Boat, parent=None) -> None:
-        """Create a BoatVectors object."""
+        """Create a GUIBoatVectors object."""
         super().__init__(parent)
 
         self.frameList = boat.frameList
@@ -292,10 +292,12 @@ class GUIWaypoints(QGraphicsItem):
         self.updateWaypoints()
 
     def paint(self, painter: QPainter, _option: QStyleOptionGraphicsItem, _widget: Optional[QWidget] = None) -> None:
-
+        """Paint waypoints with the painter given."""
+        # connection line
         painter.setPen(dynamicSizePen(QPen(Qt.black, 2), painter))
         painter.drawPath(self.waypointPath)
 
+        # waypoint circles
         for waypoint, radius in self.waypoints:
             painter.setPen(dynamicSizePen(QPen(Qt.blue), painter))
             painter.drawEllipse(waypoint, radius, radius)
