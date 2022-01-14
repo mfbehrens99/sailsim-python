@@ -9,6 +9,7 @@ from PySide6.QtGui import QPainter, QPainterPath, QPen, QPolygonF, Qt
 from PySide6.QtWidgets import QGraphicsItem, QGraphicsLineItem, QGraphicsPathItem, QStyleOptionGraphicsItem, QWidget
 
 from sailsim.boat.Boat import Boat
+from sailsim.sailor.Commands import Waypoint
 
 
 def painterScale(painter: QPainter) -> float:
@@ -274,3 +275,58 @@ class GUIBoatVectors(QGraphicsItem):
                                                 rudderStartPoint + QPointF(frame.boatRudderDragX, -frame.boatRudderDragY) * scaleForce))
         self.boatForceRudderLift.setLine(QLineF(rudderStartPoint,
                                                 rudderStartPoint + QPointF(frame.boatRudderLiftX, -frame.boatRudderLiftY) * scaleForce))
+
+
+class GUIWaypoints(QGraphicsItem):
+    """Display the sailors waypoints on the map."""
+
+    waypoints: list[tuple[QPointF, float]]
+    waypointPath: QPainterPath
+    waypointsBoundingRect: QRectF
+
+    def __init__(self, boat: Boat, parent=None) -> None:
+        """Create a GUIWaypoints object."""
+        super().__init__(parent)
+
+        self.sailor = boat.sailor
+        self.updateWaypoints()
+
+    def paint(self, painter: QPainter, _option: QStyleOptionGraphicsItem, _widget: Optional[QWidget] = None) -> None:
+
+        painter.setPen(dynamicSizePen(QPen(Qt.black, 2), painter))
+        painter.drawPath(self.waypointPath)
+
+        for waypoint, radius in self.waypoints:
+            painter.setPen(dynamicSizePen(QPen(Qt.blue), painter))
+            painter.drawEllipse(waypoint, radius, radius)
+
+        # Draw bounding rectangle (for testing)
+        # painter.setPen(dynamicSizePen(QPen(Qt.black), painter))
+        # painter.setBrush(Qt.NoBrush)
+        # painter.drawRect(self.boundingRect())
+
+    def boundingRect(self) -> QRectF:
+        """Return bounding rectangle of the waypoints."""
+        return self.waypointsBoundingRect
+
+    def updateWaypoints(self):
+        """Display the waypoints in a commandList on mapView."""
+        if self.sailor is None:
+            return
+        self.waypoints = []
+        commands = self.sailor.commandList
+        if len(commands) > 0:
+            self.waypointPath = QPainterPath()
+            self.waypointsBoundingRect = QRectF()
+            # TODO find out boat starting coordinates
+            waypointPathList = [[0, 0]]
+
+            for command in commands:
+                if isinstance(command, Waypoint):
+                    self.waypoints.append((QPointF(command.destX, -command.destY), command.radius))
+                    waypointPathList.append((command.destX, command.destY))
+                    self.waypointsBoundingRect |= QRectF(command.destX - command.radius,
+                                                         -command.destY - command.radius,
+                                                         2 * command.radius,
+                                                         2 * command.radius)
+            self.waypointPath = pointsToPath(waypointPathList)
