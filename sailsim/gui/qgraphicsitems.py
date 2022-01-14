@@ -39,6 +39,8 @@ class GUIBoat(QGraphicsItem):
     mainSail = QLineF(0, 0, 0, 2)
     rudder = QLineF(0, 2.2, 0, 2.2)
 
+    allowMovement = True
+
     displayMainSail = True
     displayRudder = True
     displayPath = True
@@ -61,6 +63,7 @@ class GUIBoat(QGraphicsItem):
         painter.setBrush(Qt.black)
         painter.drawPath(self.boatShape)
         painter.setBrush(Qt.NoBrush)
+
         if self.displayMainSail:
             painter.setPen(QPen(Qt.green, 0.1, Qt.SolidLine, Qt.RoundCap))
             painter.drawLine(self.mainSail)
@@ -75,7 +78,10 @@ class GUIBoat(QGraphicsItem):
 
     def boundingRect(self) -> QRectF:
         """Return bounding rect of the boat."""
-        return self.boatShape.boundingRect() | QRectF(self.mainSail.p1(), self.mainSail.p2()) | QRectF(self.rudder.p1(), self.rudder.p2())
+        return (self.boatShape.boundingRect()
+                | QRectF(self.mainSail.p1(), self.mainSail.p2()).normalized()
+                | QRectF(self.rudder.p1(), self.rudder.p2()).normalized()
+                )
 
     @cached_property
     def boatShape(self) -> QPainterPath:
@@ -95,7 +101,8 @@ class GUIBoat(QGraphicsItem):
             framenumber: int   number of the frame
         """
         frame = self.frameList[framenumber]
-        self.setPos(QPointF(frame.boatPosX, -frame.boatPosY))
+        if self.allowMovement:
+            self.setPos(QPointF(frame.boatPosX, -frame.boatPosY))
         self.setRotation(frame.boatDirection / pi * 180)
 
         self.mainSail.setP2(QPointF(-sin(frame.boatMainSailAngle), cos(frame.boatMainSailAngle)) * 2)
@@ -150,7 +157,7 @@ class QGraphicsArrowItem(QGraphicsLineItem):
         line2 = QPointF(sin(pi/2 - angle + self.arrowAngle), cos(pi/2 - angle + self.arrowAngle))
         self.arrowHead = QPolygonF([line.p2() - line1 * scale, line.p2(), line.p2() - line2 * scale])
 
-    def setEndPoint(self, point: Union[QPoint, QPointF]) -> None:
+    def setP2(self, point: Union[QPoint, QPointF]) -> None:
         """Set the end point of the QGraphicsArrowItem."""
         line = self.line()
         line.setP2(point)
@@ -199,8 +206,8 @@ class BoatVectors(QGraphicsItem):
 
         self.frameList = boat.frameList
 
-        self.boatSpeed.setPen(QPen(Qt.blue))
-        self.boatForce.setPen(QPen(Qt.darkRed))
+        self.boatSpeed.setPen(QPen(Qt.blue, 2))
+        self.boatForce.setPen(QPen(Qt.darkRed, 2))
 
         redPen = QPen(Qt.red)
         self.boatForceSailDrag.setPen(redPen)
@@ -212,10 +219,7 @@ class BoatVectors(QGraphicsItem):
 
     def paint(self, painter: QPainter, option: QStyleOptionGraphicsItem, widget: Optional[QWidget] = None) -> None:
         """Paint boat Vectors with the painter given."""
-        # Display Direction and Speed
-        self.boatSpeed.paint(painter, option, widget)
-        self.boatForce.paint(painter, option, widget)
-
+        # Draw forces
         self.boatForceSailDrag.paint(painter, option, widget)
         self.boatForceSailLift.paint(painter, option, widget)
 
@@ -224,6 +228,10 @@ class BoatVectors(QGraphicsItem):
 
         self.boatForceRudderDrag.paint(painter, option, widget)
         self.boatForceRudderLift.paint(painter, option, widget)
+
+        # Display Direction and Speed
+        self.boatSpeed.paint(painter, option, widget)
+        self.boatForce.paint(painter, option, widget)
 
         # Draw bounding rectangle (for testing)
         # painter.setPen(dynamicSizePen(QPen(Qt.black), painter))
@@ -252,14 +260,14 @@ class BoatVectors(QGraphicsItem):
         if self.followBoat:
             self.setPos(QPointF(frame.boatPosX, -frame.boatPosY))
 
-        self.boatSpeed.setEndPoint(QPointF(frame.boatSpeedX, -frame.boatSpeedY))
-        self.boatForce.setEndPoint(QPointF(frame.boatForceX, -frame.boatForceY) * scaleForce)
+        self.boatSpeed.setP2(QPointF(frame.boatSpeedX, -frame.boatSpeedY))
+        self.boatForce.setP2(QPointF(frame.boatForceX, -frame.boatForceY) * scaleForce)
 
-        self.boatForceSailDrag.setEndPoint(QPointF(frame.boatSailDragX, -frame.boatSailDragY) * scaleForce)
-        self.boatForceSailLift.setEndPoint(QPointF(frame.boatSailLiftX, -frame.boatSailLiftY) * scaleForce)
+        self.boatForceSailDrag.setP2(QPointF(frame.boatSailDragX, -frame.boatSailDragY) * scaleForce)
+        self.boatForceSailLift.setP2(QPointF(frame.boatSailLiftX, -frame.boatSailLiftY) * scaleForce)
 
-        self.boatForceCenterboardDrag.setEndPoint(QPointF(frame.boatCenterboardDragX, -frame.boatCenterboardDragY) * scaleForce)
-        self.boatForceCenterboardLift.setEndPoint(QPointF(frame.boatCenterboardLiftX, -frame.boatCenterboardLiftY) * scaleForce)
+        self.boatForceCenterboardDrag.setP2(QPointF(frame.boatCenterboardDragX, -frame.boatCenterboardDragY) * scaleForce)
+        self.boatForceCenterboardLift.setP2(QPointF(frame.boatCenterboardLiftX, -frame.boatCenterboardLiftY) * scaleForce)
 
         rudderStartPoint = QPointF(-sin(frame.boatDirection)*2.2, cos(frame.boatDirection)*2.2)
         self.boatForceRudderDrag.setLine(QLineF(rudderStartPoint,

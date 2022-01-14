@@ -1,35 +1,15 @@
 """This module contains the class declaration of BoatInspectorWidget."""
 
-from math import pi, sin, cos
+from PySide6.QtCore import Qt
+from PySide6.QtGui import QColor, QMouseEvent, QPainter, QResizeEvent, QWheelEvent
+from PySide6.QtWidgets import QApplication, QGraphicsScene, QGraphicsRectItem, QGraphicsView
 
-from PySide6.QtCore import QPoint, QPointF, Qt
-from PySide6.QtGui import QPainter, QPen
-from PySide6.QtWidgets import QApplication, QGraphicsScene
-
-from sailsim.gui.mapView import GUIBoat
+from sailsim.boat.Boat import Boat
+from sailsim.gui.qgraphicsitems import BoatVectors, GUIBoat
 
 
 class BoatInspectorScene(QGraphicsScene):
-    """Display the state of the boat."""
-
-    scaleBoat = 1 / 4
-    scaleSpeed = 8
-    scaleForce = 1 / 2048
-
-    boatSpeed = QPointF(0, 0)
-    boatForce = QPointF(0, 0)
-    boatMainSailAngle = QPointF(0, 0)
-    boatRudderAngle = QPointF(0, 0)
-
-    boat = None
-
-    boatForceSailDrag = QPointF(0, 0)
-    boatForceSailLift = QPointF(0, 0)
-    boatForceCenterboardDrag = QPointF(0, 0)
-    boatForceCenterboardLift = QPointF(0, 0)
-    boatForceRudderDrag = QPointF(0, 0)
-    boatForceRudderLift = QPointF(0, 0)
-    boatRudderPosition = QPointF(0, 0)
+    """Display the state of the boat with all its properties."""
 
     displayBoat = True
     displayMainSail = True
@@ -38,51 +18,65 @@ class BoatInspectorScene(QGraphicsScene):
     displaySpeed = True
     displayForces = True
 
-    def __init__(self, parent=None):
+    def __init__(self, boat: Boat, parent=None) -> None:
+        """
+        Create a BoatInspectorScene object.
+
+        Args:
+            boat: Boat      Boat of the simulation
+            parent          Parent of the QGraphicsScene
+        """
         super().__init__(parent)
 
-        self.offset = QPoint(0, 0)
-        self.radius = 0
+        self.setBackgroundBrush(QColor(156, 211, 219))
 
-        self.boatDirection = 0
+        background = QGraphicsRectItem(-8, -8, 16, 16)
+        background.setPen(Qt.NoPen)
+        self.addItem(background)
 
-    def paintEvent(self, _event):
-        scaleBoat, scaleSpeed, scaleForce = self.scaleBoat * self.radius, self.scaleSpeed * self.radius, self.scaleForce * self.radius
+        self.boat = GUIBoat(boat)
+        self.boat.allowMovement = False
+        self.addItem(self.boat)
 
-        painter = QPainter(self)
-        painter.setRenderHint(QPainter.Antialiasing, True)
+        self.boatVectors = BoatVectors(boat)
+        self.boatVectors.followBoat = False
+        self.addItem(self.boatVectors)
 
-        painter.translate(self.offset)
-
-        # (temporary) circle around boat
-        painter.setPen(Qt.lightGray)
-        painter.drawEllipse(QPoint(0, 0), self.radius, self.radius)
-
-        painter.scale(scaleBoat, scaleBoat)
-        self.boat.paintBoatInspector(painter, self.radius)
-
-    def viewFrame(self, frame):
+    def viewFrame(self, framenumber):
         """Set the boat to a position saved in a frame given."""
-        self.boatDirection = frame.boatDirection / pi * 180
-        self.boatSpeed = QPointF(frame.boatSpeedX, -frame.boatSpeedY)
-        self.boatMainSailAngle = QPointF(-sin(frame.boatMainSailAngle), cos(frame.boatMainSailAngle)) * 2
-        self.boatRudderAngle = QPointF(0, 2.2) + QPointF(sin(frame.boatRudderAngle), cos(frame.boatRudderAngle)) * 0.5
-
-        self.boatForce = QPointF(frame.boatForceX, -frame.boatForceY)
-        self.boatForceSailDrag = QPointF(frame.boatSailDragX, -frame.boatSailDragY)
-        self.boatForceSailLift = QPointF(frame.boatSailLiftX, -frame.boatSailLiftY)
-        self.boatForceCenterboardDrag = QPointF(frame.boatCenterboardDragX, -frame.boatCenterboardDragY)
-        self.boatForceCenterboardLift = QPointF(frame.boatCenterboardLiftX, -frame.boatCenterboardLiftY)
-        self.boatForceRudderDrag = QPointF(frame.boatRudderDragX, -frame.boatRudderDragY)
-        self.boatForceRudderLift = QPointF(frame.boatRudderLiftX, -frame.boatRudderLiftY)
-        self.boatRudderPosition = QPointF(-sin(frame.boatDirection)*2.2*self.scaleBoat*self.radius, cos(frame.boatDirection)*2.2*self.scaleBoat*self.radius)
+        self.boat.setFrame(framenumber)
+        self.boatVectors.setFrame(framenumber)
         self.update()
 
-    def resizeEvent(self, event):
+
+class BoatInspectorView(QGraphicsView):
+    """QT Viewport for viewing the BoatInspectorScene."""
+
+    def __init__(self, parent=None) -> None:
+        """Create and configure MapViewView object."""
+        super().__init__(parent)
+
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setRenderHints(QPainter.Antialiasing)
+        self.setDragMode(QGraphicsView.ScrollHandDrag)
+        self.setTransformationAnchor(QGraphicsView.AnchorUnderMouse)
+
+        self.centerOn(0, 0)
+        self.scale(32, 32)
+
+    def resizeEvent(self, _event: QResizeEvent):
         """Keep size of the boatInspector at maximum size."""
-        self.offset = QPoint(event.size().width() // 2, event.size().height() // 2)
-        self.radius = min(event.size().width(), event.size().height()) // 2
-        self.update()
+        self.centerOn(0, 0)
+
+    def mouseReleaseEvent(self, event: QMouseEvent) -> None:
+        """Snap boat inspector back to 0|0 when mouse is released."""
+        super().mouseReleaseEvent(event)
+        if event.button() == Qt.LeftButton:
+            self.centerOn(0, 0)
+
+    def wheelEvent(self, _event: QWheelEvent) -> None:
+        """Disable scrolling."""
 
 
 if __name__ == '__main__':
@@ -90,7 +84,8 @@ if __name__ == '__main__':
     import sys
 
     app = QApplication(sys.argv)
-    widget = BoatInspectorWidget()
-    widget.show()
-    r = app.exec_()
-    sys.exit(r)
+    view = BoatInspectorView()
+    view.setScene(BoatInspectorScene(Boat()))
+    view.show()
+    window = app.exec()
+    sys.exit(window)

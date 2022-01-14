@@ -16,11 +16,12 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QIcon, QImage, QKeySequence, QLinearGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
-from PySide6.QtWidgets import (QAbstractItemView, QApplication, QGraphicsView, QHBoxLayout, QHeaderView,
-    QLabel, QLayout, QMainWindow, QMenu,
-    QMenuBar, QSizePolicy, QSlider, QToolButton,
-    QTreeWidgetItem, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QApplication, QAbstractItemView, QHBoxLayout, QHeaderView, QLabel,
+    QLayout, QMainWindow, QMenu, QMenuBar,
+    QSizePolicy, QSlider, QToolButton, QTreeWidgetItem,
+    QVBoxLayout, QWidget)
 
+from sailsim.gui.boatInspector import BoatInspectorView
 from sailsim.gui.mapView import MapViewView
 from sailsim.gui.valueInspector import ValueInspectorWidget
 
@@ -83,10 +84,8 @@ class Ui_MainWindow(object):
         self.verticalLayout_3 = QVBoxLayout()
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
         self.verticalLayout_3.setSizeConstraint(QLayout.SetNoConstraint)
-        self.boatInspector = QGraphicsView(self.widget)
+        self.boatInspector = BoatInspectorView(self.widget)
         self.boatInspector.setObjectName(u"boatInspector")
-        self.boatInspector.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.boatInspector.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
         self.verticalLayout_3.addWidget(self.boatInspector)
 

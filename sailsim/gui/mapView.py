@@ -1,7 +1,7 @@
 """This module contains the class declaration for the MapViewWidget."""
 
 from PySide6.QtCore import QPointF, Qt
-from PySide6.QtGui import QCursor, QKeyEvent, QPainter, QWheelEvent
+from PySide6.QtGui import QColor, QCursor, QKeyEvent, QPainter, QPen, QResizeEvent, QWheelEvent
 from PySide6.QtWidgets import QApplication, QGraphicsRectItem, QGraphicsScene, QGraphicsView
 
 from sailsim.boat.Boat import Boat
@@ -26,11 +26,16 @@ class MapViewScene(QGraphicsScene):
         """
         super().__init__(parent)
 
+        self.setBackgroundBrush(QColor(156, 211, 219))
+
         self.boat = GUIBoat(boat)
-        self.path = GUIBoatPath(boat)
-        self.boatVectors = BoatVectors(boat)
         self.addItem(self.boat)
+
+        self.path = GUIBoatPath(boat)
+        self.path.setPen(QPen(Qt.black, 2))
         self.addItem(self.path)
+
+        self.boatVectors = BoatVectors(boat)
         self.addItem(self.boatVectors)
 
         # Make area scrollable beyond boat boundaries
@@ -41,6 +46,7 @@ class MapViewScene(QGraphicsScene):
         """Set the boat to a position saved in a frame given."""
         self.boat.setFrame(framenumber)
         self.boatVectors.setFrame(framenumber)
+        self.update()
 
 
 class MapViewView(QGraphicsView):
@@ -73,6 +79,10 @@ class MapViewView(QGraphicsView):
             self.scroll(0, SCROLL_STEP)
         else:
             super().keyPressEvent(event)
+
+    def resizeEvent(self, event: QResizeEvent):
+        """Keep center point in center."""
+        self.translate(event.size().width(), event.size().height())
 
     def wheelEvent(self, event: QWheelEvent) -> None:
         """Zoom in and out when mouse wheel is moved."""

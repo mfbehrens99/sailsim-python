@@ -38,14 +38,7 @@
          <enum>QLayout::SetNoConstraint</enum>
         </property>
         <item>
-         <widget class="QGraphicsView" name="boatInspector">
-          <property name="verticalScrollBarPolicy">
-           <enum>Qt::ScrollBarAlwaysOff</enum>
-          </property>
-          <property name="horizontalScrollBarPolicy">
-           <enum>Qt::ScrollBarAlwaysOff</enum>
-          </property>
-         </widget>
+         <widget class="BoatInspectorView" name="boatInspector"/>
         </item>
         <item>
          <widget class="ValueInspectorWidget" name="valueInspector">
@@ -692,6 +685,11 @@
    <class>MapViewView</class>
    <extends>QGraphicsView</extends>
    <header>sailsim.gui.mapView</header>
+  </customwidget>
+  <customwidget>
+   <class>BoatInspectorView</class>
+   <extends>QGraphicsView</extends>
+   <header>sailsim.gui.boatInspector</header>
   </customwidget>
  </customwidgets>
  <tabstops>

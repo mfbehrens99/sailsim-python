@@ -2,10 +2,10 @@
 
 from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QMainWindow
-from sailsim.gui.qtmain import Ui_MainWindow
 
+from sailsim.gui.boatInspector import BoatInspectorScene
 from sailsim.gui.mapView import MapViewScene
-# from sailsim.gui.boatInspector import BoatInspectorScene
+from sailsim.gui.qtmain import Ui_MainWindow
 
 
 class SailsimGUI(QMainWindow):
@@ -34,16 +34,17 @@ class SailsimGUI(QMainWindow):
         self.ui.timeSlider.setMaximum(len(simulation))
         self.ui.timeSlider.setValue(self.frame)
 
+        # set up map view
         self.mapViewScene = MapViewScene(simulation.boat)
         self.ui.mapView.setScene(self.mapViewScene)
-        # self.boatInspectorScene = BoatInspectorScene()
-        # self.ui.boatInspectorView.setScene(self.boatInspectorScene)
 
-        # self.ui.mapView.boat = boat
-        # self.ui.boatInspectorView.boat = boat
+        # set up boat inspector
+        self.boatInspectorScene = BoatInspectorScene(simulation.boat)
+        self.ui.boatInspector.setScene(self.boatInspectorScene)
+
         # if self.simulation.boat.sailor is not None:
         #     self.ui.mapView.setWaypoints(self.simulation.boat.sailor.commandList)
-        # self.updateFrame(0)
+        self.updateFrame(0)
         # self.updateViewStates()
 
     def updateFrame(self, framenumber):
@@ -57,7 +58,7 @@ class SailsimGUI(QMainWindow):
             maxFrame = str(len(self.simulation))
             self.ui.frameNr.setText(str(framenumber).zfill(len(maxFrame)) + "/" + maxFrame)
             self.mapViewScene.viewFrame(framenumber)
-            # self.boatInspectorScene.viewFrame(frame)
+            self.boatInspectorScene.viewFrame(framenumber)
             self.ui.valueInspector.viewFrame(frame)
 
     def incFrame(self):
