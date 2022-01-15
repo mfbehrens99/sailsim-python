@@ -79,13 +79,16 @@ class BoatInspectorView(QGraphicsView):
         """Disable scrolling."""
 
 
-if __name__ == '__main__':
-
+def main():
+    """Run simple test program."""
     import sys
-
     app = QApplication(sys.argv)
     view = BoatInspectorView()
     view.setScene(BoatInspectorScene(Boat()))
     view.show()
     window = app.exec()
     sys.exit(window)
+
+
+if __name__ == '__main__':
+    main()

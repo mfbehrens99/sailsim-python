@@ -103,7 +103,6 @@ class MapViewView(QGraphicsView):
 def main():
     """Run simple test program."""
     import sys
-
     app = QApplication(sys.argv)
     view = MapViewView()
     view.setScene(MapViewScene(Boat()))
