@@ -58,6 +58,12 @@ class FrameList():
         with open(name, "w", encoding="utf-8") as file:
             file.write(self.getCSV())
 
+    def __getitem__(self, key):
+        return self.frames.__getitem__(key)
+
+    def __setitem__(self, key, value):
+        return self.frames.__setitem__(key, value)
+
     def __len__(self):
         """Return length of the frameList."""
         return len(self.frames)

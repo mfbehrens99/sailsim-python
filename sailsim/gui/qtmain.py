@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'main.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.2.0
+## Created by: Qt User Interface Compiler version 6.2.2
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -16,13 +16,13 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QIcon, QImage, QKeySequence, QLinearGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
-from PySide6.QtWidgets import (QApplication, QHBoxLayout, QHeaderView, QLabel,
-    QMainWindow, QMenu, QMenuBar, QSizePolicy,
-    QSlider, QToolButton, QTreeWidgetItem, QVBoxLayout,
-    QWidget, QAbstractItemView)
+from PySide6.QtWidgets import (QApplication, QAbstractItemView, QHBoxLayout, QHeaderView, QLabel,
+    QLayout, QMainWindow, QMenu, QMenuBar,
+    QSizePolicy, QSlider, QToolButton, QTreeWidgetItem,
+    QVBoxLayout, QWidget)
 
-from sailsim.gui.boatInspector import BoatInspectorWidget
-from sailsim.gui.mapView import MapViewWidget
+from sailsim.gui.boatInspector import BoatInspectorView
+from sailsim.gui.mapView import MapViewView
 from sailsim.gui.valueInspector import ValueInspectorWidget
 
 class Ui_MainWindow(object):
@@ -37,36 +37,33 @@ class Ui_MainWindow(object):
         self.actionOpen.setObjectName(u"actionOpen")
         self.actionOpenGithub = QAction(MainWindow)
         self.actionOpenGithub.setObjectName(u"actionOpenGithub")
-        self.actionShowWaypoints = QAction(MainWindow)
-        self.actionShowWaypoints.setObjectName(u"actionShowWaypoints")
-        self.actionShowWaypoints.setCheckable(True)
-        self.actionShowMainSailMapView = QAction(MainWindow)
-        self.actionShowMainSailMapView.setObjectName(u"actionShowMainSailMapView")
-        self.actionShowMainSailMapView.setCheckable(True)
-        self.actionShowMainSailBoatInspector = QAction(MainWindow)
-        self.actionShowMainSailBoatInspector.setObjectName(u"actionShowMainSailBoatInspector")
-        self.actionShowMainSailBoatInspector.setCheckable(True)
-        self.actionShowRudderMapView = QAction(MainWindow)
-        self.actionShowRudderMapView.setObjectName(u"actionShowRudderMapView")
-        self.actionShowRudderMapView.setCheckable(True)
-        self.actionShowRudderBoatInspector = QAction(MainWindow)
-        self.actionShowRudderBoatInspector.setObjectName(u"actionShowRudderBoatInspector")
-        self.actionShowRudderBoatInspector.setCheckable(True)
-        self.actionShowWaypointLink = QAction(MainWindow)
-        self.actionShowWaypointLink.setObjectName(u"actionShowWaypointLink")
-        self.actionShowWaypointLink.setCheckable(True)
-        self.actionShowBoat = QAction(MainWindow)
-        self.actionShowBoat.setObjectName(u"actionShowBoat")
-        self.actionShowBoat.setCheckable(True)
-        self.actionShowBoatDirection = QAction(MainWindow)
-        self.actionShowBoatDirection.setObjectName(u"actionShowBoatDirection")
-        self.actionShowBoatDirection.setCheckable(True)
-        self.actionShowSpeed = QAction(MainWindow)
-        self.actionShowSpeed.setObjectName(u"actionShowSpeed")
-        self.actionShowSpeed.setCheckable(True)
-        self.actionShowForces = QAction(MainWindow)
-        self.actionShowForces.setObjectName(u"actionShowForces")
-        self.actionShowForces.setCheckable(True)
+        self.actionShowWaypointsMap = QAction(MainWindow)
+        self.actionShowWaypointsMap.setObjectName(u"actionShowWaypointsMap")
+        self.actionShowWaypointsMap.setCheckable(True)
+        self.actionShowBoatMap = QAction(MainWindow)
+        self.actionShowBoatMap.setObjectName(u"actionShowBoatMap")
+        self.actionShowBoatMap.setCheckable(True)
+        self.actionShowWaypointsPathMap = QAction(MainWindow)
+        self.actionShowWaypointsPathMap.setObjectName(u"actionShowWaypointsPathMap")
+        self.actionShowWaypointsPathMap.setCheckable(True)
+        self.actionShowBoatInspector = QAction(MainWindow)
+        self.actionShowBoatInspector.setObjectName(u"actionShowBoatInspector")
+        self.actionShowBoatInspector.setCheckable(True)
+        self.actionShowVectorsInspector = QAction(MainWindow)
+        self.actionShowVectorsInspector.setObjectName(u"actionShowVectorsInspector")
+        self.actionShowVectorsInspector.setCheckable(True)
+        self.actionMap = QAction(MainWindow)
+        self.actionMap.setObjectName(u"actionMap")
+        self.actionMap.setEnabled(False)
+        self.actionInspector = QAction(MainWindow)
+        self.actionInspector.setObjectName(u"actionInspector")
+        self.actionInspector.setEnabled(False)
+        self.actionShowVectorsMap = QAction(MainWindow)
+        self.actionShowVectorsMap.setObjectName(u"actionShowVectorsMap")
+        self.actionShowVectorsMap.setCheckable(True)
+        self.actionShowBoatPathMap = QAction(MainWindow)
+        self.actionShowBoatPathMap.setObjectName(u"actionShowBoatPathMap")
+        self.actionShowBoatPathMap.setCheckable(True)
         self.widget = QWidget(MainWindow)
         self.widget.setObjectName(u"widget")
         self.widget.setLocale(QLocale(QLocale.English, QLocale.Germany))
@@ -75,14 +72,16 @@ class Ui_MainWindow(object):
         self.main = QHBoxLayout()
         self.main.setSpacing(0)
         self.main.setObjectName(u"main")
-        self.mapView = MapViewWidget(self.widget)
+        self.main.setSizeConstraint(QLayout.SetNoConstraint)
+        self.mapView = MapViewView(self.widget)
         self.mapView.setObjectName(u"mapView")
 
         self.main.addWidget(self.mapView)
 
         self.verticalLayout_3 = QVBoxLayout()
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.boatInspector = BoatInspectorWidget(self.widget)
+        self.verticalLayout_3.setSizeConstraint(QLayout.SetNoConstraint)
+        self.boatInspector = BoatInspectorView(self.widget)
         self.boatInspector.setObjectName(u"boatInspector")
 
         self.verticalLayout_3.addWidget(self.boatInspector)
@@ -207,17 +206,16 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuHelp.menuAction())
         self.menuFile.addAction(self.actionNew)
         self.menuFile.addAction(self.actionOpen)
-        self.menuView.addAction(self.actionShowWaypoints)
-        self.menuView.addAction(self.actionShowWaypointLink)
-        self.menuView.addAction(self.actionShowMainSailMapView)
-        self.menuView.addAction(self.actionShowRudderMapView)
+        self.menuView.addAction(self.actionMap)
+        self.menuView.addAction(self.actionShowBoatMap)
+        self.menuView.addAction(self.actionShowVectorsMap)
+        self.menuView.addAction(self.actionShowBoatPathMap)
+        self.menuView.addAction(self.actionShowWaypointsMap)
+        self.menuView.addAction(self.actionShowWaypointsPathMap)
         self.menuView.addSeparator()
-        self.menuView.addAction(self.actionShowBoat)
-        self.menuView.addAction(self.actionShowMainSailBoatInspector)
-        self.menuView.addAction(self.actionShowRudderBoatInspector)
-        self.menuView.addAction(self.actionShowBoatDirection)
-        self.menuView.addAction(self.actionShowSpeed)
-        self.menuView.addAction(self.actionShowForces)
+        self.menuView.addAction(self.actionInspector)
+        self.menuView.addAction(self.actionShowBoatInspector)
+        self.menuView.addAction(self.actionShowVectorsInspector)
         self.menuHelp.addAction(self.actionOpenGithub)
 
         self.retranslateUi(MainWindow)
@@ -227,16 +225,13 @@ class Ui_MainWindow(object):
         self.buttonPlay.clicked.connect(MainWindow.pressedPlay)
         self.buttonStartFrame.clicked.connect(MainWindow.startFrame)
         self.buttonEndFrame.clicked.connect(MainWindow.endFrame)
-        self.actionShowMainSailMapView.toggled.connect(MainWindow.actionViewShowMainSailMapView)
-        self.actionShowRudderMapView.toggled.connect(MainWindow.actionViewShowRudderMapView)
-        self.actionShowWaypointLink.toggled.connect(MainWindow.actionViewShowWaypointLink)
-        self.actionShowWaypoints.toggled.connect(MainWindow.actionViewShowWaypoints)
-        self.actionShowMainSailBoatInspector.toggled.connect(MainWindow.actionViewShowMainSailBoatInspector)
-        self.actionShowRudderBoatInspector.toggled.connect(MainWindow.actionViewShowRudderBoatInspector)
-        self.actionShowSpeed.toggled.connect(MainWindow.actionViewShowSpeed)
-        self.actionShowForces.toggled.connect(MainWindow.actionViewShowForces)
-        self.actionShowBoatDirection.toggled.connect(MainWindow.actionViewShowBoatDirection)
-        self.actionShowBoat.toggled.connect(MainWindow.actionViewShowBoat)
+        self.actionShowWaypointsPathMap.toggled.connect(MainWindow.actionViewShowWaypointsPathMap)
+        self.actionShowWaypointsMap.toggled.connect(MainWindow.actionViewShowWaypointsMap)
+        self.actionShowVectorsInspector.toggled.connect(MainWindow.actionViewShowVectorsInspector)
+        self.actionShowBoatInspector.toggled.connect(MainWindow.actionViewShowBoatInspector)
+        self.actionShowBoatMap.toggled.connect(MainWindow.actionViewShowBoatMap)
+        self.actionShowVectorsMap.toggled.connect(MainWindow.actionViewShowVectorsMap)
+        self.actionShowBoatPathMap.toggled.connect(MainWindow.actionViewShowBoatPathMap)
 
         QMetaObject.connectSlotsByName(MainWindow)
     # setupUi
@@ -255,19 +250,15 @@ class Ui_MainWindow(object):
 #if QT_CONFIG(tooltip)
         self.actionOpenGithub.setToolTip(QCoreApplication.translate("MainWindow", u"Open the sailsim repository on Github", None))
 #endif // QT_CONFIG(tooltip)
-        self.actionShowWaypoints.setText(QCoreApplication.translate("MainWindow", u"Waypoints", None))
-        self.actionShowMainSailMapView.setText(QCoreApplication.translate("MainWindow", u"Main sail", None))
-        self.actionShowMainSailBoatInspector.setText(QCoreApplication.translate("MainWindow", u"Main sail", None))
-        self.actionShowRudderMapView.setText(QCoreApplication.translate("MainWindow", u"Rudder", None))
-        self.actionShowRudderBoatInspector.setText(QCoreApplication.translate("MainWindow", u"Rudder", None))
-#if QT_CONFIG(tooltip)
-        self.actionShowRudderBoatInspector.setToolTip(QCoreApplication.translate("MainWindow", u"Show Rudder in Boat Inspector", None))
-#endif // QT_CONFIG(tooltip)
-        self.actionShowWaypointLink.setText(QCoreApplication.translate("MainWindow", u"Waypoint link", None))
-        self.actionShowBoat.setText(QCoreApplication.translate("MainWindow", u"Boat", None))
-        self.actionShowBoatDirection.setText(QCoreApplication.translate("MainWindow", u"Direction", None))
-        self.actionShowSpeed.setText(QCoreApplication.translate("MainWindow", u"Speed", None))
-        self.actionShowForces.setText(QCoreApplication.translate("MainWindow", u"Forces", None))
+        self.actionShowWaypointsMap.setText(QCoreApplication.translate("MainWindow", u"Waypoints", None))
+        self.actionShowBoatMap.setText(QCoreApplication.translate("MainWindow", u"Boat", None))
+        self.actionShowWaypointsPathMap.setText(QCoreApplication.translate("MainWindow", u"Waypoints path", None))
+        self.actionShowBoatInspector.setText(QCoreApplication.translate("MainWindow", u"Boat", None))
+        self.actionShowVectorsInspector.setText(QCoreApplication.translate("MainWindow", u"Vectors", None))
+        self.actionMap.setText(QCoreApplication.translate("MainWindow", u"Map", None))
+        self.actionInspector.setText(QCoreApplication.translate("MainWindow", u"Inspector", None))
+        self.actionShowVectorsMap.setText(QCoreApplication.translate("MainWindow", u"Vectors", None))
+        self.actionShowBoatPathMap.setText(QCoreApplication.translate("MainWindow", u"Boat path", None))
         ___qtreewidgetitem = self.valueInspector.headerItem()
         ___qtreewidgetitem.setText(4, QCoreApplication.translate("MainWindow", u"Unit", None));
         ___qtreewidgetitem.setText(3, QCoreApplication.translate("MainWindow", u"Y", None));

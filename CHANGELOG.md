@@ -26,11 +26,13 @@ Template
 
 ### Added
 
-- Add .pyrclint
+- [[GUI]] Add object oriented classes for the gui
+- Add linting and testing stuff
 - Add .vscode stuff
 
 ### Changed
 
+- [[GUI]] Reimplement GUI with QGraphicsView and QGraphicsScene
 - Upgrade python project to new standart
 - Moved [Framelist] from [Simulation] to [Boat]
 - Tonns of nicer python (like using with statements for opening files)
