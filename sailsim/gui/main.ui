@@ -20,7 +20,22 @@
    <property name="locale">
     <locale language="English" country="Germany"/>
    </property>
-   <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0">
+   <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0,0">
+    <property name="spacing">
+     <number>1</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
     <item>
      <widget class="QSplitter" name="main">
       <property name="orientation">
@@ -532,6 +547,28 @@
       </item>
      </layout>
     </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLineEdit" name="console">
+        <property name="font">
+         <font>
+          <family>Cascadia Mono</family>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string>avaiable vars: sailsim, simulation, boat, wind</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="frame">
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -718,8 +755,8 @@
    <slot>updateFrame(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>354</x>
-     <y>571</y>
+     <x>587</x>
+     <y>551</y>
     </hint>
     <hint type="destinationlabel">
      <x>296</x>
@@ -734,8 +771,8 @@
    <slot>incFrame()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>119</x>
-     <y>583</y>
+     <x>138</x>
+     <y>552</y>
     </hint>
     <hint type="destinationlabel">
      <x>138</x>
@@ -750,8 +787,8 @@
    <slot>decFrame()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>65</x>
-     <y>583</y>
+     <x>77</x>
+     <y>552</y>
     </hint>
     <hint type="destinationlabel">
      <x>42</x>
@@ -766,8 +803,8 @@
    <slot>pressedPlay(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>95</x>
-     <y>583</y>
+     <x>105</x>
+     <y>552</y>
     </hint>
     <hint type="destinationlabel">
      <x>73</x>
@@ -782,8 +819,8 @@
    <slot>startFrame()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>29</x>
-     <y>571</y>
+     <x>41</x>
+     <y>552</y>
     </hint>
     <hint type="destinationlabel">
      <x>30</x>
@@ -798,8 +835,8 @@
    <slot>endFrame()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>139</x>
-     <y>572</y>
+     <x>171</x>
+     <y>552</y>
     </hint>
     <hint type="destinationlabel">
      <x>149</x>
@@ -919,6 +956,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>console</sender>
+   <signal>returnPressed()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>runCode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>665</x>
+     <y>580</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>673</x>
+     <y>560</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>updateFrame(int)</slot>
@@ -934,5 +987,6 @@
   <slot>actionViewShowWaypointsPathMap(bool)</slot>
   <slot>actionViewShowBoatInspector(bool)</slot>
   <slot>actionViewShowVectorsInspector(bool)</slot>
+  <slot>runCode()</slot>
  </slots>
 </ui>

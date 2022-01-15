@@ -1,17 +1,21 @@
 """This class is the main GUI for the sailsim project."""
 
+from typing import Any, Union
 from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QMainWindow
 
 from sailsim.gui.boatInspector import BoatInspectorScene
 from sailsim.gui.mapView import MapViewScene
+from sailsim.simulation.Simulation import Simulation
 from sailsim.gui.qtmain import Ui_MainWindow
 
 
 class SailsimGUI(QMainWindow):
     """Main GUI for sailsim."""
 
-    def __init__(self, simulation):
+    frame = 0
+
+    def __init__(self, simulation: Simulation, varspace: Union[dict[str, Any], None] = None) -> None:
         """
         Create SailsimGUI object.
 
@@ -21,7 +25,10 @@ class SailsimGUI(QMainWindow):
         super().__init__()
 
         self.simulation = simulation
-        self.frame = 0
+
+        self.varspace = {"sailsim": self}
+        if varspace is not None:
+            self.varspace.update(varspace)
 
         # Load UI from QT generated file
         self.ui = Ui_MainWindow()
@@ -112,6 +119,15 @@ class SailsimGUI(QMainWindow):
         self.ui.actionShowVectorsInspector.setChecked(self.boatInspectorScene.boatVectors.isVisible())
 
     # Slots
+
+    def runCode(self) -> None:
+        """Run custom code in the window."""
+        try:
+            exec(self.ui.console.text(), self.varspace)
+            self.ui.console.setStyleSheet("")
+        except Exception:
+            self.ui.console.setStyleSheet("border: 1px solid red")
+        self.ui.console.setText("")
 
     # Display for mapView
     def actionViewShowBoatMap(self, state):

@@ -19,25 +19,25 @@ wind = Fluctuationfield(0, 10, 1)
 sailor = Sailor(commandListExample)
 #sailor = Sailor([Waypoint(-30, 30, 1), Waypoint(10, 47, 1), Waypoint(100, 60, 1), Waypoint(0, 100, 2)])
 
-b = Boat(0, 0, 0)
-b.sailor = sailor
+boat = Boat(0, 0, 0)
+boat.sailor = sailor
 
-sailor.importBoat(b)
+sailor.importBoat(boat)
 
 # Create simulation
-s = Simulation(b, wind, 0.01, 10000)
+simulation = Simulation(boat, wind, 0.01, 10000)
 
 # Run simulation
 try:
-    s.run()
+    simulation.run()
 except (OverflowError, ValueError):
-    s.lastFrame = s.frame - 1
-    print("Overflow after Frame", s.frame)
+    simulation.lastFrame = simulation.frame - 1
+    print("Overflow after Frame", simulation.frame)
 
 #OUTPUT_PATH = "..\\..\\MATLAB\\sailsim\\out.csv"
 #s.boat.frameList.saveCSV(OUTPUT_PATH)
 
 app = QApplication(sys.argv)
-window = SailsimGUI(s)
+window = SailsimGUI(simulation, locals())
 window.show()
 sys.exit(app.exec())

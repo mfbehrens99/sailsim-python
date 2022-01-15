@@ -17,9 +17,9 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
 from PySide6.QtWidgets import (QApplication, QAbstractItemView, QHBoxLayout, QHeaderView, QLabel,
-    QMainWindow, QMenu, QMenuBar, QSizePolicy,
-    QSlider, QSplitter, QToolButton, QTreeWidgetItem,
-    QVBoxLayout, QWidget)
+    QLineEdit, QMainWindow, QMenu, QMenuBar,
+    QSizePolicy, QSlider, QSplitter, QToolButton,
+    QTreeWidgetItem, QVBoxLayout, QWidget)
 
 from sailsim.gui.boatInspector import BoatInspectorView
 from sailsim.gui.mapView import MapViewView
@@ -68,7 +68,9 @@ class Ui_MainWindow(object):
         self.layout.setObjectName(u"layout")
         self.layout.setLocale(QLocale(QLocale.English, QLocale.Germany))
         self.verticalLayout = QVBoxLayout(self.layout)
+        self.verticalLayout.setSpacing(1)
         self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.main = QSplitter(self.layout)
         self.main.setObjectName(u"main")
         self.main.setOrientation(Qt.Horizontal)
@@ -186,6 +188,20 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addLayout(self.controlBar)
 
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.console = QLineEdit(self.layout)
+        self.console.setObjectName(u"console")
+        font = QFont()
+        font.setFamilies([u"Cascadia Mono"])
+        self.console.setFont(font)
+        self.console.setFrame(False)
+
+        self.horizontalLayout.addWidget(self.console)
+
+
+        self.verticalLayout.addLayout(self.horizontalLayout)
+
         self.verticalLayout.setStretch(0, 1)
         MainWindow.setCentralWidget(self.layout)
         self.menubar = QMenuBar(MainWindow)
@@ -241,6 +257,7 @@ class Ui_MainWindow(object):
         self.actionShowBoatMap.toggled.connect(MainWindow.actionViewShowBoatMap)
         self.actionShowVectorsMap.toggled.connect(MainWindow.actionViewShowVectorsMap)
         self.actionShowBoatPathMap.toggled.connect(MainWindow.actionViewShowBoatPathMap)
+        self.console.returnPressed.connect(MainWindow.runCode)
 
         QMetaObject.connectSlotsByName(MainWindow)
     # setupUi
@@ -377,6 +394,10 @@ class Ui_MainWindow(object):
         self.buttonIncFrame.setText(QCoreApplication.translate("MainWindow", u"\u23e9", None))
         self.buttonEndFrame.setText(QCoreApplication.translate("MainWindow", u"\u23ed", None))
         self.frameNr.setText(QCoreApplication.translate("MainWindow", u"0000/1000", None))
+#if QT_CONFIG(tooltip)
+        self.console.setToolTip(QCoreApplication.translate("MainWindow", u"avaiable vars: sailsim, simulation, boat, wind", None))
+#endif // QT_CONFIG(tooltip)
+        self.console.setText("")
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
         self.menuEdit.setTitle(QCoreApplication.translate("MainWindow", u"Edit", None))
         self.menuView.setTitle(QCoreApplication.translate("MainWindow", u"View", None))
