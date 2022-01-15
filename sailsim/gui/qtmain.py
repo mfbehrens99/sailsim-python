@@ -17,8 +17,8 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
 from PySide6.QtWidgets import (QApplication, QAbstractItemView, QHBoxLayout, QHeaderView, QLabel,
-    QLayout, QMainWindow, QMenu, QMenuBar,
-    QSizePolicy, QSlider, QToolButton, QTreeWidgetItem,
+    QMainWindow, QMenu, QMenuBar, QSizePolicy,
+    QSlider, QSplitter, QToolButton, QTreeWidgetItem,
     QVBoxLayout, QWidget)
 
 from sailsim.gui.boatInspector import BoatInspectorView
@@ -64,29 +64,41 @@ class Ui_MainWindow(object):
         self.actionShowBoatPathMap = QAction(MainWindow)
         self.actionShowBoatPathMap.setObjectName(u"actionShowBoatPathMap")
         self.actionShowBoatPathMap.setCheckable(True)
-        self.widget = QWidget(MainWindow)
-        self.widget.setObjectName(u"widget")
-        self.widget.setLocale(QLocale(QLocale.English, QLocale.Germany))
-        self.verticalLayout = QVBoxLayout(self.widget)
+        self.layout = QWidget(MainWindow)
+        self.layout.setObjectName(u"layout")
+        self.layout.setLocale(QLocale(QLocale.English, QLocale.Germany))
+        self.verticalLayout = QVBoxLayout(self.layout)
         self.verticalLayout.setObjectName(u"verticalLayout")
-        self.main = QHBoxLayout()
-        self.main.setSpacing(0)
+        self.main = QSplitter(self.layout)
         self.main.setObjectName(u"main")
-        self.main.setSizeConstraint(QLayout.SetNoConstraint)
-        self.mapView = MapViewView(self.widget)
+        self.main.setOrientation(Qt.Horizontal)
+        self.main.setHandleWidth(2)
+        self.mapView = MapViewView(self.main)
         self.mapView.setObjectName(u"mapView")
-
+        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(1)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.mapView.sizePolicy().hasHeightForWidth())
+        self.mapView.setSizePolicy(sizePolicy)
         self.main.addWidget(self.mapView)
-
-        self.verticalLayout_3 = QVBoxLayout()
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.verticalLayout_3.setSizeConstraint(QLayout.SetNoConstraint)
-        self.boatInspector = BoatInspectorView(self.widget)
+        self.right = QSplitter(self.main)
+        self.right.setObjectName(u"right")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        sizePolicy1.setHorizontalStretch(3)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.right.sizePolicy().hasHeightForWidth())
+        self.right.setSizePolicy(sizePolicy1)
+        self.right.setOrientation(Qt.Vertical)
+        self.right.setHandleWidth(2)
+        self.boatInspector = BoatInspectorView(self.right)
         self.boatInspector.setObjectName(u"boatInspector")
-
-        self.verticalLayout_3.addWidget(self.boatInspector)
-
-        self.valueInspector = ValueInspectorWidget(self.widget)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(1)
+        sizePolicy2.setHeightForWidth(self.boatInspector.sizePolicy().hasHeightForWidth())
+        self.boatInspector.setSizePolicy(sizePolicy2)
+        self.right.addWidget(self.boatInspector)
+        self.valueInspector = ValueInspectorWidget(self.right)
         QTreeWidgetItem(self.valueInspector)
         QTreeWidgetItem(self.valueInspector)
         QTreeWidgetItem(self.valueInspector)
@@ -108,32 +120,29 @@ class Ui_MainWindow(object):
         QTreeWidgetItem(__qtreewidgetitem2)
         QTreeWidgetItem(__qtreewidgetitem2)
         self.valueInspector.setObjectName(u"valueInspector")
+        sizePolicy3 = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        sizePolicy3.setHorizontalStretch(0)
+        sizePolicy3.setVerticalStretch(2)
+        sizePolicy3.setHeightForWidth(self.valueInspector.sizePolicy().hasHeightForWidth())
+        self.valueInspector.setSizePolicy(sizePolicy3)
         self.valueInspector.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        self.right.addWidget(self.valueInspector)
         self.valueInspector.header().setCascadingSectionResizes(True)
         self.valueInspector.header().setMinimumSectionSize(30)
         self.valueInspector.header().setDefaultSectionSize(80)
+        self.main.addWidget(self.right)
 
-        self.verticalLayout_3.addWidget(self.valueInspector)
-
-        self.verticalLayout_3.setStretch(0, 1)
-        self.verticalLayout_3.setStretch(1, 1)
-
-        self.main.addLayout(self.verticalLayout_3)
-
-        self.main.setStretch(0, 2)
-        self.main.setStretch(1, 1)
-
-        self.verticalLayout.addLayout(self.main)
+        self.verticalLayout.addWidget(self.main)
 
         self.controlBar = QHBoxLayout()
         self.controlBar.setSpacing(0)
         self.controlBar.setObjectName(u"controlBar")
-        self.buttonStartFrame = QToolButton(self.widget)
+        self.buttonStartFrame = QToolButton(self.layout)
         self.buttonStartFrame.setObjectName(u"buttonStartFrame")
 
         self.controlBar.addWidget(self.buttonStartFrame)
 
-        self.buttonDecFrame = QToolButton(self.widget)
+        self.buttonDecFrame = QToolButton(self.layout)
         self.buttonDecFrame.setObjectName(u"buttonDecFrame")
         self.buttonDecFrame.setAutoRepeat(True)
         self.buttonDecFrame.setAutoRepeatDelay(200)
@@ -141,14 +150,14 @@ class Ui_MainWindow(object):
 
         self.controlBar.addWidget(self.buttonDecFrame)
 
-        self.buttonPlay = QToolButton(self.widget)
+        self.buttonPlay = QToolButton(self.layout)
         self.buttonPlay.setObjectName(u"buttonPlay")
         self.buttonPlay.setCheckable(True)
         self.buttonPlay.setChecked(False)
 
         self.controlBar.addWidget(self.buttonPlay)
 
-        self.buttonIncFrame = QToolButton(self.widget)
+        self.buttonIncFrame = QToolButton(self.layout)
         self.buttonIncFrame.setObjectName(u"buttonIncFrame")
         self.buttonIncFrame.setAutoRepeat(True)
         self.buttonIncFrame.setAutoRepeatDelay(200)
@@ -156,17 +165,17 @@ class Ui_MainWindow(object):
 
         self.controlBar.addWidget(self.buttonIncFrame)
 
-        self.buttonEndFrame = QToolButton(self.widget)
+        self.buttonEndFrame = QToolButton(self.layout)
         self.buttonEndFrame.setObjectName(u"buttonEndFrame")
 
         self.controlBar.addWidget(self.buttonEndFrame)
 
-        self.frameNr = QLabel(self.widget)
+        self.frameNr = QLabel(self.layout)
         self.frameNr.setObjectName(u"frameNr")
 
         self.controlBar.addWidget(self.frameNr)
 
-        self.timeSlider = QSlider(self.widget)
+        self.timeSlider = QSlider(self.layout)
         self.timeSlider.setObjectName(u"timeSlider")
         self.timeSlider.setCursor(QCursor(Qt.OpenHandCursor))
         self.timeSlider.setMaximum(1024)
@@ -178,7 +187,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addLayout(self.controlBar)
 
         self.verticalLayout.setStretch(0, 1)
-        MainWindow.setCentralWidget(self.widget)
+        MainWindow.setCentralWidget(self.layout)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
         self.menubar.setGeometry(QRect(0, 0, 963, 26))
