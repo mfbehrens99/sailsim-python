@@ -42,10 +42,8 @@ class SailsimGUI(QMainWindow):
         self.boatInspectorScene = BoatInspectorScene(simulation.boat)
         self.ui.boatInspector.setScene(self.boatInspectorScene)
 
-        # if self.simulation.boat.sailor is not None:
-        #     self.ui.mapView.setWaypoints(self.simulation.boat.sailor.commandList)
         self.updateFrame(0)
-        # self.updateViewStates()
+        self.updateViewStates()
 
     def updateFrame(self, framenumber):
         """Update display when the frame changed."""
@@ -102,22 +100,51 @@ class SailsimGUI(QMainWindow):
     def updateViewStates(self):
         """Load states for QActions from child widgets."""
         # Import states from mapView
-        self.ui.actionShowWaypointLink.setChecked(self.ui.mapView.displayWaypointLink)
-        self.ui.actionShowWaypoints.setChecked(self.ui.mapView.displayWaypoints)
-        self.ui.actionShowMainSailMapView.setChecked(self.ui.mapView.boat.displayMainSail)
-        self.ui.actionShowRudderMapView.setChecked(self.ui.mapView.boat.displayRudder)
+        self.ui.actionShowBoatMap.setChecked(self.mapViewScene.boat.isVisible())
+        self.ui.actionShowVectorsMap.setChecked(self.mapViewScene.boatVectors.isVisible())
+        self.ui.actionShowBoatPathMap.setChecked(self.mapViewScene.path.isVisible())
+        self.ui.actionShowWaypointsMap.setChecked(self.mapViewScene.waypoints.displayWaypoints)
+        self.ui.actionShowWaypointsPathMap.setChecked(self.mapViewScene.waypoints.displayWaypointsPath)
 
         # Import states from boatInspector
-        self.ui.actionShowBoat.setChecked(self.ui.boatInspector.displayBoat)
-        self.ui.actionShowRudderBoatInspector.setChecked(self.ui.boatInspector.displayRudder)
-        self.ui.actionShowMainSailBoatInspector.setChecked(self.ui.boatInspector.displayMainSail)
-        self.ui.actionShowBoatDirection.setChecked(self.ui.boatInspector.displayBoatDirection)
-        self.ui.actionShowSpeed.setChecked(self.ui.boatInspector.displaySpeed)
-        self.ui.actionShowForces.setChecked(self.ui.boatInspector.displayForces)
+        self.ui.actionShowBoatInspector.setChecked(self.boatInspectorScene.boat.isVisible())
+        self.ui.actionShowVectorsInspector.setChecked(self.boatInspectorScene.boatVectors.isVisible())
 
-        # Disable actions if boat is hidden
-        self.ui.actionShowRudderBoatInspector.setEnabled(self.ui.boatInspector.displayBoat)
-        self.ui.actionShowMainSailBoatInspector.setEnabled(self.ui.boatInspector.displayBoat)
+    # Slots
 
-    from .actionslots import actionViewShowWaypointLink, actionViewShowWaypoints, actionViewShowMainSailMapView, actionViewShowRudderMapView
-    from .actionslots import actionViewShowBoat, actionViewShowBoatDirection, actionViewShowSpeed, actionViewShowMainSailBoatInspector, actionViewShowRudderBoatInspector, actionViewShowForces
+    # Display for mapView
+    def actionViewShowBoatMap(self, state):
+        """Show/hide the boat on the map view."""
+        self.mapViewScene.boat.setVisible(state)
+        self.mapViewScene.update()
+
+    def actionViewShowVectorsMap(self, state):
+        """Show/hide the vectors on the map view."""
+        self.mapViewScene.boatVectors.setVisible(state)
+        self.mapViewScene.update()
+
+    def actionViewShowBoatPathMap(self, state):
+        """Show/hide the boat path on the map view."""
+        self.mapViewScene.path.setVisible(state)
+        self.mapViewScene.update()
+
+    def actionViewShowWaypointsMap(self, state):
+        """Show/hide the waypoints on the map view."""
+        self.mapViewScene.waypoints.displayWaypoints = state
+        self.mapViewScene.update()
+
+    def actionViewShowWaypointsPathMap(self, state):
+        """Show/hide the waypoints path on the map view."""
+        self.mapViewScene.waypoints.displayWaypointsPath = state
+        self.mapViewScene.update()
+
+    # Display for boatInspector
+    def actionViewShowBoatInspector(self, state):
+        """Show/hide the boat on the boat inspector."""
+        self.boatInspectorScene.boat.setVisible(state)
+        self.boatInspectorScene.update()
+
+    def actionViewShowVectorsInspector(self, state):
+        """Show/hide the vectors on the boat inspector."""
+        self.boatInspectorScene.boatVectors.setVisible(state)
+        self.boatInspectorScene.update()

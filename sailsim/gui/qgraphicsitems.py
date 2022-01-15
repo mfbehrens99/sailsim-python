@@ -44,8 +44,6 @@ class GUIBoat(QGraphicsItem):
 
     displayMainSail = True
     displayRudder = True
-    displayPath = True
-    displayForces = True
 
     def __init__(self, boat: Boat, parent=None) -> None:
         """
@@ -284,6 +282,9 @@ class GUIWaypoints(QGraphicsItem):
     waypointPath: QPainterPath
     waypointsBoundingRect: QRectF
 
+    displayWaypoints = True
+    displayWaypointsPath = True
+
     def __init__(self, boat: Boat, parent=None) -> None:
         """Create a GUIWaypoints object."""
         super().__init__(parent)
@@ -294,13 +295,15 @@ class GUIWaypoints(QGraphicsItem):
     def paint(self, painter: QPainter, _option: QStyleOptionGraphicsItem, _widget: Optional[QWidget] = None) -> None:
         """Paint waypoints with the painter given."""
         # connection line
-        painter.setPen(dynamicSizePen(QPen(Qt.black, 2), painter))
-        painter.drawPath(self.waypointPath)
+        if self.displayWaypointsPath:
+            painter.setPen(dynamicSizePen(QPen(Qt.black, 2), painter))
+            painter.drawPath(self.waypointPath)
 
         # waypoint circles
-        for waypoint, radius in self.waypoints:
-            painter.setPen(dynamicSizePen(QPen(Qt.blue), painter))
-            painter.drawEllipse(waypoint, radius, radius)
+        if self.displayWaypoints:
+            for waypoint, radius in self.waypoints:
+                painter.setPen(dynamicSizePen(QPen(Qt.blue), painter))
+                painter.drawEllipse(waypoint, radius, radius)
 
         # Draw bounding rectangle (for testing)
         # painter.setPen(dynamicSizePen(QPen(Qt.black), painter))
