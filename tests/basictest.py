@@ -30,7 +30,7 @@ s = Simulation(b, wind, 0.01, 10000)
 # Run simulation
 try:
     s.run()
-except OverflowError:
+except (OverflowError, ValueError):
     s.lastFrame = s.frame - 1
     print("Overflow after Frame", s.frame)
 
