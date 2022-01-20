@@ -1,8 +1,11 @@
 """This module contains the class declaration for the ValueInspectorWidget."""
 
 from math import pi, sqrt
+from typing import Optional, Union
 
-from PySide6.QtWidgets import QTreeWidget
+from PySide6.QtWidgets import QTreeWidget, QWidget
+
+from sailsim.simulation.Simulation import Simulation
 
 def toString(text):
     return f'{text:.4f}'.rstrip('0').rstrip('.')
@@ -10,7 +13,16 @@ def toString(text):
 class ValueInspectorWidget(QTreeWidget):
     """List Widget that displays the boat's values."""
 
-    def viewFrame(self, frame):
+    simulation: Simulation
+
+    def __init__(self, parent: Optional[Union[QWidget, None]] = None) -> None:
+        super().__init__(parent)
+
+    def setSimulation(self, simulation: Simulation) -> None:
+        self.simulation = simulation
+
+    def viewFrame(self, framenumber):
+        frame = self.simulation.boat.frameList[framenumber]
         self.updateValueInspectorRow(self.topLevelItem(0), frame.boatPosX, frame.boatPosY)
 
         self.topLevelItem(1).setText(1, toString(frame.boatDirection * 180 / pi))

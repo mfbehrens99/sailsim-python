@@ -50,22 +50,22 @@ class SailsimGUI(QMainWindow):
         self.boatInspectorScene = BoatInspectorScene(simulation.boat)
         self.ui.boatInspector.setScene(self.boatInspectorScene)
 
+        self.ui.valueInspector.setSimulation(simulation)
+
         self.updateFrame(0)
         self.updateViewStates()
 
     def updateFrame(self, framenumber):
         """Update display when the frame changed."""
-        frames = self.simulation.boat.frameList.frames
-        if framenumber < len(frames):
+        if framenumber < len(self.simulation.boat.frameList.frames):
             self.frame = framenumber
-            frame = frames[framenumber]
 
             # Update widgets
             maxFrame = str(len(self.simulation))
             self.ui.frameNr.setText(str(framenumber).zfill(len(maxFrame)) + "/" + maxFrame)
             self.mapViewScene.viewFrame(framenumber)
             self.boatInspectorScene.viewFrame(framenumber)
-            self.ui.valueInspector.viewFrame(frame)
+            self.ui.valueInspector.viewFrame(framenumber)
 
     def incFrame(self):
         """Move to the next frame if it is in the range of the slider."""

@@ -84,4 +84,4 @@ class Simulation:
 
     def __len__(self):
         """Return number of frames. Might be None."""
-        return self.lastFrame
+        return self.frame
