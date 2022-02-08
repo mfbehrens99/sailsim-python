@@ -14,42 +14,42 @@ def leverSpeedVector(self, lever):
 
 
 # Sail forces
-def sailDrag(self, apparentWindSpeedSq, apparentWindNormX, apparentWindNormY):
+def sailDrag(self, apparentWindSpeed, apparentWindNormX, apparentWindNormY):
     """Calculate the force that is created when wind blows against the boat."""
-    scalarSailDrag = 0.5 * DENSITY_AIR * self.sailArea * apparentWindSpeedSq * self.coefficientAirDrag(self.dataHolder.angleOfAttack)
+    scalarSailDrag = 0.5 * DENSITY_AIR * self.sailArea * apparentWindSpeed**2 * self.coefficientAirDrag(self.temp_angleOfAttack)
     return self.scalarToDragForce(scalarSailDrag, apparentWindNormX, apparentWindNormY)
 
 
-def sailLift(self, apparentWindSpeedSq, apparentWindNormX, apparentWindNormY):
+def sailLift(self, apparentWindSpeed, apparentWindNormX, apparentWindNormY):
     """Calculate the lift force that is created when the wind changes its direction in the sail."""
-    scalarSailLift = 0.5 * DENSITY_AIR * self.sailArea * apparentWindSpeedSq * self.coefficientAirLift(self.dataHolder.angleOfAttack)
-    return self.scalarToLiftForce(scalarSailLift, self.dataHolder.angleOfAttack, apparentWindNormX, apparentWindNormY)
+    scalarSailLift = 0.5 * DENSITY_AIR * self.sailArea * apparentWindSpeed**2 * self.coefficientAirLift(self.temp_angleOfAttack)
+    return self.scalarToLiftForce(scalarSailLift, self.temp_angleOfAttack, apparentWindNormX, apparentWindNormY)
 
 
 # Centerboard forces
 def centerboardDrag(self, flowSpeedSq, flowSpeedCenterboardNormX, flowSpeedCenterboardNormY):
     """Calculate the drag force of the water that is decelerating the boat."""
-    scalarCenterboardDrag = 0.5 * DENSITY_WATER * self.centerboardArea * flowSpeedSq * self.coefficientWaterDrag(self.dataHolder.leewayAngle)
+    scalarCenterboardDrag = 0.5 * DENSITY_WATER * self.centerboardArea * flowSpeedSq * self.coefficientWaterDrag(self.temp_leewayAngle)
     return self.scalarToDragForce(scalarCenterboardDrag, flowSpeedCenterboardNormX, flowSpeedCenterboardNormY)
 
 
 def centerboardLift(self, flowSpeedSq, flowSpeedCenterboardNormX, flowSpeedCenterboardNormY):
     """Calculate force that is caused by lift forces in the water."""
-    scalarCenterboardLift = 0.5 * DENSITY_WATER * self.centerboardArea * flowSpeedSq * self.coefficientWaterLift(self.dataHolder.leewayAngle)
-    return self.scalarToLiftForce(scalarCenterboardLift, self.dataHolder.leewayAngle, flowSpeedCenterboardNormX, flowSpeedCenterboardNormY)
+    scalarCenterboardLift = 0.5 * DENSITY_WATER * self.centerboardArea * flowSpeedSq * self.coefficientWaterLift(self.temp_leewayAngle)
+    return self.scalarToLiftForce(scalarCenterboardLift, self.temp_leewayAngle, flowSpeedCenterboardNormX, flowSpeedCenterboardNormY)
 
 
 # Rudder forces
 def rudderDrag(self, flowSpeedSq, flowSpeedRudderNormX, flowSpeedRudderNormY):
     """Calculates Force of the rudder that ist decelerating the boat."""
-    scalarRudderDrag = 0.5 * DENSITY_WATER * self.rudderArea * flowSpeedSq * self.coefficientWaterDrag(angleKeepInterval(self.dataHolder.leewayAngle + self.rudderAngle))
+    scalarRudderDrag = 0.5 * DENSITY_WATER * self.rudderArea * flowSpeedSq * self.coefficientWaterDrag(angleKeepInterval(self.temp_leewayAngle + self.rudderAngle))
     return self.scalarToDragForce(scalarRudderDrag, flowSpeedRudderNormX, flowSpeedRudderNormY)
 
 
 def rudderLift(self, flowSpeedSq, flowSpeedRudderNormX, flowSpeedRudderNormY):
     """Calculates Lift caused by rudder."""
-    scalarRudderLift = 0.5 * DENSITY_WATER * self.rudderArea * flowSpeedSq * self.coefficientWaterLift(angleKeepInterval(self.dataHolder.leewayAngle + self.rudderAngle))
-    return self.scalarToLiftForce(scalarRudderLift, angleKeepInterval(self.dataHolder.leewayAngle + self.rudderAngle), flowSpeedRudderNormX, flowSpeedRudderNormY)
+    scalarRudderLift = 0.5 * DENSITY_WATER * self.rudderArea * flowSpeedSq * self.coefficientWaterLift(angleKeepInterval(self.temp_leewayAngle + self.rudderAngle))
+    return self.scalarToLiftForce(scalarRudderLift, angleKeepInterval(self.temp_leewayAngle + self.rudderAngle), flowSpeedRudderNormX, flowSpeedRudderNormY)
 
 
 

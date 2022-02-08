@@ -1,23 +1,22 @@
 from copy import deepcopy
 
-from sailsim.simulation.FrameList import FrameList
-
 
 class Simulation:
     """Main simulation class in this project."""
 
-    def __init__(self, world, timestep, lastFrame=None):
+    def __init__(self, boat, wind, timestep, lastFrame=None):
         """
         Create Simulation.
 
         Args:
-            world:      world object that contains all information about the world to simulate
+            boat:       boat object to simulate
+            wind:       wind of the simulation
             timestep:   time difference between frames
             lastFrame:  number of frames to be simulated, default: no end
         """
-        self.world = world
-        self.initWorld = deepcopy(world)
-        self.frameList = FrameList()
+        self.boat = boat
+        self.wind = wind
+        self.initBoat = deepcopy(boat)
 
         # Timing
         self.timestep = timestep
@@ -33,7 +32,7 @@ class Simulation:
             while self.frame <= self.lastFrame:
                 self.step()
         else:
-            for i in range(steps):
+            for _ in range(steps):
                 self.step()
 
     def step(self):
@@ -42,19 +41,20 @@ class Simulation:
         time = self.frame * self.timestep
 
         # Calculate Forces on boat
-        (boatX, boatY) = self.world.boat.getPos()                           # Fetch boat position
-        (windX, windY) = self.world.wind.getWindCart(boatX, boatY, time)    # Get wind
-        (forceX, forceY, torque) = self.world.boat.resultingCauses(windX, windY)
+        (boatX, boatY) = self.boat.getPos()                           # Fetch boat position
+        (windX, windY) = self.wind.getWindCart(boatX, boatY, time)    # Get wind
+        self.boat.updateTemporaryData(windX, windY)
+        (forceX, forceY, torque) = self.boat.resultingCauses()
 
         # Save frame
-        self.frameList.grabFrame(self)
+        self.boat.frameList.grabFrame(self, self.boat)
         self.frame += 1
 
-        self.world.boat.runSailor()
+        self.boat.runSailor()
 
         # Move Boat
-        self.world.boat.applyCauses(forceX, forceY, torque, self.timestep)
-        self.world.boat.moveInterval(self.timestep)
+        self.boat.applyCauses(forceX, forceY, torque, self.timestep)
+        self.boat.moveInterval(self.timestep)
 
 
     def getTime(self):
@@ -69,18 +69,18 @@ class Simulation:
     def reset(self):
         """Set simulation to the first frame recorded."""
         # Reset Boat
-        self.world = deepcopy(self.initWorld)
+        self.boat = deepcopy(self.initBoat)
 
         # Reset Simulation
-        self.frameList.reset()
+        self.boat.frameList.reset()
         self.frame = 0
 
 
     def __repr__(self):
         """Return basic information about the simulation."""
         if self.lastFrame is None:
-            return "sailsim @frm%s(%ss), %sms\n%s\n----------" % (self.frame, self.getTime(), self.timestep * 1000, self.world)
-        return "sailsim @frm%s/%s(%ss,%s%%), %sms\n%s\n----------" % (self.frame, self.lastFrame, self.getTime(), str(round(self.frame * 100 / self.lastFrame, 1)).zfill(4), self.timestep * 1000, self.world)
+            return f"sailsim @frm{self.frame}({self.getTime()}s), {self.timestep * 1000}ms"
+        return f"sailsim @frm{self.frame}/{self.lastFrame}({self.getTime()}s), {self.timestep * 1000}ms"
 
     def __len__(self):
         """Return number of frames. Might be None."""

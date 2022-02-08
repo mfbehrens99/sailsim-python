@@ -7,51 +7,35 @@ from sailsim.gui.SailsimGUI import SailsimGUI
 
 # Import basic modules
 from sailsim.simulation.Simulation import Simulation
-from sailsim.world.World import World
 from sailsim.boat.Boat import Boat
 from sailsim.sailor.Sailor import Sailor
-from sailsim.sailor.Commands import commandListExample
-
-# Import Winds
-from sailsim.wind.Wind import Wind
-from sailsim.wind.Windfield import Windfield
+from sailsim.sailor.Commands import commandListExample, Waypoint
 from sailsim.wind.Fluctuationfield import Fluctuationfield
-from sailsim.wind.Squallfield import Squallfield
-
-from sailsim.gui.ConfigWind import ConfigWind
-from sailsim.gui.ConfigBoat import ConfigBoat
-
-OUTPUT_PATH = "..\\..\\MATLAB\\sailsim\\out.csv"
 
 # Define Wind
-wf = Windfield(0, 10)
-flctf = Fluctuationfield(1)
-sqf = Squallfield(0, 0, 100, 1, 0) # TODO has to be enabled later
-wind = Wind([wf, flctf, sqf])
-ConfigWind(wind).mainloop()
+wind = Fluctuationfield(0, 10, 1)
 
 # Create and configure boat and sailor
 sailor = Sailor(commandListExample)
+#sailor = Sailor([Waypoint(-30, 30, 1), Waypoint(10, 47, 1), Waypoint(100, 60, 1), Waypoint(0, 100, 2)])
 
 b = Boat(0, 0, 0)
-b.setMainSailAngleDeg(0)
-ConfigBoat(b, wind).mainloop()
 b.sailor = sailor
 
 sailor.importBoat(b)
 
-# Create world and simulation
-w = World(b, wind, None)
-s = Simulation(w, 0.01, 1000)
+# Create simulation
+s = Simulation(b, wind, 0.01, 10000)
 
 # Run simulation
 try:
     s.run()
-except OverflowError:
+except (OverflowError, ValueError):
     s.lastFrame = s.frame - 1
     print("Overflow after Frame", s.frame)
 
-s.frameList.saveCSV(OUTPUT_PATH)
+#OUTPUT_PATH = "..\\..\\MATLAB\\sailsim\\out.csv"
+#s.boat.frameList.saveCSV(OUTPUT_PATH)
 
 app = QApplication(sys.argv)
 window = SailsimGUI(s)

@@ -16,408 +16,435 @@
   <property name="styleSheet">
    <string notr="true"/>
   </property>
-  <widget class="QWidget" name="widget">
+  <widget class="QWidget" name="layout">
    <property name="locale">
     <locale language="English" country="Germany"/>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0">
     <item>
-     <layout class="QHBoxLayout" name="main" stretch="2,1">
-      <property name="spacing">
-       <number>0</number>
+     <widget class="QSplitter" name="main">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
       </property>
-      <item>
-       <widget class="MapViewWidget" name="mapView" native="true"/>
-      </item>
-      <item>
-       <layout class="QVBoxLayout" name="verticalLayout_3" stretch="1,1">
+      <property name="handleWidth">
+       <number>2</number>
+      </property>
+      <widget class="MapViewView" name="mapView">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>1</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+      <widget class="QSplitter" name="right">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>3</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="handleWidth">
+        <number>2</number>
+       </property>
+       <widget class="BoatInspectorView" name="boatInspector">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>1</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
+       <widget class="ValueInspectorWidget" name="valueInspector">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>2</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+        <attribute name="headerCascadingSectionResizes">
+         <bool>true</bool>
+        </attribute>
+        <attribute name="headerDefaultSectionSize">
+         <number>80</number>
+        </attribute>
+        <attribute name="headerMinimumSectionSize">
+         <number>30</number>
+        </attribute>
+        <column>
+         <property name="text">
+          <string>Name</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Value</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>X</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Y</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>Unit</string>
+         </property>
+        </column>
         <item>
-         <widget class="BoatInspectorWidget" name="boatInspector" native="true"/>
+         <property name="text">
+          <string>Position</string>
+         </property>
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="text">
+          <string>m</string>
+         </property>
         </item>
         <item>
-         <widget class="ValueInspectorWidget" name="valueInspector">
-          <property name="editTriggers">
-           <set>QAbstractItemView::NoEditTriggers</set>
+         <property name="text">
+          <string>Direction</string>
+         </property>
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="text">
+          <string>Deg</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Speed</string>
+         </property>
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="text">
+          <string>m/s</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Ang speed</string>
+         </property>
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="text">
+          <string>deg/s</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Force</string>
+         </property>
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="text">
+          <string>N</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>SailDrag</string>
           </property>
-          <attribute name="headerCascadingSectionResizes">
-           <bool>true</bool>
-          </attribute>
-          <attribute name="headerDefaultSectionSize">
-           <number>80</number>
-          </attribute>
-          <attribute name="headerMinimumSectionSize">
-           <number>30</number>
-          </attribute>
-          <column>
-           <property name="text">
-            <string>Name</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Value</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>X</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Y</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Unit</string>
-           </property>
-          </column>
-          <item>
-           <property name="text">
-            <string>Position</string>
-           </property>
-           <property name="text">
-            <string>0</string>
-           </property>
-           <property name="text">
-            <string>0</string>
-           </property>
-           <property name="text">
-            <string>0</string>
-           </property>
-           <property name="text">
-            <string>m</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Direction</string>
-           </property>
-           <property name="text">
-            <string>0</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="text">
-            <string>Deg</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Speed</string>
-           </property>
-           <property name="text">
-            <string>0</string>
-           </property>
-           <property name="text">
-            <string>0</string>
-           </property>
-           <property name="text">
-            <string>0</string>
-           </property>
-           <property name="text">
-            <string>m/s</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Ang speed</string>
-           </property>
-           <property name="text">
-            <string>0</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="text">
-            <string>deg/s</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Force</string>
-           </property>
-           <property name="text">
-            <string>0</string>
-           </property>
-           <property name="text">
-            <string>0</string>
-           </property>
-           <property name="text">
-            <string>0</string>
-           </property>
-           <property name="text">
-            <string>N</string>
-           </property>
-           <item>
-            <property name="text">
-             <string>SailDrag</string>
-            </property>
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="text">
-             <string>N</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>SailLift</string>
-            </property>
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="text">
-             <string>N</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>CenterboardDrag</string>
-            </property>
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="text">
-             <string>N</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>CenterboardLift</string>
-            </property>
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="text">
-             <string>N</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>RudderDrag</string>
-            </property>
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="text">
-             <string>N</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>RudderLift</string>
-            </property>
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="text">
-             <string>N</string>
-            </property>
-           </item>
-          </item>
-          <item>
-           <property name="text">
-            <string>Torque</string>
-           </property>
-           <property name="text">
-            <string>0</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="text">
-            <string>Nm</string>
-           </property>
-           <item>
-            <property name="text">
-             <string>WaterDrag</string>
-            </property>
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="text">
-             <string>Nm</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Centerboard</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="text">
-             <string>Nm</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Rudder</string>
-            </property>
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="text">
-             <string>Nm</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Hull</string>
-            </property>
-            <property name="text">
-             <string>0</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="text">
-             <string>Nm</string>
-            </property>
-           </item>
-          </item>
-          <item>
-           <property name="text">
-            <string>Angle</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <item>
-            <property name="text">
-             <string>Main sail</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="text">
-             <string>Deg</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Rudder</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="text">
-             <string>Deg</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>LeewayAngle</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="text">
-             <string>Deg</string>
-            </property>
-           </item>
-          </item>
-         </widget>
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="text">
+           <string>N</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>SailLift</string>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="text">
+           <string>N</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>CenterboardDrag</string>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="text">
+           <string>N</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>CenterboardLift</string>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="text">
+           <string>N</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>RudderDrag</string>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="text">
+           <string>N</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>RudderLift</string>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="text">
+           <string>N</string>
+          </property>
+         </item>
         </item>
-       </layout>
-      </item>
-     </layout>
+        <item>
+         <property name="text">
+          <string>Torque</string>
+         </property>
+         <property name="text">
+          <string>0</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="text">
+          <string>Nm</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>WaterDrag</string>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="text">
+           <string>Nm</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Centerboard</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="text">
+           <string>Nm</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Rudder</string>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="text">
+           <string>Nm</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Hull</string>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="text">
+           <string>Nm</string>
+          </property>
+         </item>
+        </item>
+        <item>
+         <property name="text">
+          <string>Angle</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <item>
+          <property name="text">
+           <string>Main sail</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="text">
+           <string>Deg</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Rudder</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="text">
+           <string>Deg</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>LeewayAngle</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="text">
+           <string>Deg</string>
+          </property>
+         </item>
+        </item>
+       </widget>
+      </widget>
+     </widget>
     </item>
     <item>
      <layout class="QHBoxLayout" name="controlBar">
@@ -532,17 +559,16 @@
     <property name="title">
      <string>View</string>
     </property>
-    <addaction name="actionShowWaypoints"/>
-    <addaction name="actionShowWaypointLink"/>
-    <addaction name="actionShowMainSailMapView"/>
-    <addaction name="actionShowRudderMapView"/>
+    <addaction name="actionMap"/>
+    <addaction name="actionShowBoatMap"/>
+    <addaction name="actionShowVectorsMap"/>
+    <addaction name="actionShowBoatPathMap"/>
+    <addaction name="actionShowWaypointsMap"/>
+    <addaction name="actionShowWaypointsPathMap"/>
     <addaction name="separator"/>
-    <addaction name="actionShowBoat"/>
-    <addaction name="actionShowMainSailBoatInspector"/>
-    <addaction name="actionShowRudderBoatInspector"/>
-    <addaction name="actionShowBoatDirection"/>
-    <addaction name="actionShowSpeed"/>
-    <addaction name="actionShowForces"/>
+    <addaction name="actionInspector"/>
+    <addaction name="actionShowBoatInspector"/>
+    <addaction name="actionShowVectorsInspector"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -585,7 +611,7 @@
     <string>Open the sailsim repository on Github</string>
    </property>
   </action>
-  <action name="actionShowWaypoints">
+  <action name="actionShowWaypointsMap">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -593,50 +619,7 @@
     <string>Waypoints</string>
    </property>
   </action>
-  <action name="actionShowMainSailMapView">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Main sail</string>
-   </property>
-  </action>
-  <action name="actionShowMainSailBoatInspector">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Main sail</string>
-   </property>
-  </action>
-  <action name="actionShowRudderMapView">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Rudder</string>
-   </property>
-  </action>
-  <action name="actionShowRudderBoatInspector">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Rudder</string>
-   </property>
-   <property name="toolTip">
-    <string>Show Rudder in Boat Inspector</string>
-   </property>
-  </action>
-  <action name="actionShowWaypointLink">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Waypoint link</string>
-   </property>
-  </action>
-  <action name="actionShowBoat">
+  <action name="actionShowBoatMap">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -644,51 +627,78 @@
     <string>Boat</string>
    </property>
   </action>
-  <action name="actionShowBoatDirection">
+  <action name="actionShowWaypointsPathMap">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Direction</string>
+    <string>Waypoints path</string>
    </property>
   </action>
-  <action name="actionShowSpeed">
+  <action name="actionShowBoatInspector">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Speed</string>
+    <string>Boat</string>
    </property>
   </action>
-  <action name="actionShowForces">
+  <action name="actionShowVectorsInspector">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Forces</string>
+    <string>Vectors</string>
+   </property>
+  </action>
+  <action name="actionMap">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Map</string>
+   </property>
+  </action>
+  <action name="actionInspector">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Inspector</string>
+   </property>
+  </action>
+  <action name="actionShowVectorsMap">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Vectors</string>
+   </property>
+  </action>
+  <action name="actionShowBoatPathMap">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Boat path</string>
    </property>
   </action>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>MapViewWidget</class>
-   <extends>QWidget</extends>
-   <header>sailsim.gui.mapView</header>
-   <container>1</container>
-   <slots>
-    <slot>viewFrame(int)</slot>
-   </slots>
-  </customwidget>
-  <customwidget>
-   <class>BoatInspectorWidget</class>
-   <extends>QWidget</extends>
-   <header>sailsim.gui.boatInspector</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>ValueInspectorWidget</class>
    <extends>QTreeWidget</extends>
    <header>sailsim.gui.valueInspector</header>
+  </customwidget>
+  <customwidget>
+   <class>MapViewView</class>
+   <extends>QGraphicsView</extends>
+   <header>sailsim.gui.mapView</header>
+  </customwidget>
+  <customwidget>
+   <class>BoatInspectorView</class>
+   <extends>QGraphicsView</extends>
+   <header>sailsim.gui.boatInspector</header>
   </customwidget>
  </customwidgets>
  <tabstops>
@@ -798,10 +808,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionShowMainSailMapView</sender>
+   <sender>actionShowWaypointsPathMap</sender>
    <signal>toggled(bool)</signal>
    <receiver>MainWindow</receiver>
-   <slot>actionViewShowMainSailMapView(bool)</slot>
+   <slot>actionViewShowWaypointsPathMap(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -814,10 +824,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionShowRudderMapView</sender>
+   <sender>actionShowWaypointsMap</sender>
    <signal>toggled(bool)</signal>
    <receiver>MainWindow</receiver>
-   <slot>actionViewShowRudderMapView(bool)</slot>
+   <slot>actionViewShowWaypointsMap(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -830,10 +840,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionShowWaypointLink</sender>
+   <sender>actionShowVectorsInspector</sender>
    <signal>toggled(bool)</signal>
    <receiver>MainWindow</receiver>
-   <slot>actionViewShowWaypointLink(bool)</slot>
+   <slot>actionViewShowVectorsInspector(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -846,10 +856,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionShowWaypoints</sender>
+   <sender>actionShowBoatInspector</sender>
    <signal>toggled(bool)</signal>
    <receiver>MainWindow</receiver>
-   <slot>actionViewShowWaypoints(bool)</slot>
+   <slot>actionViewShowBoatInspector(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -862,10 +872,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionShowMainSailBoatInspector</sender>
+   <sender>actionShowBoatMap</sender>
    <signal>toggled(bool)</signal>
    <receiver>MainWindow</receiver>
-   <slot>actionViewShowMainSailBoatInspector(bool)</slot>
+   <slot>actionViewShowBoatMap(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -878,10 +888,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionShowRudderBoatInspector</sender>
+   <sender>actionShowVectorsMap</sender>
    <signal>toggled(bool)</signal>
    <receiver>MainWindow</receiver>
-   <slot>actionViewShowRudderBoatInspector(bool)</slot>
+   <slot>actionViewShowVectorsMap(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -894,58 +904,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>actionShowSpeed</sender>
+   <sender>actionShowBoatPathMap</sender>
    <signal>toggled(bool)</signal>
    <receiver>MainWindow</receiver>
-   <slot>actionViewShowSpeed(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>481</x>
-     <y>297</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionShowForces</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>actionViewShowForces(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>481</x>
-     <y>297</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionShowBoatDirection</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>actionViewShowBoatDirection(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>481</x>
-     <y>297</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>actionShowBoat</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>actionViewShowBoat(bool)</slot>
+   <slot>actionViewShowBoatPathMap(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -965,15 +927,12 @@
   <slot>pressedPlay(bool)</slot>
   <slot>startFrame()</slot>
   <slot>endFrame()</slot>
-  <slot>actionViewShowMainSailMapView(bool)</slot>
-  <slot>actionViewShowRudderMapView(bool)</slot>
-  <slot>actionViewShowWaypointLink(bool)</slot>
-  <slot>actionViewShowWaypoints(bool)</slot>
-  <slot>actionViewShowRudderBoatInspector(bool)</slot>
-  <slot>actionViewShowMainSailBoatInspector(bool)</slot>
-  <slot>actionViewShowBoat(bool)</slot>
-  <slot>actionViewShowBoatDirection(bool)</slot>
-  <slot>actionViewShowSpeed(bool)</slot>
-  <slot>actionViewShowForces(bool)</slot>
+  <slot>actionViewShowBoatMap(bool)</slot>
+  <slot>actionViewShowVectorsMap(bool)</slot>
+  <slot>actionViewShowBoatPathMap(bool)</slot>
+  <slot>actionViewShowWaypointsMap(bool)</slot>
+  <slot>actionViewShowWaypointsPathMap(bool)</slot>
+  <slot>actionViewShowBoatInspector(bool)</slot>
+  <slot>actionViewShowVectorsInspector(bool)</slot>
  </slots>
 </ui>
