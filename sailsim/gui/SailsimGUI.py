@@ -2,15 +2,22 @@
 
 from PySide6.QtCore import QTimer
 from PySide6.QtWidgets import QMainWindow
-from sailsim.gui.qtmain import Ui_MainWindow
 
-from sailsim.gui.mapView import pointsToPath
+from sailsim.gui.boatInspector import BoatInspectorScene
+from sailsim.gui.mapView import MapViewScene
+from sailsim.gui.qtmain import Ui_MainWindow
 
 
 class SailsimGUI(QMainWindow):
     """Main GUI for sailsim."""
 
     def __init__(self, simulation):
+        """
+        Create SailsimGUI object.
+
+        Args:
+            simulation      Simulation that should be displayed
+        """
         super().__init__()
 
         self.simulation = simulation
@@ -19,39 +26,39 @@ class SailsimGUI(QMainWindow):
         # Load UI from QT generated file
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        # self.setWindowState(Qt.WindowMaximized)
 
-        # Set up timer for play button
+        # Playback and timeSlider
         self.timer = QTimer(self)
         self.timer.setInterval(simulation.timestep * 1000)
         self.timer.timeout.connect(self.playStep)
-
         self.ui.timeSlider.setMaximum(len(simulation))
         self.ui.timeSlider.setValue(self.frame)
-        if self.simulation.boat.sailor is not None:
-            self.ui.mapView.setWaypoints(self.simulation.boat.sailor.commandList)
-        self.updatePath(5)
+
+        # set up map view
+        self.mapViewScene = MapViewScene(simulation.boat)
+        self.ui.mapView.setScene(self.mapViewScene)
+
+        # set up boat inspector
+        self.boatInspectorScene = BoatInspectorScene(simulation.boat)
+        self.ui.boatInspector.setScene(self.boatInspectorScene)
+
         self.updateFrame(0)
         self.updateViewStates()
 
-    def updateFrame(self, frameNr):
+    def updateFrame(self, framenumber):
         """Update display when the frame changed."""
         frames = self.simulation.boat.frameList.frames
-        if frameNr < len(frames):
-            self.frame = frameNr
-            frame = frames[frameNr]
+        if framenumber < len(frames):
+            self.frame = framenumber
+            frame = frames[framenumber]
 
             # Update widgets
             maxFrame = str(len(self.simulation))
-            self.ui.frameNr.setText(str(frameNr).zfill(len(maxFrame)) + "/" + maxFrame)
-            self.ui.mapView.viewFrame(frame)
-            self.ui.boatInspector.viewFrame(frame)
+            self.ui.frameNr.setText(str(framenumber).zfill(len(maxFrame)) + "/" + maxFrame)
+            self.mapViewScene.viewFrame(framenumber)
+            self.boatInspectorScene.viewFrame(framenumber)
             self.ui.valueInspector.viewFrame(frame)
-
-    def updatePath(self, pathStep):
-        """Update the path displayed on the MapViewWidget with the current data from the simulation."""
-        coordinates = self.simulation.boat.frameList.getCoordinateList()
-        if len(coordinates) > 0:
-            self.ui.mapView.setPath(pointsToPath(coordinates, pathStep))
 
     def incFrame(self):
         """Move to the next frame if it is in the range of the slider."""
@@ -94,22 +101,51 @@ class SailsimGUI(QMainWindow):
     def updateViewStates(self):
         """Load states for QActions from child widgets."""
         # Import states from mapView
-        self.ui.actionShowWaypointLink.setChecked(self.ui.mapView.displayWaypointLink)
-        self.ui.actionShowWaypoints.setChecked(self.ui.mapView.displayWaypoints)
-        self.ui.actionShowMainSailMapView.setChecked(self.ui.mapView.displayMainSail)
-        self.ui.actionShowRudderMapView.setChecked(self.ui.mapView.displayRudder)
+        self.ui.actionShowBoatMap.setChecked(self.mapViewScene.boat.isVisible())
+        self.ui.actionShowVectorsMap.setChecked(self.mapViewScene.boatVectors.isVisible())
+        self.ui.actionShowBoatPathMap.setChecked(self.mapViewScene.path.isVisible())
+        self.ui.actionShowWaypointsMap.setChecked(self.mapViewScene.waypoints.displayWaypoints)
+        self.ui.actionShowWaypointsPathMap.setChecked(self.mapViewScene.waypoints.displayWaypointsPath)
 
         # Import states from boatInspector
-        self.ui.actionShowBoat.setChecked(self.ui.boatInspector.displayBoat)
-        self.ui.actionShowRudderBoatInspector.setChecked(self.ui.boatInspector.displayRudder)
-        self.ui.actionShowMainSailBoatInspector.setChecked(self.ui.boatInspector.displayMainSail)
-        self.ui.actionShowBoatDirection.setChecked(self.ui.boatInspector.displayBoatDirection)
-        self.ui.actionShowSpeed.setChecked(self.ui.boatInspector.displaySpeed)
-        self.ui.actionShowForces.setChecked(self.ui.boatInspector.displayForces)
+        self.ui.actionShowBoatInspector.setChecked(self.boatInspectorScene.boat.isVisible())
+        self.ui.actionShowVectorsInspector.setChecked(self.boatInspectorScene.boatVectors.isVisible())
 
-        # Disable actions if boat is hidden
-        self.ui.actionShowRudderBoatInspector.setEnabled(self.ui.boatInspector.displayBoat)
-        self.ui.actionShowMainSailBoatInspector.setEnabled(self.ui.boatInspector.displayBoat)
+    # Slots
 
-    from .actionslots import actionViewShowWaypointLink, actionViewShowWaypoints, actionViewShowMainSailMapView, actionViewShowRudderMapView
-    from .actionslots import actionViewShowBoat, actionViewShowBoatDirection, actionViewShowSpeed, actionViewShowMainSailBoatInspector, actionViewShowRudderBoatInspector, actionViewShowForces
+    # Display for mapView
+    def actionViewShowBoatMap(self, state):
+        """Show/hide the boat on the map view."""
+        self.mapViewScene.boat.setVisible(state)
+        self.mapViewScene.update()
+
+    def actionViewShowVectorsMap(self, state):
+        """Show/hide the vectors on the map view."""
+        self.mapViewScene.boatVectors.setVisible(state)
+        self.mapViewScene.update()
+
+    def actionViewShowBoatPathMap(self, state):
+        """Show/hide the boat path on the map view."""
+        self.mapViewScene.path.setVisible(state)
+        self.mapViewScene.update()
+
+    def actionViewShowWaypointsMap(self, state):
+        """Show/hide the waypoints on the map view."""
+        self.mapViewScene.waypoints.displayWaypoints = state
+        self.mapViewScene.update()
+
+    def actionViewShowWaypointsPathMap(self, state):
+        """Show/hide the waypoints path on the map view."""
+        self.mapViewScene.waypoints.displayWaypointsPath = state
+        self.mapViewScene.update()
+
+    # Display for boatInspector
+    def actionViewShowBoatInspector(self, state):
+        """Show/hide the boat on the boat inspector."""
+        self.boatInspectorScene.boat.setVisible(state)
+        self.boatInspectorScene.update()
+
+    def actionViewShowVectorsInspector(self, state):
+        """Show/hide the vectors on the boat inspector."""
+        self.boatInspectorScene.boatVectors.setVisible(state)
+        self.boatInspectorScene.update()

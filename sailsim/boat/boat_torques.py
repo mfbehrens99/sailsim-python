@@ -5,10 +5,10 @@ from sailsim.utils.constants import DENSITY_AIR, DENSITY_WATER
 
 def waterDragTorque(self):
     c_w = 1.1
+    draught = .3 # bad approximation...
     # TODO use c_w
-    # NOTE formula does not contain an area (but only a length)
     # print(self.angSpeed)
-    torque = 1 / 4 * c_w * DENSITY_WATER * pow(self.length, 4) * pow(self.angSpeed, 2)
+    torque = 1 / 64 * c_w * draught * DENSITY_WATER * pow(self.length, 4) * pow(self.angSpeed, 2)
     if self.angSpeed < 0:
         return torque
     return -torque

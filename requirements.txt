@@ -1,2 +1,2 @@
 PySide6
-opensimplex
+opensimplex >= 0.4
