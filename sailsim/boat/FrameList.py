@@ -1,40 +1,44 @@
 """This module includes everything to store the simulation of a boat."""
 
 
+from sailsim.boat.Boat import Boat
+from sailsim.simulation.Simulation import Simulation
+
+
 class FrameList():
     """Keep all Frames of a boat and export the data."""
 
-    def __init__(self):
-        self.frames = []
+    def __init__(self) -> None:
+        self.frames: list = []
 
 
-    def grabFrame(self, simulation, boat):
+    def grabFrame(self, simulation: Simulation, boat: Boat) -> None:
         """Append new frame with all information to list."""
         (posX, posY) = boat.getPos()
-        frame = Frame()
+        frame: Frame = Frame()
         frame.collectSimulation(simulation)
         frame.collectBoat(boat)
         frame.collectWind(simulation.wind, posX, posY)
         self.frames.append(frame)
 
-    def reset(self):
+    def reset(self) -> None:
         """Delete all previously saved frames."""
         self.frames = []
 
-    def getCoordinateList(self):
+    def getCoordinateList(self) -> list[tuple[float, float]]:
         out = []
         for frame in self.frames:
             out.append((frame.boatPosX, frame.boatPosY))
         return out
 
-    def getCSV(self):
+    def getCSV(self) -> str:
         """Generate .csv file and return it."""
         output = self.getCSVHeader() + "\n"
         for frame in self.frames:
             output += frame.getCSVLine() + "\n"
         return output
 
-    def getCSVHeader(self):
+    def getCSVHeader(self) -> str:
         """Generate head of .csv file."""
         headers = [
             "frame", "time",
@@ -51,7 +55,7 @@ class FrameList():
         return ",".join(headers)
 
 
-    def saveCSV(self, name="output.csv"):
+    def saveCSV(self, name="output.csv") -> None:
         """Generate .csv file and save it to drive."""
         if not name.endswith(".csv"):
             name += ".csv"
@@ -72,7 +76,7 @@ class FrameList():
 class Frame():
     """This class is holding all data about one frame in the simulation."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.frameNr = self.time = None
 
         self.windX = self.windY = None
@@ -104,12 +108,12 @@ class Frame():
         self.boatCenterboardTorque = self.boatRudderTorque = None
 
 
-    def collectSimulation(self, simulation):
+    def collectSimulation(self, simulation) -> None:
         """Collect and save information about the state of the simulation."""
         self.frameNr = simulation.frame
         self.time = simulation.getTime()
 
-    def collectBoat(self, boat):
+    def collectBoat(self, boat) -> None:
         """Collect and save all information about the boat."""
         self.boatPosX = boat.posX
         self.boatPosY = boat.posY
@@ -140,12 +144,12 @@ class Frame():
         self.boatCenterboardTorque = boat.temp_centerboardTorque
         self.boatRudderTorque = boat.temp_rudderTorque
 
-    def collectWind(self, wind, x, y):
+    def collectWind(self, wind, x, y) -> None:
         """Collect and save all information about the wind."""
         (self.windX, self.windY) = wind.getWindCart(x, y, self.time)
 
 
-    def getCSVLine(self):
+    def getCSVLine(self) -> str:
         """Return string that contains all data about this frame."""
         data = [
             self.frameNr, self.time,
