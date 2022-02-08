@@ -176,12 +176,11 @@ class Boat:
         self.temp_centerboardTorque = self.centerboardTorque(self.temp_centerboardDragX + self.temp_centerboardLiftX, self.temp_centerboardDragY + self.temp_centerboardLiftY, dirNormX, dirNormY)
         self.temp_rudderTorque = self.rudderTorque(self.temp_rudderDragX + self.temp_rudderLiftX, self.temp_rudderDragY + self.temp_rudderLiftY, dirNormX, dirNormY)
 
-        forceX = self.temp_sailDragX + self.temp_sailLiftX + self.temp_centerboardDragX + self.temp_centerboardLiftX + self.temp_rudderDragX + self.temp_rudderLiftX
-        forceY = self.temp_sailDragY + self.temp_sailLiftY + self.temp_centerboardDragY + self.temp_centerboardLiftY + self.temp_rudderDragY + self.temp_rudderLiftY
-        torque = self.temp_waterDragTorque + self.temp_centerboardTorque + self.temp_rudderTorque
+        self.temp_forceX = self.temp_sailDragX + self.temp_sailLiftX + self.temp_centerboardDragX + self.temp_centerboardLiftX + self.temp_rudderDragX + self.temp_rudderLiftX
+        self.temp_forceY = self.temp_sailDragY + self.temp_sailLiftY + self.temp_centerboardDragY + self.temp_centerboardLiftY + self.temp_rudderDragY + self.temp_rudderLiftY
+        self.temp_torque = self.temp_waterDragTorque + self.temp_centerboardTorque + self.temp_rudderTorque
 
-        (self.temp_forceX, self.temp_forceY, self.temp_torque) = (forceX, forceY, torque)
-        return (forceX, forceY, torque)
+        return (self.temp_forceX, self.temp_forceY, self.temp_torque)
 
     # Import force and torque functions
     from .boat_forces import leverSpeedVector, sailDrag, sailLift, centerboardDrag, centerboardLift, rudderDrag, rudderLift, scalarToDragForce, scalarToLiftForce
