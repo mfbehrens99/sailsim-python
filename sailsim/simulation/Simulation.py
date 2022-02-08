@@ -1,13 +1,15 @@
+"""This module contains the Simulation class definition."""
+
 from copy import deepcopy
 
-from sailsim.boat import Boat
-from sailsim.wind import Wind
+from sailsim.boat.Boat import Boat
+from sailsim.wind.Wind import Wind
 
 
 class Simulation:
     """Main simulation class in this project."""
 
-    def __init__(self, boat: Boat, wind: Wind, timestep: float, lastFrame: int=None):
+    def __init__(self, boat: Boat, wind: Wind, timestep: float, lastFrame: int = None) -> None:
         """
         Create Simulation.
 
@@ -26,10 +28,10 @@ class Simulation:
         self.frame: int = 0
         self.lastFrame: int = lastFrame
 
-    def run(self, steps: int=0) -> None:
+    def run(self, steps: int = 0) -> None:
         """Run whole Simulation if lastFrame is set."""
         if steps < 1:
-            # Check if lastFrame exisists
+            # Check if lastFrame exists
             if self.lastFrame is None:
                 raise Exception('Simulation has no lastFrame')
             while self.frame <= self.lastFrame:
@@ -59,7 +61,6 @@ class Simulation:
         self.boat.applyCauses(forceX, forceY, torque, self.timestep)
         self.boat.moveInterval(self.timestep)
 
-
     def getTime(self) -> float:
         """Return the elapsed time since the start of the simulation."""
         return self.timestep * self.frame
@@ -67,7 +68,6 @@ class Simulation:
     def totalTime(self) -> float:
         """Return the total time that will elapse throughout the simulation."""
         return self.timestep * self.lastFrame
-
 
     def reset(self) -> None:
         """Set simulation to the first frame recorded."""
@@ -77,7 +77,6 @@ class Simulation:
         # Reset Simulation
         self.boat.frameList.reset()
         self.frame = 0
-
 
     def __repr__(self) -> str:
         """Return basic information about the simulation."""
