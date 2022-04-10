@@ -3,7 +3,7 @@
 from sailsim.utils.constants import DENSITY_AIR, DENSITY_WATER
 
 
-def waterDragTorque(self):
+def waterDragTorque(self) -> float:
     c_w = 1.1
     draught = .3 # bad approximation...
     # TODO use c_w
@@ -14,8 +14,8 @@ def waterDragTorque(self):
     return -torque
 
 
-def centerboardTorque(self, centerboardX, centerboardY, dirNormX, dirNormY):
+def centerboardTorque(self, centerboardX: float, centerboardY: float, dirNormX: float, dirNormY: float) -> float:
     return (centerboardY * dirNormX - centerboardX * dirNormY) * self.centerboardLever # negative cross product
 
-def rudderTorque(self, rudderX, rudderY, dirNormX, dirNormY):
+def rudderTorque(self, rudderX: float, rudderY: float, dirNormX: float, dirNormY: float) -> float:
     return (rudderY * dirNormX - rudderX * dirNormY) * self.rudderLever # negative cross product
