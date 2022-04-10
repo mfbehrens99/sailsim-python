@@ -1,9 +1,8 @@
-from sailsim.simulation.simulation import Simulation
+from sailsim.simulation.Simulation import Simulation
 
-from sailsim.world.world import World
-from sailsim.boat.boat import Boat
-from sailsim.wind.wind import Wind
-from sailsim.wind.windfield import Windfield
+from sailsim.boat.Boat import Boat
+from sailsim.wind.Wind import Wind
+from sailsim.wind.Windfield import Windfield
 
 
 if __name__ == '__main__':

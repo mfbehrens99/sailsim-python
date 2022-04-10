@@ -26,7 +26,7 @@ class Simulation:
         # Timing
         self.timestep: float = timestep
         self.frame: int = 0
-        self.lastFrame: int = lastFrame
+        self.lastFrame = lastFrame
 
     def run(self, steps: int = 0) -> None:
         """Run whole Simulation if lastFrame is set."""

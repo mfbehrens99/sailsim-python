@@ -145,7 +145,7 @@ class Boat:
         self.temp_leewayAngle = self.calcLeewayAngle()
         self.temp_angleOfAttack = self.angleOfAttack(self.temp_apparentWindAngle)
 
-    def resultingCauses(self) -> None:
+    def resultingCauses(self) -> tuple[float, float, float]:
         """Add up all acting forces and return them as a tuple."""
         # calculate flowSpeed
         (flowSpeedRudderX, flowSpeedRudderY) = self.leverSpeedVector(self.rudderLever)
