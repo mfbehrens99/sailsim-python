@@ -11,27 +11,27 @@ class Sailor:
 
     from .sailorgetset import setCommandList, configBoat, configSailor, importBoat
 
-    destX = 0
-    destY = 0
-    commandListIndex = 0
+    destX: float = 0
+    destY: float = 0
+    commandListIndex: int = 0
 
-    rudderAngle = None
-    boatDirection = None
+    rudderAngle: float
+    boatDirection: float
 
-    mainSailAngle = None
+    mainSailAngle: float
 
-    mass = None
-    sailArea = None
-    hullArea = None
-    centerboardArea = None
+    mass: float
+    sailArea: float
+    hullArea: float
+    centerboardArea: float
 
-    maxMainSailAngle = None
-    maxRudderAngle = None
+    maxMainSailAngle: float
+    maxRudderAngle: float
 
-    tackingAngleUpwind = None
-    tackingAngleDownwind = None
+    tackingAngleUpwind: float
+    tackingAngleDownwind: float
 
-    def __init__(self, commandList):
+    def __init__(self, commandList: list[Waypoint]) -> None:
         """
         Create a Sailor for steering a Boat.
 
@@ -42,8 +42,8 @@ class Sailor:
 
         self.tackingAngleBufferSize = 10 / 180 * pi
 
-    def run(self, posX, posY, gpsSpeed, gpsDir, compass, windSpeed, windAngle):
-        """Execute Sailor calculations and save resultes in object properties."""
+    def run(self, posX: float, posY: float, gpsSpeed: float, gpsDir: float, compass: float, windSpeed: float, windAngle: float) -> None:
+        """Execute Sailor calculations and save results in object properties."""
         self.checkCommand(posX, posY)
 
         straightCourse = cartToArg(self.destX - posX, self.destY - posY)
@@ -88,7 +88,7 @@ class Sailor:
         # NOTE this is a very simple approximation of the real curve
         self.mainSailAngle = angleKeepInterval((windAngle - pi)) / 2
 
-    def checkCommand(self, posX, posY):
+    def checkCommand(self, posX: float, posY: float) -> None:
         """Execute commands from commandList."""
         # TODO make prettier
         while len(self.commandList) > self.commandListIndex:
@@ -103,15 +103,15 @@ class Sailor:
             if success:
                 self.commandListIndex += 1
             else:
-                break
+                return
 
-    def setDestination(self, destX, destY):
-        """Set Sailor's destination to speecific coordinates."""
+    def setDestination(self, destX: float, destY: float) -> None:
+        """Set Sailor's destination to specific coordinates."""
         self.destX = destX
         self.destY = destY
 
 
-def trueWindDirection(gpsSpeed, gpsDir, windSpeed, windAngle):
+def trueWindDirection(gpsSpeed: float, gpsDir: float, windSpeed: float, windAngle: float) -> float:
     """Calculate trueWindDirection from gps and wind measurement."""
     (gpsX, gpsY) = polarToCart(gpsSpeed, gpsDir)
     (windX, windY) = polarToCart(windSpeed, windAngle)

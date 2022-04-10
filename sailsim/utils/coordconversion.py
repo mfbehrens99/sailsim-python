@@ -9,19 +9,19 @@ found on a compass. So this definition differs from the standard definition of a
 from math import sin, cos, atan, pi, sqrt
 
 
-def cartToRadius(cartX, cartY):
+def cartToRadius(cartX: float, cartY: float) -> float:
     """Convert Cartesian coordinates into their corresponding radius."""
     return sqrt(cartX**2 + cartY**2)
 
 
-def cartToRadiusSq(cartX, cartY):
+def cartToRadiusSq(cartX: float, cartY: float) -> float:
     """Convert Cartesian coordinates into their corresponding radius squared."""
     return cartX**2 + cartY**2
 
 
-def cartToArg(cartX, cartY):
+def cartToArg(cartX: float, cartY: float) -> float:
     """Convert Cartesian coordinates into their corresponding argument (angle)."""
-    if cartY != 0: # Don't divide by 0
+    if cartY != 0:
         if cartY < 0:               # 2nd and 3rd quadrant
             return atan(cartX / cartY) + pi
         if cartX < 0:               # 4st quadrant
@@ -34,12 +34,12 @@ def cartToArg(cartX, cartY):
     return 3 / 2 * pi               # 270 degrees
 
 
-def cartToPolar(cartX, cartY):
+def cartToPolar(cartX: float, cartY: float) -> tuple[float, float]:
     """Convert Cartesian coordinates into polar coordinates."""
     return (cartToRadius(cartX, cartY), cartToArg(cartX, cartY))
 
 
-def polarToCart(radius, argument):
+def polarToCart(radius: float, argument: float) -> tuple[float, float]:
     """Convert polar coordinates into Cartesian coordinates."""
     cartX = radius * sin(argument)
     cartY = radius * cos(argument)

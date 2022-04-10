@@ -1,115 +1,57 @@
 """This module includes everything to store the simulation of a boat."""
 
 
-class FrameList():
-    """Keep all Frames of a boat and export the data."""
-
-    def __init__(self):
-        self.frames = []
-
-
-    def grabFrame(self, simulation, boat):
-        """Append new frame with all information to list."""
-        (posX, posY) = boat.getPos()
-        frame = Frame()
-        frame.collectSimulation(simulation)
-        frame.collectBoat(boat)
-        frame.collectWind(simulation.wind, posX, posY)
-        self.frames.append(frame)
-
-    def reset(self):
-        """Delete all previously saved frames."""
-        self.frames = []
-
-    def getCoordinateList(self):
-        out = []
-        for frame in self.frames:
-            out.append((frame.boatPosX, frame.boatPosY))
-        return out
-
-    def getCSV(self):
-        """Generate .csv file and return it."""
-        output = self.getCSVHeader() + "\n"
-        for frame in self.frames:
-            output += frame.getCSVLine() + "\n"
-        return output
-
-    def getCSVHeader(self):
-        """Generate head of .csv file."""
-        headers = [
-            "frame", "time",
-            "boatPosX", "boatPosY", "boatSpeedX", "boatSpeedY", "boatDirection", "boatAngSpeed",
-            "boatMainSailAngle", "boatRudderAngle",
-            "boatApparentWindX", "boatApparentWindY", "boatApparentWindAngle", "boatLeewayAngle", "boatAngleOfAttack",
-            "boatForceX", "boatForceY",
-            "boatSailDragX", "boatSailDragY", "boatSailLiftX", "boatSailLiftY",
-            "boatWaterDragX", "boatWaterDragY", "boatWaterLiftX", "boatWaterLiftY",
-            "boatRudderDragX", "boatRudderDragY", "boatRudderLiftX", "boatRudderLiftY",
-            "boatTorque", "boatWaterDragTorque", "boatCenterboardTorque", "boatRudderTorque",
-            "windX", "windY",
-        ]
-        return ",".join(headers)
-
-
-    def saveCSV(self, name="output.csv"):
-        """Generate .csv file and save it to drive."""
-        if not name.endswith(".csv"):
-            name += ".csv"
-        with open(name, "w", encoding="utf-8") as file:
-            file.write(self.getCSV())
-
-    def __getitem__(self, key):
-        return self.frames.__getitem__(key)
-
-    def __setitem__(self, key, value):
-        return self.frames.__setitem__(key, value)
-
-    def __len__(self):
-        """Return length of the frameList."""
-        return len(self.frames)
-
-
 class Frame():
     """This class is holding all data about one frame in the simulation."""
 
-    def __init__(self):
-        self.frameNr = self.time = None
+    frameNr: int
+    time: float
 
-        self.windX = self.windY = None
+    windX: float
+    windY: float
+    boatPosX: float
+    boatPosY: float
+    boatSpeedX: float
+    boatSpeedY: float
+    boatDirection: float
+    boatAngSpeed: float
 
-        self.boatPosX = self.boatPosY = None
-        self.boatSpeedX = self.boatSpeedY = None
-        self.boatDirection = None
-        self.boatAngSpeed = None
+    boatMainSailAngle: float
+    boatRudderAngle: float
 
-        self.boatMainSailAngle = None
-        self.boatRudderAngle = None
+    boatApparentWindX: float
+    boatApparentWindY: float
+    boatApparentWindAngle: float
+    boatLeewayAngle: float
+    boatAngleOfAttack: float
 
-        self.boatApparentWindX = self.boatApparentWindY = None
-        self.boatApparentWindAngle = None
-        self.boatLeewayAngle = None
-        self.boatAngleOfAttack = None
+    boatForceX: float
+    boatForceY: float
+    boatSailDragX: float
+    boatSailDragY: float
+    boatSailLiftX: float
+    boatSailLiftY: float
+    boatCenterboardDragX: float
+    boatCenterboardDragY: float
+    boatCenterboardLiftX: float
+    boatCenterboardLiftY: float
 
-        self.boatForceX = self.boatForceY = None
-        self.boatSailDragX = self.boatSailDragY = None
-        self.boatSailLiftX = self.boatSailLiftY = None
-        self.boatCenterboardDragX = self.boatCenterboardDragY = None
-        self.boatCenterboardLiftX = self.boatCenterboardLiftY = None
+    boatRudderDragX: float
+    boatRudderDragY: float
+    boatRudderLiftX: float
+    boatRudderLiftY: float
 
-        self.boatRudderDragX = self.boatRudderDragY = None
-        self.boatRudderLiftX = self.boatRudderLiftY = None
+    boatTorque: float
+    boatWaterDragTorque: float
+    boatCenterboardTorque: float
+    boatRudderTorque: float
 
-        self.boatTorque = None
-        self.boatWaterDragTorque = None
-        self.boatCenterboardTorque = self.boatRudderTorque = None
-
-
-    def collectSimulation(self, simulation):
+    def collectSimulation(self, simulation) -> None:
         """Collect and save information about the state of the simulation."""
         self.frameNr = simulation.frame
         self.time = simulation.getTime()
 
-    def collectBoat(self, boat):
+    def collectBoat(self, boat) -> None:
         """Collect and save all information about the boat."""
         self.boatPosX = boat.posX
         self.boatPosY = boat.posY
@@ -140,12 +82,11 @@ class Frame():
         self.boatCenterboardTorque = boat.temp_centerboardTorque
         self.boatRudderTorque = boat.temp_rudderTorque
 
-    def collectWind(self, wind, x, y):
+    def collectWind(self, wind, x, y) -> None:
         """Collect and save all information about the wind."""
         (self.windX, self.windY) = wind.getWindCart(x, y, self.time)
 
-
-    def getCSVLine(self):
+    def getCSVLine(self) -> str:
         """Return string that contains all data about this frame."""
         data = [
             self.frameNr, self.time,
@@ -159,5 +100,73 @@ class Frame():
             self.boatTorque, self.boatWaterDragTorque, self.boatCenterboardTorque, self.boatRudderTorque,
             self.windX, self.windY,
         ]
-        dataStr = [f'{x:.4f}'.rstrip('0').rstrip('.') for x in data] # FIXME very slow and inflexible
+        dataStr = [f'{x:.4f}'.rstrip('0').rstrip('.') for x in data]  # FIXME very slow and inflexible
         return ",".join(dataStr)
+
+
+class FrameList():
+    """Keep all Frames of a boat and export the data."""
+
+    def __init__(self) -> None:
+        self.frames: list = []
+
+
+    def grabFrame(self, simulation, boat) -> None:
+        """Append new frame with all information to list."""
+        (posX, posY) = boat.getPos()
+        frame: Frame = Frame()
+        frame.collectSimulation(simulation)
+        frame.collectBoat(boat)
+        frame.collectWind(simulation.wind, posX, posY)
+        self.frames.append(frame)
+
+    def reset(self) -> None:
+        """Delete all previously saved frames."""
+        self.frames = []
+
+    def getCoordinateList(self) -> list[tuple[float, float]]:
+        out = []
+        for frame in self.frames:
+            out.append((frame.boatPosX, frame.boatPosY))
+        return out
+
+    def getCSV(self) -> str:
+        """Generate .csv file and return it."""
+        output = self.getCSVHeader() + "\n"
+        for frame in self.frames:
+            output += frame.getCSVLine() + "\n"
+        return output
+
+    def getCSVHeader(self) -> str:
+        """Generate head of .csv file."""
+        headers = [
+            "frame", "time",
+            "boatPosX", "boatPosY", "boatSpeedX", "boatSpeedY", "boatDirection", "boatAngSpeed",
+            "boatMainSailAngle", "boatRudderAngle",
+            "boatApparentWindX", "boatApparentWindY", "boatApparentWindAngle", "boatLeewayAngle", "boatAngleOfAttack",
+            "boatForceX", "boatForceY",
+            "boatSailDragX", "boatSailDragY", "boatSailLiftX", "boatSailLiftY",
+            "boatWaterDragX", "boatWaterDragY", "boatWaterLiftX", "boatWaterLiftY",
+            "boatRudderDragX", "boatRudderDragY", "boatRudderLiftX", "boatRudderLiftY",
+            "boatTorque", "boatWaterDragTorque", "boatCenterboardTorque", "boatRudderTorque",
+            "windX", "windY",
+        ]
+        return ",".join(headers)
+
+
+    def saveCSV(self, name: str = "output.csv") -> None:
+        """Generate .csv file and save it to drive."""
+        if not name.endswith(".csv"):
+            name += ".csv"
+        with open(name, "w", encoding="utf-8") as file:
+            file.write(self.getCSV())
+
+    def __getitem__(self, key: int) -> Frame:
+        return self.frames.__getitem__(key)
+
+    def __setitem__(self, key: int, value) -> None:
+        return self.frames.__setitem__(key, value)
+
+    def __len__(self):
+        """Return length of the frameList."""
+        return len(self.frames)
