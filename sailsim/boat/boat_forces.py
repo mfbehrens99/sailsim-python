@@ -1,6 +1,6 @@
 """This module holdes some force calculation for the Boat class."""
 
-from math import pi
+from numpy import pi
 
 from sailsim.utils.anglecalculations import angleKeepInterval, directionKeepInterval
 from sailsim.utils.coordconversion import polarToCart

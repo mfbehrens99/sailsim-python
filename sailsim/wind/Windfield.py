@@ -1,4 +1,4 @@
-from math import pi
+from numpy import pi
 
 from sailsim.utils.coordconversion import cartToPolar
 

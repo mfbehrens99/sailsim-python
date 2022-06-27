@@ -8,17 +8,17 @@ from sailsim.wind.Windfield import Windfield
 
 class TestSimulation():
     def setup(self):
-        self.s = Simulation(Boat(), Wind([Windfield(0, 1)]), 0.01, 1)
+        self.simulation = Simulation(Boat(), Wind([Windfield(0, 1)]), 0.01, 1)
 
     def test_step(self):
-        self.s.step()
+        self.simulation.step()
 
     def test_reset(self):
         self.s.reset()
-        assert len(self.s.boat.frameList) == 0
-        assert self.s.frame == 0
+        assert len(self.simulation.boat.frameList) == 0
+        assert self.simulation.frame == 0
 
     def test_run(self):
         self.s.run()
-        assert len(self.s.boat.frameList) == self.s.lastFrame + 1
-        assert self.s.frame == self.s.lastFrame + 1
+        assert len(self.simulation.boat.frameList) == self.simulation.lastFrame + 1
+        assert self.simulation.frame == self.simulation.lastFrame + 1

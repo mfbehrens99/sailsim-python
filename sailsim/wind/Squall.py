@@ -1,4 +1,4 @@
-from math import sin, cos
+from numpy import sin, cos
 
 from sailsim.utils.coordconversion import cartToArg
 from sailsim.wind.Windfield import Windfield

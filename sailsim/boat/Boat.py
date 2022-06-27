@@ -1,4 +1,4 @@
-from math import sqrt, pi, sin, cos
+from numpy import sqrt, pi, sin, cos
 
 from sailsim.boat.FrameList import FrameList
 from sailsim.sailor.Sailor import Sailor

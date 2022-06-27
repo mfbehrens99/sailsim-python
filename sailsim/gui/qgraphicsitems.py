@@ -1,6 +1,6 @@
 """Contains modules for GUI elements."""
 
-from math import atan2, cos, pi, sin, sqrt
+from numpy import arctan2, cos, pi, sin, sqrt
 from functools import cached_property
 from typing import Optional, Union
 
@@ -150,7 +150,7 @@ class QGraphicsArrowItem(QGraphicsLineItem):
     def updateHead(self, scale: float = 1.0) -> None:
         """Update shape and size of the arrow head."""
         line = self.line()
-        angle = atan2(line.dy(), line.dx())
+        angle = arctan2(line.dy(), line.dx())
 
         line1 = QPointF(sin(pi/2 - angle - self.arrowAngle), cos(pi/2 - angle - self.arrowAngle))
         line2 = QPointF(sin(pi/2 - angle + self.arrowAngle), cos(pi/2 - angle + self.arrowAngle))

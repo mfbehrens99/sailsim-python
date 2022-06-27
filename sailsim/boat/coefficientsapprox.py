@@ -1,6 +1,6 @@
 """These are approximated coefficient for sail boats."""
 
-from math import pi
+from numpy import pi
 
 
 def coefficientAirDrag(angleOfAttack: float) -> float:

@@ -1,6 +1,6 @@
 from tkinter import Tk, Frame, Label, Entry, Scale, StringVar, Canvas, Button
 from tkinter import HORIZONTAL, RIGHT, N, E, S, W
-from math import pi, sin, cos
+from numpy import pi, sin, cos
 
 from sailsim.utils.anglecalculations import angleKeepInterval, directionKeepInterval
 from sailsim.utils.conversion import stringToFloat

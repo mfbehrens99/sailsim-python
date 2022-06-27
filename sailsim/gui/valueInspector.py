@@ -1,6 +1,6 @@
 """This module contains the class declaration for the ValueInspectorWidget."""
 
-from math import pi, sqrt
+from numpy import pi, sqrt
 
 from PySide6.QtWidgets import QTreeWidget
 

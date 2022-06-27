@@ -1,6 +1,6 @@
 """This module is intended for angle and direction calculations."""
 
-from math import pi
+from numpy import pi
 
 
 def angleKeepInterval(angle: float) -> float:
