@@ -101,8 +101,8 @@ class GUIBoat(QGraphicsItem):
         """
         frame = self.frameList[framenumber]
         if self.allowMovement:
-            self.setPos(QPointF(frame.boatPosX, -frame.boatPosY))
-        self.setRotation(frame.boatDirection / pi * 180)
+            self.setPos(QPointF(frame.pose[0], -frame.pose[1]))
+        self.setRotation(frame.pose[2] / pi * 180)
 
         self.mainSail.setP2(QPointF(-sin(frame.boatMainSailAngle), cos(frame.boatMainSailAngle)) * 2)
         self.rudder.setP2(self.rudder.p1() + QPointF(sin(frame.boatRudderAngle), cos(frame.boatRudderAngle)) * 0.5)
@@ -257,9 +257,9 @@ class GUIBoatVectors(QGraphicsItem):
         scaleForce = 1 / 1024
 
         if self.followBoat:
-            self.setPos(QPointF(frame.boatPosX, -frame.boatPosY))
+            self.setPos(QPointF(frame.pose[0], -frame.pose[1]))
 
-        self.boatSpeed.setP2(QPointF(frame.boatSpeedX, -frame.boatSpeedY))
+        self.boatSpeed.setP2(QPointF(frame.speed[0], -frame.speed[1]))
         self.boatForce.setP2(QPointF(frame.boatForceX, -frame.boatForceY) * scaleForce)
 
         self.boatForceSailDrag.setP2(QPointF(frame.boatSailDragX, -frame.boatSailDragY) * scaleForce)
@@ -268,7 +268,7 @@ class GUIBoatVectors(QGraphicsItem):
         self.boatForceCenterboardDrag.setP2(QPointF(frame.boatCenterboardDragX, -frame.boatCenterboardDragY) * scaleForce)
         self.boatForceCenterboardLift.setP2(QPointF(frame.boatCenterboardLiftX, -frame.boatCenterboardLiftY) * scaleForce)
 
-        rudderStartPoint = QPointF(-sin(frame.boatDirection)*2.2, cos(frame.boatDirection)*2.2)
+        rudderStartPoint = QPointF(-sin(frame.pose[2])*2.2, cos(frame.pose[2])*2.2)
         self.boatForceRudderDrag.setLine(QLineF(rudderStartPoint,
                                                 rudderStartPoint + QPointF(frame.boatRudderDragX, -frame.boatRudderDragY) * scaleForce))
         self.boatForceRudderLift.setLine(QLineF(rudderStartPoint,

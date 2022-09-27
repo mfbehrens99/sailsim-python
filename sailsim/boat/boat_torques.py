@@ -8,8 +8,8 @@ def waterDragTorque(self) -> float:
     draught = .3 # bad approximation...
     # TODO use c_w
     # print(self.angSpeed)
-    torque = 1 / 64 * c_w * draught * DENSITY_WATER * pow(self.length, 4) * pow(self.angSpeed, 2)
-    if self.angSpeed < 0:
+    torque = 1 / 64 * c_w * draught * DENSITY_WATER * pow(self.length, 4) * pow(self.speed[2], 2)
+    if self.speed[2] < 0:
         return torque
     return -torque
 

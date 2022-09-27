@@ -1,5 +1,7 @@
 """This module includes everything to store the simulation of a boat."""
 
+from numpy import ndarray
+
 
 class Frame():
     """This class is holding all data about one frame in the simulation."""
@@ -9,12 +11,8 @@ class Frame():
 
     windX: float
     windY: float
-    boatPosX: float
-    boatPosY: float
-    boatSpeedX: float
-    boatSpeedY: float
-    boatDirection: float
-    boatAngSpeed: float
+    pose: ndarray
+    speed: ndarray
 
     boatMainSailAngle: float
     boatRudderAngle: float
@@ -53,12 +51,8 @@ class Frame():
 
     def collectBoat(self, boat) -> None:
         """Collect and save all information about the boat."""
-        self.boatPosX = boat.posX
-        self.boatPosY = boat.posY
-        self.boatSpeedX = boat.speedX
-        self.boatSpeedY = boat.speedY
-        self.boatDirection = boat.direction
-        self.boatAngSpeed = boat.angSpeed
+        self.pose = boat.pose
+        self.speed = boat.speed
 
         self.boatMainSailAngle = boat.mainSailAngle
         self.boatRudderAngle = boat.rudderAngle
@@ -90,7 +84,7 @@ class Frame():
         """Return string that contains all data about this frame."""
         data = [
             self.frameNr, self.time,
-            self.boatPosX, self.boatPosY, self.boatSpeedX, self.boatSpeedY, self.boatDirection, self.boatAngSpeed,
+            self.pose[0], self.pose[1], self.pose[2], self.speed[0], self.speed[1], self.speed[2],
             self.boatMainSailAngle, self.boatRudderAngle,
             self.boatApparentWindX, self.boatApparentWindY, self.boatApparentWindAngle, self.boatLeewayAngle, self.boatAngleOfAttack,
             self.boatForceX, self.boatForceY,
@@ -127,7 +121,7 @@ class FrameList():
     def getCoordinateList(self) -> list[tuple[float, float]]:
         out = []
         for frame in self.frames:
-            out.append((frame.boatPosX, frame.boatPosY))
+            out.append((frame.pose[0], frame.pose[1]))
         return out
 
     def getCSV(self) -> str:
@@ -141,7 +135,7 @@ class FrameList():
         """Generate head of .csv file."""
         headers = [
             "frame", "time",
-            "boatPosX", "boatPosY", "boatSpeedX", "boatSpeedY", "boatDirection", "boatAngSpeed",
+            "boatPosX", "boatPosY", "boatDirection", "boatSpeedX", "boatSpeedY", "boatAngSpeed",
             "boatMainSailAngle", "boatRudderAngle",
             "boatApparentWindX", "boatApparentWindY", "boatApparentWindAngle", "boatLeewayAngle", "boatAngleOfAttack",
             "boatForceX", "boatForceY",

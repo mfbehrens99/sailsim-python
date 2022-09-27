@@ -49,7 +49,7 @@ class Simulation:
         (boatX, boatY) = self.boat.getPos()                           # Fetch boat position
         (windX, windY) = self.wind.getWindCart(boatX, boatY, time)    # Get wind
         self.boat.updateTemporaryData(windX, windY)
-        (forceX, forceY, torque) = self.boat.resultingCauses()
+        wrench = self.boat.resultingCauses()
 
         # Save frame
         self.boat.frameList.grabFrame(self, self.boat)
@@ -58,7 +58,7 @@ class Simulation:
         self.boat.runSailor()
 
         # Move Boat
-        self.boat.applyCauses(forceX, forceY, torque, self.timestep)
+        self.boat.applyCauses(wrench, self.timestep)
         self.boat.moveInterval(self.timestep)
 
     def getTime(self) -> float:

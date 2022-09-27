@@ -9,8 +9,8 @@ from sailsim.utils.constants import DENSITY_AIR, DENSITY_WATER
 
 def leverSpeedVector(self, lever: float) -> float:
     """Calculate the speed vector at a certain point concidering the rotation."""
-    (orbSpeedX, orbSpeedY) = polarToCart(self.angSpeed * lever, directionKeepInterval(self.direction + pi))
-    return (-self.speedX + orbSpeedX, -self.speedY + orbSpeedY)
+    (orbSpeedX, orbSpeedY) = polarToCart(self.speed[2] * lever, directionKeepInterval(self.pose[2] + pi))
+    return (-self.speed[0] + orbSpeedX, -self.speed[1] + orbSpeedY)
 
 
 # Sail forces

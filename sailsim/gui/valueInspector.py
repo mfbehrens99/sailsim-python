@@ -11,13 +11,13 @@ class ValueInspectorWidget(QTreeWidget):
     """List Widget that displays the boat's values."""
 
     def viewFrame(self, frame):
-        self.updateValueInspectorRow(self.topLevelItem(0), frame.boatPosX, frame.boatPosY)
+        self.updateValueInspectorRow(self.topLevelItem(0), frame.pose[0], frame.pose[1])
 
-        self.topLevelItem(1).setText(1, toString(frame.boatDirection * 180 / pi))
+        self.topLevelItem(1).setText(1, toString(frame.pose[2] * 180 / pi))
 
-        self.updateValueInspectorRow(self.topLevelItem(2), frame.boatSpeedX, frame.boatSpeedY)
+        self.updateValueInspectorRow(self.topLevelItem(2), frame.speed[0], frame.speed[1])
 
-        self.topLevelItem(3).setText(1, toString(frame.boatAngSpeed * 180 / pi))
+        self.topLevelItem(3).setText(1, toString(frame.speed[2] * 180 / pi))
 
         # Display Forces
         itemForce = self.topLevelItem(4)
