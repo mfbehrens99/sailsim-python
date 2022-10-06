@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>963</width>
-    <height>596</height>
+    <width>791</width>
+    <height>641</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,16 +31,16 @@
       </property>
       <widget class="MapViewView" name="mapView">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-         <horstretch>1</horstretch>
+        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+         <horstretch>2</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
       </widget>
       <widget class="QSplitter" name="right">
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-         <horstretch>3</horstretch>
+        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+         <horstretch>1</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
@@ -54,7 +54,7 @@
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
-          <verstretch>1</verstretch>
+          <verstretch>2</verstretch>
          </sizepolicy>
         </property>
        </widget>
@@ -62,11 +62,14 @@
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
-          <verstretch>2</verstretch>
+          <verstretch>3</verstretch>
          </sizepolicy>
         </property>
         <property name="editTriggers">
          <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+        <property name="alternatingRowColors">
+         <bool>true</bool>
         </property>
         <attribute name="headerCascadingSectionResizes">
          <bool>true</bool>
@@ -84,11 +87,6 @@
         </column>
         <column>
          <property name="text">
-          <string>Value</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
           <string>X</string>
          </property>
         </column>
@@ -99,12 +97,17 @@
         </column>
         <column>
          <property name="text">
+          <string>Z</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
           <string>Unit</string>
          </property>
         </column>
         <item>
          <property name="text">
-          <string>Position</string>
+          <string>Pose</string>
          </property>
          <property name="text">
           <string>0</string>
@@ -116,24 +119,7 @@
           <string>0</string>
          </property>
          <property name="text">
-          <string>m</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Direction</string>
-         </property>
-         <property name="text">
-          <string>0</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="text">
-          <string>Deg</string>
+          <string>m, deg</string>
          </property>
         </item>
         <item>
@@ -150,24 +136,7 @@
           <string>0</string>
          </property>
          <property name="text">
-          <string>m/s</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Ang speed</string>
-         </property>
-         <property name="text">
-          <string>0</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="text">
-          <string>deg/s</string>
+          <string>m/s, deg/s</string>
          </property>
         </item>
         <item>
@@ -184,7 +153,7 @@
           <string>0</string>
          </property>
          <property name="text">
-          <string>N</string>
+          <string>N, Nm</string>
          </property>
          <item>
           <property name="text">
@@ -200,7 +169,7 @@
            <string>0</string>
           </property>
           <property name="text">
-           <string>N</string>
+           <string>N, Nm</string>
           </property>
          </item>
          <item>
@@ -217,7 +186,7 @@
            <string>0</string>
           </property>
           <property name="text">
-           <string>N</string>
+           <string>N, Nm</string>
           </property>
          </item>
          <item>
@@ -234,7 +203,7 @@
            <string>0</string>
           </property>
           <property name="text">
-           <string>N</string>
+           <string>N, Nm</string>
           </property>
          </item>
          <item>
@@ -251,7 +220,7 @@
            <string>0</string>
           </property>
           <property name="text">
-           <string>N</string>
+           <string>N, Nm</string>
           </property>
          </item>
          <item>
@@ -268,7 +237,7 @@
            <string>0</string>
           </property>
           <property name="text">
-           <string>N</string>
+           <string>N, Nm</string>
           </property>
          </item>
          <item>
@@ -285,92 +254,41 @@
            <string>0</string>
           </property>
           <property name="text">
-           <string>N</string>
+           <string>N, Nm</string>
           </property>
          </item>
-        </item>
-        <item>
-         <property name="text">
-          <string>Torque</string>
-         </property>
-         <property name="text">
-          <string>0</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="text">
-          <string>Nm</string>
-         </property>
          <item>
           <property name="text">
-           <string>WaterDrag</string>
+           <string>HullDrag</string>
           </property>
           <property name="text">
            <string>0</string>
           </property>
           <property name="text">
-           <string/>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="text">
-           <string>Nm</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Centerboard</string>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="text">
-           <string>Nm</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>Rudder</string>
+           <string>0</string>
           </property>
           <property name="text">
            <string>0</string>
           </property>
           <property name="text">
-           <string/>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="text">
-           <string>Nm</string>
+           <string>N, Nm</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Hull</string>
+           <string>HullLift</string>
           </property>
           <property name="text">
            <string>0</string>
           </property>
           <property name="text">
-           <string/>
+           <string>0</string>
           </property>
           <property name="text">
-           <string/>
+           <string>0</string>
           </property>
           <property name="text">
-           <string>Nm</string>
+           <string>N, Nm</string>
           </property>
          </item>
         </item>
@@ -539,7 +457,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>963</width>
+     <width>791</width>
      <height>26</height>
     </rect>
    </property>

@@ -6,7 +6,9 @@ The argument is measured clockwise between the positive y-axis and the vector li
 found on a compass. So this definition differs from the standard definition of angles in mathematics.
 """
 
-from numpy import sin, cos, arctan2, pi, sqrt
+from numpy import sin, cos, arctan2, sqrt
+
+from sailsim.utils.anglecalculations import angleKeepInterval
 
 
 def cartToRadius(cartX: float, cartY: float) -> float:
@@ -21,18 +23,7 @@ def cartToRadiusSq(cartX: float, cartY: float) -> float:
 
 def cartToArg(cartX: float, cartY: float) -> float:
     """Convert Cartesian coordinates into their corresponding argument (angle)."""
-    return arctan2(cartX, cartY)
-    # if cartY != 0:
-    #     if cartY < 0:               # 2nd and 3rd quadrant
-    #         return atan(cartX / cartY) + pi
-    #     if cartX < 0:               # 4st quadrant
-    #         return atan(cartX / cartY) + 2 * pi
-    #     return atan(cartX / cartY)  # else 1th quadrant
-    # if cartX > 0:
-    #     return pi / 2               # 90 degrees
-    # if cartX == 0:
-    #     return 0                    # 0 degrees when speed is 0
-    # return 3 / 2 * pi               # 270 degrees
+    return angleKeepInterval(arctan2(cartX, cartY))
 
 
 def cartToPolar(cartX: float, cartY: float) -> tuple[float, float]:

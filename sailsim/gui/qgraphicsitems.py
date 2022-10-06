@@ -195,7 +195,7 @@ class GUIBoatVectors(QGraphicsItem):
     boatForceCenterboardLift = QGraphicsArrowItem()
     boatForceRudderDrag = QGraphicsArrowItem()
     boatForceRudderLift = QGraphicsArrowItem()
-    boatRudderPosition = QGraphicsArrowItem()
+    wrenchRudderPosition = QGraphicsArrowItem()
 
     followBoat = True
 
@@ -260,19 +260,19 @@ class GUIBoatVectors(QGraphicsItem):
             self.setPos(QPointF(frame.pose[0], -frame.pose[1]))
 
         self.boatSpeed.setP2(QPointF(frame.speed[0], -frame.speed[1]))
-        self.boatForce.setP2(QPointF(frame.boatForceX, -frame.boatForceY) * scaleForce)
+        self.boatForce.setP2(QPointF(frame.wrench[0], -frame.wrench[1]) * scaleForce)
 
-        self.boatForceSailDrag.setP2(QPointF(frame.boatSailDragX, -frame.boatSailDragY) * scaleForce)
-        self.boatForceSailLift.setP2(QPointF(frame.boatSailLiftX, -frame.boatSailLiftY) * scaleForce)
+        self.boatForceSailDrag.setP2(QPointF(frame.wrenchSailDrag[0], -frame.wrenchSailDrag[1]) * scaleForce)
+        self.boatForceSailLift.setP2(QPointF(frame.wrenchSailLift[0], -frame.wrenchSailLift[1]) * scaleForce)
 
-        self.boatForceCenterboardDrag.setP2(QPointF(frame.boatCenterboardDragX, -frame.boatCenterboardDragY) * scaleForce)
-        self.boatForceCenterboardLift.setP2(QPointF(frame.boatCenterboardLiftX, -frame.boatCenterboardLiftY) * scaleForce)
+        self.boatForceCenterboardDrag.setP2(QPointF(frame.wrenchCenterboardDrag[0], -frame.wrenchCenterboardDrag[1]) * scaleForce)
+        self.boatForceCenterboardLift.setP2(QPointF(frame.wrenchCenterboardLift[0], -frame.wrenchCenterboardLift[1]) * scaleForce)
 
-        rudderStartPoint = QPointF(-sin(frame.pose[2])*2.2, cos(frame.pose[2])*2.2)
+        rudderStartPoint = QPointF(-sin(frame.pose[2]) * 2.2, cos(frame.pose[2]) * 2.2)
         self.boatForceRudderDrag.setLine(QLineF(rudderStartPoint,
-                                                rudderStartPoint + QPointF(frame.boatRudderDragX, -frame.boatRudderDragY) * scaleForce))
+                                                rudderStartPoint + QPointF(frame.wrenchRudderDrag[0], -frame.wrenchRudderDrag[1]) * scaleForce))
         self.boatForceRudderLift.setLine(QLineF(rudderStartPoint,
-                                                rudderStartPoint + QPointF(frame.boatRudderLiftX, -frame.boatRudderLiftY) * scaleForce))
+                                                rudderStartPoint + QPointF(frame.wrenchRudderLift[0], -frame.wrenchRudderLift[1]) * scaleForce))
 
 
 class GUIWaypoints(QGraphicsItem):
