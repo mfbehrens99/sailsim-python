@@ -5,7 +5,7 @@ from numpy.linalg import norm
 
 from sailsim.boat.FrameList import FrameList
 from sailsim.sailor.Sailor import Sailor
-from sailsim.utils.anglecalculations import angleKeepInterval, directionKeepInterval
+from sailsim.utils.anglecalculations import angleKeepInterval
 from sailsim.utils.coordconversion import cartToRadiusSq, cartToArg
 from sailsim.utils import Wrench
 from sailsim.boat.coefficientsapprox import coefficientAirDrag, coefficientAirLift, coefficientWaterDrag, coefficientWaterLift
@@ -49,7 +49,7 @@ class Boat:
         self.length: float = 4.2               # m
         self.width: float = 1.63               # m
         self.mass: float = 80                  # kg
-        self.momentumInertia: float = 1/12 * self.mass * (pow(self.length, 2) + pow(self.width, 2))  # kg/m^2
+        self.momentumInertia: float = 1 / 12 * self.mass * (pow(self.length, 2) + pow(self.width, 2))  # kg/m^2
         self.sailArea: float = 7.45            # m^2
         self.hullArea: float = 4               # m^2
         self.centerboardArea: float = 1        # m^2 # self.centerboardDepth * self.centerboardLength
@@ -139,9 +139,9 @@ class Boat:
         # normalize apparent wind vector and boat speed vector
         dirNorm = array([sin(self.pose[2]), cos(self.pose[2])])
         # if vector is (0, 0) set normalized vector to (0, 0) as well
-        apparentWindNorm: ndarray = array([self.temp_apparentWindX, self.temp_apparentWindY]) / self.temp_apparentWindSpeed if not self.temp_apparentWindSpeed == 0 else zeros(2)  # normalised apparent wind vector
-        flowSpeedRudderNorm: ndarray = array([flowSpeedRudderX, flowSpeedRudderY]) / flowSpeedRudder if not flowSpeedRudder == 0 else zeros(2)  # normalised speed vector
-        flowSpeedCenterboardNorm: ndarray = array([flowSpeedCenterboardX, flowSpeedCenterboardY]) / flowSpeedCenterboard if not flowSpeedCenterboard == 0 else zeros(2)  # normalised speed vector
+        apparentWindNorm: ndarray = array([self.temp_apparentWindX, self.temp_apparentWindY]) / self.temp_apparentWindSpeed if not self.temp_apparentWindSpeed == 0 else zeros(2)  # normalized apparent wind vector
+        flowSpeedRudderNorm: ndarray = array([flowSpeedRudderX, flowSpeedRudderY]) / flowSpeedRudder if not flowSpeedRudder == 0 else zeros(2)  # normalized speed vector
+        flowSpeedCenterboardNorm: ndarray = array([flowSpeedCenterboardX, flowSpeedCenterboardY]) / flowSpeedCenterboard if not flowSpeedCenterboard == 0 else zeros(2)  # normalized speed vector
 
         # Sail forces
         self.temp_sailDrag = self.sailDrag(self.temp_apparentWindSpeed, apparentWindNorm)
@@ -158,7 +158,7 @@ class Boat:
         # TODO Hull forces
         self.temp_hullDrag = self.waterDrag()
 
-        self.temp_wrench = self.temp_sailDrag + self.temp_sailLift + self.temp_centerboardDrag + self.temp_centerboardLift + self.temp_rudderDrag + self.temp_rudderLift + self.temp_hullDrag
+        self.temp_wrench = (self.temp_sailDrag + self.temp_sailLift + self.temp_centerboardDrag + self.temp_centerboardLift + self.temp_rudderDrag + self.temp_rudderLift + self.temp_hullDrag).view(Wrench)
         return self.temp_wrench
 
     # Import force and torque functions
@@ -166,7 +166,7 @@ class Boat:
 
     def boatSpeed(self) -> float:
         """Return speed of the boat."""
-        return norm(self.speed[:2])
+        return float(norm(self.speed[:2]))
 
     # Angle calculations
     def calcLeewayAngle(self) -> float:
@@ -178,7 +178,7 @@ class Boat:
         return (trueWindX - self.speed[0], trueWindY - self.speed[1])
 
     def apparentWindAngle(self, apparentWindX: float, apparentWindY: float) -> float:
-        """Calculate the apparent wind angle based on the carthesian true wind."""
+        """Calculate the apparent wind angle based on the Cartesian true wind."""
         return angleKeepInterval(cartToArg(apparentWindX, apparentWindY) - self.pose[2])
 
     def angleOfAttack(self, apparentWindAngle: float) -> float:
@@ -186,5 +186,6 @@ class Boat:
         return angleKeepInterval(apparentWindAngle - self.mainSailAngle + pi)
 
     def __repr__(self) -> str:
+        """Generate a descriptive text for the boat."""
         heading: float = round(cartToArg(self.speed[0], self.speed[1]) * 180 / pi, 2)
         return f"Boat @({round(self.pose[0], 3)}|{round(self.pose[1], 3)}|{heading}°), v={round(self.boatSpeed(), 2)}m/s"

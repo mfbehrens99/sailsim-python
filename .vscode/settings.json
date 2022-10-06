@@ -21,5 +21,17 @@
         "--no-pretty",
         "--disallow-untyped-calls",
         "--disallow-untyped-defs"
+    ],
+    "cSpell.words": [
+        "anglecalculations",
+        "coefficientsapprox",
+        "coordconversion",
+        "dtype",
+        "Fluctuationfield",
+        "ndarray",
+        "sailsim",
+        "Squallfield",
+        "timestep",
+        "Windfield"
     ]
 }
