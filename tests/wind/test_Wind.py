@@ -24,7 +24,7 @@ class TestWind():
         self.w.winds = [Windfield(2, 1), Windfield(4, 1)]
         assert self.w.getWindCart(0, 0, 0) == (6, 2)
 
-    def test_getWind(self):
+    def test_getWind(self) -> None:
         self.w.winds = [Windfield(1, 0)]
         assert self.w.getWind(0, 0, 0) == approx((1, pi / 2))
 
@@ -32,4 +32,4 @@ class TestWind():
         assert self.w.getWind(0, 0, 0) == approx((1, 0))
 
         self.w.winds = [Windfield(-1, 1)]
-        assert self.w.getWind(0, 0, 0) == approx((sqrt(2), 7/4*pi))
+        assert self.w.getWind(0, 0, 0) == approx((sqrt(2), -1 / 4 * pi))

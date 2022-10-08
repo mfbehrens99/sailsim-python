@@ -30,7 +30,7 @@ class BoatInspectorScene(QGraphicsScene):
 
         self.setBackgroundBrush(QColor(156, 211, 219))
 
-        background = QGraphicsRectItem(-8, -8, 16, 16)
+        background = QGraphicsRectItem(-32, -32, 64, 64)
         background.setPen(Qt.NoPen)
         self.addItem(background)
 

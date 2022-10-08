@@ -26,7 +26,7 @@ class SailsimGUI(QMainWindow):
         # Load UI from QT generated file
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        # self.setWindowState(Qt.WindowMaximized)
+        self.showMaximized()
 
         # Playback and timeSlider
         self.timer = QTimer(self)

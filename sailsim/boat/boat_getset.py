@@ -1,21 +1,16 @@
-from math import pi
+from numpy import pi, ndarray
 
 from sailsim.utils.anglecalculations import angleKeepInterval, directionKeepInterval
 
 
-def setBoat(self, posX: float, posY: float, direction: float = 0, speedX: float = 0, speedY: float = 0, angSpeed: float = 0) -> float:
+def setBoat(self, pose: ndarray, speed: ndarray = ndarray([0, 0, 0])) -> float:
     """Set important properties of boat."""
-    self.posX = posX
-    self.posY = posY
-    self.direction = direction
-    self.speedX = speedX
-    self.speedY = speedY
-    self.angSpeed = angSpeed
+    self.pose = pose
+    self.speed = speed
 
-
-def getPos(self) -> float:
+def getPos(self) -> tuple[float, float]:
     """Return coordinates of the boat."""
-    return (self.posX, self.posY)
+    return (self.pose[0], self.pose[1])
 
 
 def getSpeed(self) -> float:

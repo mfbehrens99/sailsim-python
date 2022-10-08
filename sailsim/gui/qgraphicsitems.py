@@ -1,6 +1,6 @@
 """Contains modules for GUI elements."""
 
-from math import atan2, cos, pi, sin, sqrt
+from numpy import arctan2, cos, pi, sin, sqrt
 from functools import cached_property
 from typing import Optional, Union
 
@@ -101,8 +101,8 @@ class GUIBoat(QGraphicsItem):
         """
         frame = self.frameList[framenumber]
         if self.allowMovement:
-            self.setPos(QPointF(frame.boatPosX, -frame.boatPosY))
-        self.setRotation(frame.boatDirection / pi * 180)
+            self.setPos(QPointF(frame.pose[0], -frame.pose[1]))
+        self.setRotation(frame.pose[2] / pi * 180)
 
         self.mainSail.setP2(QPointF(-sin(frame.boatMainSailAngle), cos(frame.boatMainSailAngle)) * 2)
         self.rudder.setP2(self.rudder.p1() + QPointF(sin(frame.boatRudderAngle), cos(frame.boatRudderAngle)) * 0.5)
@@ -150,7 +150,7 @@ class QGraphicsArrowItem(QGraphicsLineItem):
     def updateHead(self, scale: float = 1.0) -> None:
         """Update shape and size of the arrow head."""
         line = self.line()
-        angle = atan2(line.dy(), line.dx())
+        angle = arctan2(line.dy(), line.dx())
 
         line1 = QPointF(sin(pi/2 - angle - self.arrowAngle), cos(pi/2 - angle - self.arrowAngle))
         line2 = QPointF(sin(pi/2 - angle + self.arrowAngle), cos(pi/2 - angle + self.arrowAngle))
@@ -195,7 +195,7 @@ class GUIBoatVectors(QGraphicsItem):
     boatForceCenterboardLift = QGraphicsArrowItem()
     boatForceRudderDrag = QGraphicsArrowItem()
     boatForceRudderLift = QGraphicsArrowItem()
-    boatRudderPosition = QGraphicsArrowItem()
+    wrenchRudderPosition = QGraphicsArrowItem()
 
     followBoat = True
 
@@ -257,22 +257,22 @@ class GUIBoatVectors(QGraphicsItem):
         scaleForce = 1 / 1024
 
         if self.followBoat:
-            self.setPos(QPointF(frame.boatPosX, -frame.boatPosY))
+            self.setPos(QPointF(frame.pose[0], -frame.pose[1]))
 
-        self.boatSpeed.setP2(QPointF(frame.boatSpeedX, -frame.boatSpeedY))
-        self.boatForce.setP2(QPointF(frame.boatForceX, -frame.boatForceY) * scaleForce)
+        self.boatSpeed.setP2(QPointF(frame.speed[0], -frame.speed[1]))
+        self.boatForce.setP2(QPointF(frame.wrench[0], -frame.wrench[1]) * scaleForce)
 
-        self.boatForceSailDrag.setP2(QPointF(frame.boatSailDragX, -frame.boatSailDragY) * scaleForce)
-        self.boatForceSailLift.setP2(QPointF(frame.boatSailLiftX, -frame.boatSailLiftY) * scaleForce)
+        self.boatForceSailDrag.setP2(QPointF(frame.wrenchSailDrag[0], -frame.wrenchSailDrag[1]) * scaleForce)
+        self.boatForceSailLift.setP2(QPointF(frame.wrenchSailLift[0], -frame.wrenchSailLift[1]) * scaleForce)
 
-        self.boatForceCenterboardDrag.setP2(QPointF(frame.boatCenterboardDragX, -frame.boatCenterboardDragY) * scaleForce)
-        self.boatForceCenterboardLift.setP2(QPointF(frame.boatCenterboardLiftX, -frame.boatCenterboardLiftY) * scaleForce)
+        self.boatForceCenterboardDrag.setP2(QPointF(frame.wrenchCenterboardDrag[0], -frame.wrenchCenterboardDrag[1]) * scaleForce)
+        self.boatForceCenterboardLift.setP2(QPointF(frame.wrenchCenterboardLift[0], -frame.wrenchCenterboardLift[1]) * scaleForce)
 
-        rudderStartPoint = QPointF(-sin(frame.boatDirection)*2.2, cos(frame.boatDirection)*2.2)
+        rudderStartPoint = QPointF(-sin(frame.pose[2]) * 2.2, cos(frame.pose[2]) * 2.2)
         self.boatForceRudderDrag.setLine(QLineF(rudderStartPoint,
-                                                rudderStartPoint + QPointF(frame.boatRudderDragX, -frame.boatRudderDragY) * scaleForce))
+                                                rudderStartPoint + QPointF(frame.wrenchRudderDrag[0], -frame.wrenchRudderDrag[1]) * scaleForce))
         self.boatForceRudderLift.setLine(QLineF(rudderStartPoint,
-                                                rudderStartPoint + QPointF(frame.boatRudderLiftX, -frame.boatRudderLiftY) * scaleForce))
+                                                rudderStartPoint + QPointF(frame.wrenchRudderLift[0], -frame.wrenchRudderLift[1]) * scaleForce))
 
 
 class GUIWaypoints(QGraphicsItem):

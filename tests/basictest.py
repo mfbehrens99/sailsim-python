@@ -1,5 +1,9 @@
 """This is a basic simulation program. It is intended to serve as a basis for testing with a know output."""
 
+# Import modules
+from numpy import array
+import numpy as np
+
 # Import gui
 import sys
 from PySide6.QtWidgets import QApplication
@@ -19,13 +23,13 @@ wind = Fluctuationfield(0, 10, 1)
 sailor = Sailor(commandListExample)
 #sailor = Sailor([Waypoint(-30, 30, 1), Waypoint(10, 47, 1), Waypoint(100, 60, 1), Waypoint(0, 100, 2)])
 
-b = Boat(0, 0, 0)
+b = Boat()
 b.sailor = sailor
 
 sailor.importBoat(b)
 
 # Create simulation
-s = Simulation(b, wind, 0.01, 10000)
+s = Simulation(b, wind, 0.01, 1000)
 
 # Run simulation
 try:

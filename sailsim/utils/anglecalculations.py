@@ -1,15 +1,13 @@
 """This module is intended for angle and direction calculations."""
 
-from math import pi
+from numpy import pi
 
 
 def angleKeepInterval(angle: float) -> float:
     """Keep angle inside the range of (-pi; pi]."""
-    if angle > pi:
-        return angle - 2 * pi
-    if angle <= -pi:
-        return angle + 2 * pi
-    return angle
+    if -pi < angle <= pi:
+        return angle
+    return (angle + pi) % (2 * pi) - pi
 
 
 def directionKeepInterval(direction: float) -> float:

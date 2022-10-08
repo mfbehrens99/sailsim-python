@@ -1,5 +1,9 @@
 """This module includes everything to store the simulation of a boat."""
 
+from numpy import ndarray
+
+from sailsim.utils import Wrench
+
 
 class Frame():
     """This class is holding all data about one frame in the simulation."""
@@ -9,12 +13,8 @@ class Frame():
 
     windX: float
     windY: float
-    boatPosX: float
-    boatPosY: float
-    boatSpeedX: float
-    boatSpeedY: float
-    boatDirection: float
-    boatAngSpeed: float
+    pose: ndarray
+    speed: ndarray
 
     boatMainSailAngle: float
     boatRudderAngle: float
@@ -25,26 +25,15 @@ class Frame():
     boatLeewayAngle: float
     boatAngleOfAttack: float
 
-    boatForceX: float
-    boatForceY: float
-    boatSailDragX: float
-    boatSailDragY: float
-    boatSailLiftX: float
-    boatSailLiftY: float
-    boatCenterboardDragX: float
-    boatCenterboardDragY: float
-    boatCenterboardLiftX: float
-    boatCenterboardLiftY: float
-
-    boatRudderDragX: float
-    boatRudderDragY: float
-    boatRudderLiftX: float
-    boatRudderLiftY: float
-
-    boatTorque: float
-    boatWaterDragTorque: float
-    boatCenterboardTorque: float
-    boatRudderTorque: float
+    wrench: Wrench
+    wrenchSailDrag: Wrench
+    wrenchSailLift: float
+    wrenchCenterboardDrag: float
+    wrenchCenterboardLift: float
+    wrenchRudderDrag: float
+    wrenchRudderLift: float
+    wrenchHullDrag: float
+    wrenchHullLift: float
 
     def collectSimulation(self, simulation) -> None:
         """Collect and save information about the state of the simulation."""
@@ -53,12 +42,8 @@ class Frame():
 
     def collectBoat(self, boat) -> None:
         """Collect and save all information about the boat."""
-        self.boatPosX = boat.posX
-        self.boatPosY = boat.posY
-        self.boatSpeedX = boat.speedX
-        self.boatSpeedY = boat.speedY
-        self.boatDirection = boat.direction
-        self.boatAngSpeed = boat.angSpeed
+        self.pose = boat.pose
+        self.speed = boat.speed
 
         self.boatMainSailAngle = boat.mainSailAngle
         self.boatRudderAngle = boat.rudderAngle
@@ -68,19 +53,22 @@ class Frame():
         self.boatLeewayAngle = boat.temp_leewayAngle
         self.boatAngleOfAttack = boat.temp_angleOfAttack
 
-        (self.boatForceX, self.boatForceY) = (boat.temp_forceX, boat.temp_forceY)
-        (self.boatSailDragX, self.boatSailDragY) = (boat.temp_sailDragX, boat.temp_sailDragY)
-        (self.boatSailLiftX, self.boatSailLiftY) = (boat.temp_sailLiftX, boat.temp_sailLiftY)
-        (self.boatCenterboardDragX, self.boatCenterboardDragY) = (boat.temp_centerboardDragX, boat.temp_centerboardDragY)
-        (self.boatCenterboardLiftX, self.boatCenterboardLiftY) = (boat.temp_centerboardLiftX, boat.temp_centerboardLiftY)
+        # temp_sailDrag: Wrench
+        # temp_sailLift: Wrench
+        # temp_centerboardDrag: Wrench
+        # temp_centerboardLift: Wrench
+        # temp_rudderDrag: Wrench
+        # temp_rudderLift: Wrench
+        # temp_hullDrag: Wrench
 
-        (self.boatRudderDragX, self.boatRudderDragY) = (boat.temp_rudderDragX, boat.temp_rudderDragY)
-        (self.boatRudderLiftX, self.boatRudderLiftY) = (boat.temp_rudderLiftX, boat.temp_rudderLiftY)
-
-        self.boatTorque = boat.temp_torque
-        self.boatWaterDragTorque = boat.temp_waterDragTorque
-        self.boatCenterboardTorque = boat.temp_centerboardTorque
-        self.boatRudderTorque = boat.temp_rudderTorque
+        self.wrench = boat.temp_wrench
+        self.wrenchSailDrag = boat.temp_sailDrag
+        self.wrenchSailLift = boat.temp_sailLift
+        self.wrenchCenterboardDrag = boat.temp_centerboardDrag
+        self.wrenchCenterboardLift = boat.temp_centerboardLift
+        self.wrenchRudderDrag = boat.temp_rudderDrag
+        self.wrenchRudderLift = boat.temp_rudderLift
+        self.wrenchHullDrag = boat.temp_hullDrag
 
     def collectWind(self, wind, x, y) -> None:
         """Collect and save all information about the wind."""
@@ -88,20 +76,23 @@ class Frame():
 
     def getCSVLine(self) -> str:
         """Return string that contains all data about this frame."""
-        data = [
-            self.frameNr, self.time,
-            self.boatPosX, self.boatPosY, self.boatSpeedX, self.boatSpeedY, self.boatDirection, self.boatAngSpeed,
-            self.boatMainSailAngle, self.boatRudderAngle,
-            self.boatApparentWindX, self.boatApparentWindY, self.boatApparentWindAngle, self.boatLeewayAngle, self.boatAngleOfAttack,
-            self.boatForceX, self.boatForceY,
-            self.boatSailDragX, self.boatSailDragY, self.boatSailLiftX, self.boatSailLiftY,
-            self.boatCenterboardDragX, self.boatCenterboardDragY, self.boatCenterboardLiftX, self.boatCenterboardLiftY,
-            self.boatRudderDragX, self.boatRudderDragY, self.boatRudderLiftX, self.boatRudderLiftY,
-            self.boatTorque, self.boatWaterDragTorque, self.boatCenterboardTorque, self.boatRudderTorque,
-            self.windX, self.windY,
-        ]
-        dataStr = [f'{x:.4f}'.rstrip('0').rstrip('.') for x in data]  # FIXME very slow and inflexible
-        return ",".join(dataStr)
+        # FIXME does not work anymore
+        # FIXME use csv module
+        return "Pls fixme"
+        # data = [
+        #     self.frameNr, self.time,
+        #     self.pose[0], self.pose[1], self.pose[2], self.speed[0], self.speed[1], self.speed[2],
+        #     self.boatMainSailAngle, self.boatRudderAngle,
+        #     self.boatApparentWindX, self.boatApparentWindY, self.boatApparentWindAngle, self.boatLeewayAngle, self.boatAngleOfAttack,
+        #     self.boatForceX, self.boatForceY,
+        #     self.boatSailDragX, self.boatSailDragY, self.boatSailLiftX, self.boatSailLiftY,
+        #     self.boatCenterboardDragX, self.boatCenterboardDragY, self.boatCenterboardLiftX, self.boatCenterboardLiftY,
+        #     self.boatRudderDragX, self.boatRudderDragY, self.boatRudderLiftX, self.boatRudderLiftY,
+        #     self.boatTorque, self.boatWaterDragTorque, self.boatCenterboardTorque, self.boatRudderTorque,
+        #     self.windX, self.windY,
+        # ]
+        # dataStr = [f'{x:.4f}'.rstrip('0').rstrip('.') for x in data]  # FIXME very slow and inflexible
+        # return ",".join(dataStr)
 
 
 class FrameList():
@@ -127,7 +118,7 @@ class FrameList():
     def getCoordinateList(self) -> list[tuple[float, float]]:
         out = []
         for frame in self.frames:
-            out.append((frame.boatPosX, frame.boatPosY))
+            out.append((frame.pose[0], frame.pose[1]))
         return out
 
     def getCSV(self) -> str:
@@ -141,7 +132,7 @@ class FrameList():
         """Generate head of .csv file."""
         headers = [
             "frame", "time",
-            "boatPosX", "boatPosY", "boatSpeedX", "boatSpeedY", "boatDirection", "boatAngSpeed",
+            "boatPosX", "boatPosY", "boatDirection", "boatSpeedX", "boatSpeedY", "boatAngSpeed",
             "boatMainSailAngle", "boatRudderAngle",
             "boatApparentWindX", "boatApparentWindY", "boatApparentWindAngle", "boatLeewayAngle", "boatAngleOfAttack",
             "boatForceX", "boatForceY",

@@ -1,5 +1,5 @@
 from tkinter import Tk, Frame, Label, Entry, Button, Listbox, StringVar, Canvas, messagebox
-from math import pi
+from numpy import pi
 
 from sailsim.utils.conversion import stringToFloat
 from sailsim.utils.coordconversion import cartToPolar, polarToCart

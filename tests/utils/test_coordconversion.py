@@ -17,14 +17,14 @@ def test_cartToRadius():
 
 
 def test_cartToArg():
-    assert cartToArg( 0,  1) == approx(0/4 * pi)
-    assert cartToArg( 1,  1) == approx(1/4 * pi)
-    assert cartToArg( 1,  0) == approx(2/4 * pi)
-    assert cartToArg( 1, -1) == approx(3/4 * pi)
-    assert cartToArg( 0, -1) == approx(4/4 * pi)
-    assert cartToArg(-1, -1) == approx(5/4 * pi)
-    assert cartToArg(-1,  0) == approx(6/4 * pi)
-    assert cartToArg(-1,  1) == approx(7/4 * pi)
+    assert cartToArg( 0,  1) == approx( 0/4 * pi)
+    assert cartToArg( 1,  1) == approx( 1/4 * pi)
+    assert cartToArg( 1,  0) == approx( 2/4 * pi)
+    assert cartToArg( 1, -1) == approx( 3/4 * pi)
+    assert cartToArg( 0, -1) == approx( 4/4 * pi)
+    assert cartToArg(-1, -1) == approx(-3/4 * pi)
+    assert cartToArg(-1,  0) == approx(-2/4 * pi)
+    assert cartToArg(-1,  1) == approx(-1/4 * pi)
 
 
 def test_polarToCart():

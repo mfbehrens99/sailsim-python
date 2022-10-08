@@ -1,9 +1,13 @@
-from math import sqrt, pi, sin, cos
+"""This file contains the boat class."""
+
+from numpy import sqrt, pi, sin, cos, array, ndarray, zeros
+from numpy.linalg import norm
 
 from sailsim.boat.FrameList import FrameList
 from sailsim.sailor.Sailor import Sailor
-from sailsim.utils.anglecalculations import angleKeepInterval, directionKeepInterval
+from sailsim.utils.anglecalculations import angleKeepInterval
 from sailsim.utils.coordconversion import cartToRadiusSq, cartToArg
+from sailsim.utils import Wrench
 from sailsim.boat.coefficientsapprox import coefficientAirDrag, coefficientAirLift, coefficientWaterDrag, coefficientWaterLift
 
 
@@ -22,45 +26,30 @@ class Boat:
     temp_leewayAngle: float
     temp_angleOfAttack: float
 
-    temp_forceX: float
-    temp_forceY: float
-    temp_sailDragX: float
-    temp_sailDragY: float
-    temp_sailLiftX: float
-    temp_sailLiftY: float
-    temp_centerboardDragX: float
-    temp_centerboardDragY: float
-    temp_centerboardLiftX: float
-    temp_centerboardLiftY: float
-    temp_rudderDragX: float
-    temp_rudderDragY: float
-    temp_rudderLiftX: float
-    temp_rudderLiftY: float
-
-    temp_torque: float
-    temp_waterDragTorque: float
-    temp_rudderTorque: float
-    temp_centerboardTorque: float
+    temp_wrench: Wrench
+    temp_sailDrag: Wrench
+    temp_sailLift: Wrench
+    temp_centerboardDrag: Wrench
+    temp_centerboardLift: Wrench
+    temp_rudderDrag: Wrench
+    temp_rudderLift: Wrench
+    temp_hullDrag: Wrench
 
     sailor: Sailor
 
-    def __init__(self, posX: float = 0, posY: float = 0, direction: float = 0, speedX: float = 0, speedY: float = 0, angSpeed: float = 0) -> None:
+    def __init__(self, pose: ndarray = zeros(3), speed: ndarray = zeros(3)) -> None:
         """
         Create a boat.
 
         Args:
-            posX:       x position of the boat (in m)
-            posY:       y position of the boat (in m)
-            direction:  direction the boat is pointing (in rad)
-            speedX:     speed in x direction (in m/s)
-            speedY:     speed in y direction (in m/s)
-            angSpeed:   angular speed in z direction (in rad/s)
+            pose:       position and orientation of the boat (in m or rad) (x, y, direction)
+            speed:      speed (in m/s or rad/s) (x, y, angular)
         """
         # Static properties
         self.length: float = 4.2               # m
         self.width: float = 1.63               # m
         self.mass: float = 80                  # kg
-        self.momentumInertia: float = 1/12 * self.mass * (pow(self.length, 2) + pow(self.width, 2))  # kg/m^2
+        self.momentumInertia: float = 1 / 12 * self.mass * (pow(self.length, 2) + pow(self.width, 2))  # kg/m^2
         self.sailArea: float = 7.45            # m^2
         self.hullArea: float = 4               # m^2
         self.centerboardArea: float = 1        # m^2 # self.centerboardDepth * self.centerboardLength
@@ -73,13 +62,9 @@ class Boat:
         self.rudderLever: float = 2.1          # m
 
         # Dynamic properties
-        self.posX: float = posX
-        self.posY: float = posY
-        self.speedX: float = speedX
-        self.speedY: float = speedY
+        self.pose: ndarray = pose
+        self.speed: ndarray = speed
 
-        self.direction: float = directionKeepInterval(direction)
-        self.angSpeed: float = angSpeed        # rad/s
         self.pivot: float = 0.5 * self.length  # m
 
         self.mainSailAngle: float = 0
@@ -99,38 +84,33 @@ class Boat:
         self.frameList: FrameList = FrameList()
 
     # Simulation methods
-    def applyCauses(self, forceX: float, forceY: float, torque: float, interval: float) -> None:
+    def applyCauses(self, wrench: Wrench, interval: float) -> None:
         """Change speed according a force & torque given."""
         # Translation: △v = a * t; F = m * a -> △v = F / m * t
         # Rotation:    △ω = α * t; M = I * α -> △ω = M / I * t
-        self.speedX += forceX / self.mass * interval
-        self.speedY += forceY / self.mass * interval
-        self.angSpeed += torque / self.momentumInertia * interval
+        self.speed = self.speed + wrench / array([self.mass, self.mass, self.momentumInertia], dtype=float) * interval
 
     def moveInterval(self, interval: float) -> None:
         """Change position according to sailsDirection and speed."""
         # △s = v * t; △α = ω * t
-        self.posX += self.speedX * interval
-        self.posY += self.speedY * interval
-        self.direction = directionKeepInterval(self.direction + self.angSpeed * interval)
+        self.pose = self.pose + self.speed * interval
 
     def runSailor(self) -> None:
         """Activate the sailing algorithm to decide what the boat should do."""
         if self.sailor is not None:
             # Run sailor if sailor exists
             self.sailor.run(
-                self.posX,
-                self.posY,
+                self.pose[0],
+                self.pose[1],
                 self.temp_boatSpeed,
-                cartToArg(self.speedX, self.speedY),
-                self.direction,
+                cartToArg(self.speed[0], self.speed[1]),
+                self.pose[2],
                 self.temp_apparentWindSpeed,
                 self.temp_apparentWindAngle
             )
 
             # Retrieve boat properties from Sailor
             self.mainSailAngle = self.sailor.mainSailAngle
-            # self.direction = self.sailor.boatDirection
             self.rudderAngle = self.sailor.rudderAngle
 
     def updateTemporaryData(self, trueWindX: float, trueWindY: float) -> None:
@@ -145,7 +125,7 @@ class Boat:
         self.temp_leewayAngle = self.calcLeewayAngle()
         self.temp_angleOfAttack = self.angleOfAttack(self.temp_apparentWindAngle)
 
-    def resultingCauses(self) -> tuple[float, float, float]:
+    def resultingCauses(self) -> Wrench:
         """Add up all acting forces and return them as a tuple."""
         # calculate flowSpeed
         (flowSpeedRudderX, flowSpeedRudderY) = self.leverSpeedVector(self.rudderLever)
@@ -156,64 +136,56 @@ class Boat:
         flowSpeedCenterboardSq = cartToRadiusSq(flowSpeedCenterboardX, flowSpeedCenterboardY)
         flowSpeedCenterboard = sqrt(flowSpeedCenterboardSq)
 
-        # normalise apparent wind vector and boat speed vector
-        (dirNormX, dirNormY) = (sin(self.direction), cos(self.direction))
-        # if vector is (0, 0) set normalised vector to (0, 0) as well
-        (apparentWindNormX, apparentWindNormY) = (self.temp_apparentWindX / self.temp_apparentWindSpeed, self.temp_apparentWindY / self.temp_apparentWindSpeed) if not self.temp_apparentWindSpeed == 0 else (0, 0) # normalised apparent wind vector
-        # (speedNormX, speedNormY) = (self.speedX / self.temp_boatSpeed, self.speedY / self.temp_boatSpeed) if not self.temp_boatSpeed == 0 else (0, 0) # normalized speed vector
-        (flowSpeedRudderNormX, flowSpeedRudderNormY) = (flowSpeedRudderX / flowSpeedRudder, flowSpeedRudderY / flowSpeedRudder) if not flowSpeedRudder == 0 else (0, 0) # normalised speed vector
-        (flowSpeedCenterboardNormX, flowSpeedCenterboardNormY) = (flowSpeedCenterboardX / flowSpeedCenterboard, flowSpeedCenterboardY / flowSpeedCenterboard) if not flowSpeedCenterboard == 0 else (0, 0) # normalised speed vector
+        # normalize apparent wind vector and boat speed vector
+        dirNorm = array([sin(self.pose[2]), cos(self.pose[2])])
+        # if vector is (0, 0) set normalized vector to (0, 0) as well
+        apparentWindNorm: ndarray = array([self.temp_apparentWindX, self.temp_apparentWindY]) / self.temp_apparentWindSpeed if not self.temp_apparentWindSpeed == 0 else zeros(2)  # normalized apparent wind vector
+        flowSpeedRudderNorm: ndarray = array([flowSpeedRudderX, flowSpeedRudderY]) / flowSpeedRudder if not flowSpeedRudder == 0 else zeros(2)  # normalized speed vector
+        flowSpeedCenterboardNorm: ndarray = array([flowSpeedCenterboardX, flowSpeedCenterboardY]) / flowSpeedCenterboard if not flowSpeedCenterboard == 0 else zeros(2)  # normalized speed vector
 
         # Sail forces
-        (self.temp_sailDragX, self.temp_sailDragY) = self.sailDrag(self.temp_apparentWindSpeed, apparentWindNormX, apparentWindNormY)
-        (self.temp_sailLiftX, self.temp_sailLiftY) = self.sailLift(self.temp_apparentWindSpeed, apparentWindNormX, apparentWindNormY)
+        self.temp_sailDrag = self.sailDrag(self.temp_apparentWindSpeed, apparentWindNorm)
+        self.temp_sailLift = self.sailLift(self.temp_apparentWindSpeed, apparentWindNorm)
 
         # Centerboard forces
-        (self.temp_centerboardDragX, self.temp_centerboardDragY) = self.centerboardDrag(flowSpeedCenterboardSq, flowSpeedCenterboardNormX, flowSpeedCenterboardNormY)
-        (self.temp_centerboardLiftX, self.temp_centerboardLiftY) = self.centerboardLift(flowSpeedCenterboardSq, flowSpeedCenterboardNormX, flowSpeedCenterboardNormY)
+        self.temp_centerboardDrag = self.centerboardDrag(flowSpeedCenterboardSq, flowSpeedCenterboardNorm, dirNorm)
+        self.temp_centerboardLift = self.centerboardLift(flowSpeedCenterboardSq, flowSpeedCenterboardNorm, dirNorm)
 
         # Rudder forces
-        (self.temp_rudderDragX, self.temp_rudderDragY) = self.rudderDrag(flowSpeedRudderSq, flowSpeedRudderNormX, flowSpeedRudderNormY)
-        (self.temp_rudderLiftX, self.temp_rudderLiftY) = self.rudderLift(flowSpeedRudderSq, flowSpeedRudderNormX, flowSpeedRudderNormY)
+        self.temp_rudderDrag = self.rudderDrag(flowSpeedRudderSq, flowSpeedRudderNorm, dirNorm)
+        self.temp_rudderLift = self.rudderLift(flowSpeedRudderSq, flowSpeedRudderNorm, dirNorm)
 
         # TODO Hull forces
+        self.temp_hullDrag = self.waterDrag()
 
-        # Torques
-        self.temp_waterDragTorque = self.waterDragTorque()
-        self.temp_centerboardTorque = self.centerboardTorque(self.temp_centerboardDragX + self.temp_centerboardLiftX, self.temp_centerboardDragY + self.temp_centerboardLiftY, dirNormX, dirNormY)
-        self.temp_rudderTorque = self.rudderTorque(self.temp_rudderDragX + self.temp_rudderLiftX, self.temp_rudderDragY + self.temp_rudderLiftY, dirNormX, dirNormY)
-
-        self.temp_forceX = self.temp_sailDragX + self.temp_sailLiftX + self.temp_centerboardDragX + self.temp_centerboardLiftX + self.temp_rudderDragX + self.temp_rudderLiftX
-        self.temp_forceY = self.temp_sailDragY + self.temp_sailLiftY + self.temp_centerboardDragY + self.temp_centerboardLiftY + self.temp_rudderDragY + self.temp_rudderLiftY
-        self.temp_torque = self.temp_waterDragTorque + self.temp_centerboardTorque + self.temp_rudderTorque
-
-        return (self.temp_forceX, self.temp_forceY, self.temp_torque)
+        self.temp_wrench = (self.temp_sailDrag + self.temp_sailLift + self.temp_centerboardDrag + self.temp_centerboardLift + self.temp_rudderDrag + self.temp_rudderLift + self.temp_hullDrag).view(Wrench)
+        return self.temp_wrench
 
     # Import force and torque functions
-    from sailsim.boat.boat_forces import leverSpeedVector, sailDrag, sailLift, centerboardDrag, centerboardLift, rudderDrag, rudderLift, scalarToDragForce, scalarToLiftForce
-    from sailsim.boat.boat_torques import waterDragTorque, centerboardTorque, rudderTorque
+    from sailsim.boat.boat_forces import leverSpeedVector, sailDrag, sailLift, centerboardDrag, centerboardLift, rudderDrag, rudderLift, waterDrag, scalarToLiftForce
 
     def boatSpeed(self) -> float:
         """Return speed of the boat."""
-        return sqrt(pow(self.speedX, 2) + pow(self.speedY, 2))
+        return float(norm(self.speed[:2]))
 
     # Angle calculations
     def calcLeewayAngle(self) -> float:
         """Calculate and return the leeway angle."""
-        return angleKeepInterval(cartToArg(self.speedX, self.speedY) - self.direction)
+        return angleKeepInterval(cartToArg(self.speed[0], self.speed[1]) - self.pose[2])
 
     def apparentWind(self, trueWindX: float, trueWindY: float) -> tuple[float, float]:
         """Return apparent wind by adding true wind and speed."""
-        return (trueWindX - self.speedX, trueWindY - self.speedY)
+        return (trueWindX - self.speed[0], trueWindY - self.speed[1])
 
     def apparentWindAngle(self, apparentWindX: float, apparentWindY: float) -> float:
-        """Calculate the apparent wind angle based on the carthesian true wind."""
-        return angleKeepInterval(cartToArg(apparentWindX, apparentWindY) - self.direction)
+        """Calculate the apparent wind angle based on the Cartesian true wind."""
+        return angleKeepInterval(cartToArg(apparentWindX, apparentWindY) - self.pose[2])
 
     def angleOfAttack(self, apparentWindAngle: float) -> float:
         """Calculate angle between main sail and apparent wind vector."""
         return angleKeepInterval(apparentWindAngle - self.mainSailAngle + pi)
 
     def __repr__(self) -> str:
-        heading: float = round(cartToArg(self.speedX, self.speedY) * 180 / pi, 2)
-        return f"Boat @({round(self.posX, 3)}|{round(self.posY, 3)}|{heading}°), v={round(self.boatSpeed(), 2)}m/s"
+        """Generate a descriptive text for the boat."""
+        heading: float = round(cartToArg(self.speed[0], self.speed[1]) * 180 / pi, 2)
+        return f"Boat @({round(self.pose[0], 3)}|{round(self.pose[1], 3)}|{heading}°), v={round(self.boatSpeed(), 2)}m/s"
