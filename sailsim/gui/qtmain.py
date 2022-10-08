@@ -1,29 +1,24 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'main.ui'
+# Form generated from reading UI file 'main.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.3.1
+# Created by: Qt User Interface Compiler version 6.3.1
 ##
-## WARNING! All changes made in this file will be lost when recompiling UI file!
+# WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
-    QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
-    QCursor, QFont, QFontDatabase, QGradient,
-    QIcon, QImage, QKeySequence, QLinearGradient,
-    QPainter, QPalette, QPixmap, QRadialGradient,
-    QTransform)
-from PySide6.QtWidgets import (QAbstractItemView, QApplication, QHBoxLayout, QHeaderView,
-    QLabel, QMainWindow, QMenu, QMenuBar,
-    QSizePolicy, QSlider, QSplitter, QToolButton,
-    QTreeWidgetItem, QVBoxLayout, QWidget)
+from PySide6.QtCore import (QCoreApplication, QLocale, QMetaObject, QRect,
+                            Qt)
+from PySide6.QtGui import (QAction, QCursor)
+from PySide6.QtWidgets import (QAbstractItemView, QHBoxLayout, QLabel, QMenu,
+                               QMenuBar, QSizePolicy, QSlider, QSplitter,
+                               QToolButton, QTreeWidgetItem, QVBoxLayout, QWidget)
 
 from sailsim.gui.boatInspector import BoatInspectorView
 from sailsim.gui.mapView import MapViewView
 from sailsim.gui.valueInspector import ValueInspectorWidget
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -179,7 +174,6 @@ class Ui_MainWindow(object):
 
         self.controlBar.addWidget(self.timeSlider)
 
-
         self.verticalLayout.addLayout(self.controlBar)
 
         self.verticalLayout.setStretch(0, 1)
@@ -244,15 +238,15 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"SailsimGUI", None))
         self.actionNew.setText(QCoreApplication.translate("MainWindow", u"New", None))
-#if QT_CONFIG(shortcut)
+# if QT_CONFIG(shortcut)
         self.actionNew.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+N", None))
 #endif // QT_CONFIG(shortcut)
         self.actionOpen.setText(QCoreApplication.translate("MainWindow", u"Open", None))
-#if QT_CONFIG(shortcut)
+# if QT_CONFIG(shortcut)
         self.actionOpen.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+O", None))
 #endif // QT_CONFIG(shortcut)
         self.actionOpenGithub.setText(QCoreApplication.translate("MainWindow", u"Open Github", None))
-#if QT_CONFIG(tooltip)
+# if QT_CONFIG(tooltip)
         self.actionOpenGithub.setToolTip(QCoreApplication.translate("MainWindow", u"Open the sailsim repository on Github", None))
 #endif // QT_CONFIG(tooltip)
         self.actionShowWaypointsMap.setText(QCoreApplication.translate("MainWindow", u"Waypoints", None))
@@ -265,91 +259,91 @@ class Ui_MainWindow(object):
         self.actionShowVectorsMap.setText(QCoreApplication.translate("MainWindow", u"Vectors", None))
         self.actionShowBoatPathMap.setText(QCoreApplication.translate("MainWindow", u"Boat path", None))
         ___qtreewidgetitem = self.valueInspector.headerItem()
-        ___qtreewidgetitem.setText(4, QCoreApplication.translate("MainWindow", u"Unit", None));
-        ___qtreewidgetitem.setText(3, QCoreApplication.translate("MainWindow", u"Z", None));
-        ___qtreewidgetitem.setText(2, QCoreApplication.translate("MainWindow", u"Y", None));
-        ___qtreewidgetitem.setText(1, QCoreApplication.translate("MainWindow", u"X", None));
-        ___qtreewidgetitem.setText(0, QCoreApplication.translate("MainWindow", u"Name", None));
+        ___qtreewidgetitem.setText(4, QCoreApplication.translate("MainWindow", u"Unit", None))
+        ___qtreewidgetitem.setText(3, QCoreApplication.translate("MainWindow", u"Z", None))
+        ___qtreewidgetitem.setText(2, QCoreApplication.translate("MainWindow", u"Y", None))
+        ___qtreewidgetitem.setText(1, QCoreApplication.translate("MainWindow", u"X", None))
+        ___qtreewidgetitem.setText(0, QCoreApplication.translate("MainWindow", u"Name", None))
 
         __sortingEnabled = self.valueInspector.isSortingEnabled()
         self.valueInspector.setSortingEnabled(False)
         ___qtreewidgetitem1 = self.valueInspector.topLevelItem(0)
-        ___qtreewidgetitem1.setText(4, QCoreApplication.translate("MainWindow", u"m, deg", None));
-        ___qtreewidgetitem1.setText(3, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem1.setText(2, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem1.setText(1, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem1.setText(0, QCoreApplication.translate("MainWindow", u"Pose", None));
+        ___qtreewidgetitem1.setText(4, QCoreApplication.translate("MainWindow", u"m, deg", None))
+        ___qtreewidgetitem1.setText(3, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem1.setText(2, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem1.setText(1, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem1.setText(0, QCoreApplication.translate("MainWindow", u"Pose", None))
         ___qtreewidgetitem2 = self.valueInspector.topLevelItem(1)
-        ___qtreewidgetitem2.setText(4, QCoreApplication.translate("MainWindow", u"m/s, deg/s", None));
-        ___qtreewidgetitem2.setText(3, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem2.setText(2, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem2.setText(1, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem2.setText(0, QCoreApplication.translate("MainWindow", u"Speed", None));
+        ___qtreewidgetitem2.setText(4, QCoreApplication.translate("MainWindow", u"m/s, deg/s", None))
+        ___qtreewidgetitem2.setText(3, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem2.setText(2, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem2.setText(1, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem2.setText(0, QCoreApplication.translate("MainWindow", u"Speed", None))
         ___qtreewidgetitem3 = self.valueInspector.topLevelItem(2)
-        ___qtreewidgetitem3.setText(4, QCoreApplication.translate("MainWindow", u"N, Nm", None));
-        ___qtreewidgetitem3.setText(3, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem3.setText(2, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem3.setText(1, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem3.setText(0, QCoreApplication.translate("MainWindow", u"Force", None));
+        ___qtreewidgetitem3.setText(4, QCoreApplication.translate("MainWindow", u"N, Nm", None))
+        ___qtreewidgetitem3.setText(3, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem3.setText(2, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem3.setText(1, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem3.setText(0, QCoreApplication.translate("MainWindow", u"Force", None))
         ___qtreewidgetitem4 = ___qtreewidgetitem3.child(0)
-        ___qtreewidgetitem4.setText(4, QCoreApplication.translate("MainWindow", u"N, Nm", None));
-        ___qtreewidgetitem4.setText(3, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem4.setText(2, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem4.setText(1, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem4.setText(0, QCoreApplication.translate("MainWindow", u"SailDrag", None));
+        ___qtreewidgetitem4.setText(4, QCoreApplication.translate("MainWindow", u"N, Nm", None))
+        ___qtreewidgetitem4.setText(3, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem4.setText(2, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem4.setText(1, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem4.setText(0, QCoreApplication.translate("MainWindow", u"SailDrag", None))
         ___qtreewidgetitem5 = ___qtreewidgetitem3.child(1)
-        ___qtreewidgetitem5.setText(4, QCoreApplication.translate("MainWindow", u"N, Nm", None));
-        ___qtreewidgetitem5.setText(3, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem5.setText(2, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem5.setText(1, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem5.setText(0, QCoreApplication.translate("MainWindow", u"SailLift", None));
+        ___qtreewidgetitem5.setText(4, QCoreApplication.translate("MainWindow", u"N, Nm", None))
+        ___qtreewidgetitem5.setText(3, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem5.setText(2, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem5.setText(1, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem5.setText(0, QCoreApplication.translate("MainWindow", u"SailLift", None))
         ___qtreewidgetitem6 = ___qtreewidgetitem3.child(2)
-        ___qtreewidgetitem6.setText(4, QCoreApplication.translate("MainWindow", u"N, Nm", None));
-        ___qtreewidgetitem6.setText(3, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem6.setText(2, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem6.setText(1, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem6.setText(0, QCoreApplication.translate("MainWindow", u"CenterboardDrag", None));
+        ___qtreewidgetitem6.setText(4, QCoreApplication.translate("MainWindow", u"N, Nm", None))
+        ___qtreewidgetitem6.setText(3, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem6.setText(2, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem6.setText(1, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem6.setText(0, QCoreApplication.translate("MainWindow", u"CenterboardDrag", None))
         ___qtreewidgetitem7 = ___qtreewidgetitem3.child(3)
-        ___qtreewidgetitem7.setText(4, QCoreApplication.translate("MainWindow", u"N, Nm", None));
-        ___qtreewidgetitem7.setText(3, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem7.setText(2, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem7.setText(1, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem7.setText(0, QCoreApplication.translate("MainWindow", u"CenterboardLift", None));
+        ___qtreewidgetitem7.setText(4, QCoreApplication.translate("MainWindow", u"N, Nm", None))
+        ___qtreewidgetitem7.setText(3, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem7.setText(2, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem7.setText(1, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem7.setText(0, QCoreApplication.translate("MainWindow", u"CenterboardLift", None))
         ___qtreewidgetitem8 = ___qtreewidgetitem3.child(4)
-        ___qtreewidgetitem8.setText(4, QCoreApplication.translate("MainWindow", u"N, Nm", None));
-        ___qtreewidgetitem8.setText(3, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem8.setText(2, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem8.setText(1, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem8.setText(0, QCoreApplication.translate("MainWindow", u"RudderDrag", None));
+        ___qtreewidgetitem8.setText(4, QCoreApplication.translate("MainWindow", u"N, Nm", None))
+        ___qtreewidgetitem8.setText(3, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem8.setText(2, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem8.setText(1, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem8.setText(0, QCoreApplication.translate("MainWindow", u"RudderDrag", None))
         ___qtreewidgetitem9 = ___qtreewidgetitem3.child(5)
-        ___qtreewidgetitem9.setText(4, QCoreApplication.translate("MainWindow", u"N, Nm", None));
-        ___qtreewidgetitem9.setText(3, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem9.setText(2, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem9.setText(1, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem9.setText(0, QCoreApplication.translate("MainWindow", u"RudderLift", None));
+        ___qtreewidgetitem9.setText(4, QCoreApplication.translate("MainWindow", u"N, Nm", None))
+        ___qtreewidgetitem9.setText(3, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem9.setText(2, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem9.setText(1, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem9.setText(0, QCoreApplication.translate("MainWindow", u"RudderLift", None))
         ___qtreewidgetitem10 = ___qtreewidgetitem3.child(6)
-        ___qtreewidgetitem10.setText(4, QCoreApplication.translate("MainWindow", u"N, Nm", None));
-        ___qtreewidgetitem10.setText(3, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem10.setText(2, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem10.setText(1, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem10.setText(0, QCoreApplication.translate("MainWindow", u"HullDrag", None));
+        ___qtreewidgetitem10.setText(4, QCoreApplication.translate("MainWindow", u"N, Nm", None))
+        ___qtreewidgetitem10.setText(3, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem10.setText(2, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem10.setText(1, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem10.setText(0, QCoreApplication.translate("MainWindow", u"HullDrag", None))
         ___qtreewidgetitem11 = ___qtreewidgetitem3.child(7)
-        ___qtreewidgetitem11.setText(4, QCoreApplication.translate("MainWindow", u"N, Nm", None));
-        ___qtreewidgetitem11.setText(3, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem11.setText(2, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem11.setText(1, QCoreApplication.translate("MainWindow", u"0", None));
-        ___qtreewidgetitem11.setText(0, QCoreApplication.translate("MainWindow", u"HullLift", None));
+        ___qtreewidgetitem11.setText(4, QCoreApplication.translate("MainWindow", u"N, Nm", None))
+        ___qtreewidgetitem11.setText(3, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem11.setText(2, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem11.setText(1, QCoreApplication.translate("MainWindow", u"0", None))
+        ___qtreewidgetitem11.setText(0, QCoreApplication.translate("MainWindow", u"HullLift", None))
         ___qtreewidgetitem12 = self.valueInspector.topLevelItem(3)
-        ___qtreewidgetitem12.setText(0, QCoreApplication.translate("MainWindow", u"Angle", None));
+        ___qtreewidgetitem12.setText(0, QCoreApplication.translate("MainWindow", u"Angle", None))
         ___qtreewidgetitem13 = ___qtreewidgetitem12.child(0)
-        ___qtreewidgetitem13.setText(4, QCoreApplication.translate("MainWindow", u"Deg", None));
-        ___qtreewidgetitem13.setText(0, QCoreApplication.translate("MainWindow", u"Main sail", None));
+        ___qtreewidgetitem13.setText(4, QCoreApplication.translate("MainWindow", u"Deg", None))
+        ___qtreewidgetitem13.setText(0, QCoreApplication.translate("MainWindow", u"Main sail", None))
         ___qtreewidgetitem14 = ___qtreewidgetitem12.child(1)
-        ___qtreewidgetitem14.setText(4, QCoreApplication.translate("MainWindow", u"Deg", None));
-        ___qtreewidgetitem14.setText(0, QCoreApplication.translate("MainWindow", u"Rudder", None));
+        ___qtreewidgetitem14.setText(4, QCoreApplication.translate("MainWindow", u"Deg", None))
+        ___qtreewidgetitem14.setText(0, QCoreApplication.translate("MainWindow", u"Rudder", None))
         ___qtreewidgetitem15 = ___qtreewidgetitem12.child(2)
-        ___qtreewidgetitem15.setText(4, QCoreApplication.translate("MainWindow", u"Deg", None));
-        ___qtreewidgetitem15.setText(0, QCoreApplication.translate("MainWindow", u"LeewayAngle", None));
+        ___qtreewidgetitem15.setText(4, QCoreApplication.translate("MainWindow", u"Deg", None))
+        ___qtreewidgetitem15.setText(0, QCoreApplication.translate("MainWindow", u"LeewayAngle", None))
         self.valueInspector.setSortingEnabled(__sortingEnabled)
 
         self.buttonStartFrame.setText(QCoreApplication.translate("MainWindow", u"\u23ee", None))
@@ -364,4 +358,3 @@ class Ui_MainWindow(object):
         self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))
         self.menuTools.setTitle(QCoreApplication.translate("MainWindow", u"Tools", None))
     # retranslateUi
-
