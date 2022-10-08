@@ -22,4 +22,4 @@ class TestWindfield():
         assert w.getWind(0, 0, 0) == approx((1, 0))
 
         w = Windfield(-1, 1)
-        assert w.getWind(0, 0, 0) == approx((sqrt(2), 7/4*pi))
+        assert w.getWind(0, 0, 0) == approx((sqrt(2), -1 / 4*pi))

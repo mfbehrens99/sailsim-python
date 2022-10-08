@@ -8,8 +8,6 @@ found on a compass. So this definition differs from the standard definition of a
 
 from numpy import sin, cos, arctan2, sqrt
 
-from sailsim.utils.anglecalculations import angleKeepInterval
-
 
 def cartToRadius(cartX: float, cartY: float) -> float:
     """Convert Cartesian coordinates into their corresponding radius."""
@@ -23,7 +21,7 @@ def cartToRadiusSq(cartX: float, cartY: float) -> float:
 
 def cartToArg(cartX: float, cartY: float) -> float:
     """Convert Cartesian coordinates into their corresponding argument (angle)."""
-    return angleKeepInterval(arctan2(cartX, cartY))
+    return arctan2(cartX, cartY)
 
 
 def cartToPolar(cartX: float, cartY: float) -> tuple[float, float]:
